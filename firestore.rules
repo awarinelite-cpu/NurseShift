@@ -28,9 +28,13 @@ service cloud.firestore {
       allow update: if request.auth != null && (request.auth.uid == uid || isAdmin());
     }
 
-    match /facilities/{uid} {
+    // A facility can create/update its own doc (uid == facilityId, from
+    // sign-up). Admins can also create/update any facility doc — this is
+    // what the admin single-add form and CSV bulk import rely on, since
+    // those facilities have no matching auth account at all.
+    match /facilities/{facilityId} {
       allow read: if request.auth != null;
-      allow create, update: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && (request.auth.uid == facilityId || isAdmin());
     }
 
     // Any signed-in nurse can read open shifts; only the owning facility
