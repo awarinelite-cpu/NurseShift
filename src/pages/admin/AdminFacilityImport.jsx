@@ -71,7 +71,7 @@ export default function AdminFacilityImport() {
       </div>
 
       <p style={{ marginBottom: 16 }}>
-        <Link to="/admin">← Back to license review</Link>
+        <Link to="/admin/facilities">← Back to facilities</Link>
       </p>
 
       <div className="detail-card" style={{ marginBottom: 16 }}>

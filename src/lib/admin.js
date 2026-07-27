@@ -1,5 +1,12 @@
 import { DEMO_MODE, auth, db } from './firebase';
-import { demoListNurses, demoSetVerification, demoAddFacility, demoAddShift } from './demoStore';
+import {
+  demoListNurses,
+  demoSetVerification,
+  demoAddFacility,
+  demoAddShift,
+  demoListFacilities,
+  demoListShifts,
+} from './demoStore';
 
 const DEMO_ADMIN_PASSCODE = 'admin-demo';
 
@@ -50,6 +57,43 @@ export async function setNurseVerification(nurseId, verification) {
   const { doc, updateDoc } = await import('firebase/firestore');
   await updateDoc(doc(db, 'nurses', nurseId), { verification });
   return { id: nurseId, verification };
+}
+
+// Lists every facility with how many shifts it has posted, newest facility
+// first where we can tell (Firestore keeps insertion order roughly via id
+// only in demo mode; live mode has no createdAt on older docs, so this is
+// a best-effort ordering, not a guarantee).
+export async function listFacilitiesForAdmin() {
+  if (DEMO_MODE) {
+    const facilities = demoListFacilities();
+    const shifts = demoListShifts();
+    return facilities
+      .map((f) => ({ ...f, shiftCount: shifts.filter((s) => s.facilityId === f.id).length }))
+      .reverse();
+  }
+
+  const { collection, getDocs } = await import('firebase/firestore');
+  const [facilitiesSnap, shiftsSnap] = await Promise.all([
+    getDocs(collection(db, 'facilities')),
+    getDocs(collection(db, 'shifts')),
+  ]);
+  const facilities = facilitiesSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  const shifts = shiftsSnap.docs.map((d) => d.data());
+  return facilities
+    .map((f) => ({ ...f, shiftCount: shifts.filter((s) => s.facilityId === f.id).length }))
+    .reverse();
+}
+
+// Creates a single facility, and optionally one open shift for it if unit +
+// date are supplied. Shares validation and shift-defaulting with
+// bulkImportFacilities below — kept as a thin wrapper over the same path so
+// the single-add form and CSV import can never drift out of sync.
+export async function createFacility(fields) {
+  const { created, skipped } = await bulkImportFacilities([fields]);
+  if (skipped.length > 0) {
+    throw new Error(skipped[0].reason);
+  }
+  return created[0];
 }
 
 // Bulk-creates facilities (and one shift each, if shift fields are present on
