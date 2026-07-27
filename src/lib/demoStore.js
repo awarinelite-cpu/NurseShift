@@ -1,4 +1,5 @@
 import { mockNurse, mockShifts, mockClaims } from './mockData';
+import { seedFacilities, seedShifts } from './seedData';
 
 // A tiny shared in-memory "database" for demo mode, so nurse sign-up, facility
 // actions, and admin review all see the same data without a real backend.
@@ -42,6 +43,7 @@ export function demoRateNurse(id, rating) {
 // ---------- Facilities ----------
 let _facilities = [
   { id: 'facility-demo-seed', name: 'Reddington Hospital', city: 'Victoria Island, Lagos', lat: 6.4281, lng: 3.4219 },
+  ...seedFacilities,
 ];
 let _nextFacilityId = 1;
 
@@ -62,7 +64,7 @@ export function demoUpdateFacilityLocation(id, lat, lng) {
 }
 
 // ---------- Shifts ----------
-let _shifts = [...mockShifts];
+let _shifts = [...mockShifts, ...seedShifts];
 let _nextShiftSeq = 200;
 
 export function demoListShifts() {
