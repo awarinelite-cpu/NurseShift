@@ -56,6 +56,11 @@ export function demoGetFacility(id) {
   return _facilities.find((f) => f.id === id) ?? null;
 }
 
+export function demoUpdateFacilityLocation(id, lat, lng) {
+  _facilities = _facilities.map((f) => (f.id === id ? { ...f, lat, lng } : f));
+  return demoGetFacility(id);
+}
+
 // ---------- Shifts ----------
 let _shifts = [...mockShifts];
 let _nextShiftSeq = 200;

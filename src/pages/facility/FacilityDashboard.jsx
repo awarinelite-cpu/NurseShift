@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useFacility } from '../../context/FacilityContext';
 import { listClaimsForFacility, approveClaim, rejectClaim, rateNurseForClaim } from '../../lib/facility';
+import { getCurrentLocation } from '../../lib/geo';
 import Badge from '../../components/Badge';
 
 function formatNaira(amount) {
@@ -8,11 +9,13 @@ function formatNaira(amount) {
 }
 
 export default function FacilityDashboard() {
-  const { facility } = useFacility();
+  const { facility, updateLocation } = useFacility();
   const [claims, setClaims] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actingOn, setActingOn] = useState(null);
   const [ratingFor, setRatingFor] = useState(null);
+  const [locating, setLocating] = useState(false);
+  const [locError, setLocError] = useState('');
 
   async function refresh() {
     const data = await listClaimsForFacility(facility.id);
@@ -47,6 +50,18 @@ export default function FacilityDashboard() {
     setRatingFor(null);
   }
 
+  async function handleUpdateLocation() {
+    setLocating(true);
+    setLocError('');
+    const loc = await getCurrentLocation();
+    setLocating(false);
+    if (!loc) {
+      setLocError('Could not get location — check your browser location permission and try again.');
+      return;
+    }
+    await updateLocation(loc.lat, loc.lng);
+  }
+
   const pending = claims.filter((c) => c.status === 'pending');
   const active = claims.filter((c) => c.status === 'approved');
   const toRate = claims.filter((c) => c.status === 'completed' && !c.rated);
@@ -58,6 +73,23 @@ export default function FacilityDashboard() {
         <p className="eyebrow">{facility?.name}</p>
         <h1 className="page-title">Claims</h1>
         <p className="page-sub">Approve a claim to lock in the nurse and lock the shift; rejecting reopens it.</p>
+      </div>
+
+      <div className="detail-card" style={{ marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <div>
+          <p className="detail-facility" style={{ fontSize: 14 }}>
+            {facility?.lat != null ? '📍 Location set' : 'No location set'}
+          </p>
+          <p className="detail-city">
+            {facility?.lat != null
+              ? 'New shifts you post will show a distance and map link to nurses.'
+              : 'Add your location so nurses can see distance and find you on the map.'}
+          </p>
+          {locError && <p className="form-error" style={{ marginTop: 6 }}>{locError}</p>}
+        </div>
+        <button className="clock-btn" onClick={handleUpdateLocation} disabled={locating}>
+          {locating ? 'Getting location…' : facility?.lat != null ? 'Update location' : 'Set location'}
+        </button>
       </div>
 
       {loading ? (

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { DEMO_MODE, auth } from '../lib/firebase';
-import { signUpFacility, signInFacility, signOutFacility, getFacilityProfile } from '../lib/facilityAuth';
+import { signUpFacility, signInFacility, signOutFacility, getFacilityProfile, updateFacilityLocation } from '../lib/facilityAuth';
 
 const FacilityContext = createContext(null);
 
@@ -41,8 +41,14 @@ export function FacilityProvider({ children }) {
     setFacility(null);
   }
 
+  async function updateLocation(lat, lng) {
+    const updated = await updateFacilityLocation(facility.id, lat, lng);
+    setFacility(updated);
+    return updated;
+  }
+
   return (
-    <FacilityContext.Provider value={{ facility, loading, isDemo: DEMO_MODE, signUp, signIn, signOut }}>
+    <FacilityContext.Provider value={{ facility, loading, isDemo: DEMO_MODE, signUp, signIn, signOut, updateLocation }}>
       {children}
     </FacilityContext.Provider>
   );

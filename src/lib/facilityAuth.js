@@ -1,5 +1,5 @@
 import { DEMO_MODE, auth, db } from './firebase';
-import { demoAddFacility, demoGetFacility } from './demoStore';
+import { demoAddFacility, demoGetFacility, demoUpdateFacilityLocation } from './demoStore';
 
 let _demoSignedInId = null;
 
@@ -46,4 +46,14 @@ export async function getFacilityProfile(uid) {
   const { doc, getDoc } = await import('firebase/firestore');
   const snap = await getDoc(doc(db, 'facilities', uid));
   return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+}
+
+// Lets a facility set/update its location after the fact — covers accounts
+// created before location capture existed, or ones that skipped it at sign-up.
+export async function updateFacilityLocation(facilityId, lat, lng) {
+  if (DEMO_MODE) return Promise.resolve(demoUpdateFacilityLocation(facilityId, lat, lng));
+
+  const { doc, updateDoc } = await import('firebase/firestore');
+  await updateDoc(doc(db, 'facilities', facilityId), { lat, lng });
+  return getFacilityProfile(facilityId);
 }
