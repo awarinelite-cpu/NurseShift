@@ -38,6 +38,11 @@ export function AuthProvider({ children }) {
 
   async function signIn(email, password) {
     const profile = await signInNurse(email, password);
+    if (!profile) {
+      throw new Error(
+        'Signed in, but no profile was found for this account. It may not have finished creating — try signing up again, or contact support.'
+      );
+    }
     setNurse(profile);
     return profile;
   }
