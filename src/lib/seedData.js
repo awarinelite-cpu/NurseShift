@@ -1,6 +1,16 @@
 // Seed data: hospital facilities across Lagos State and Ogun State, one open shift each.
 // Generated for demo/local-dev use — merged into demoStore's in-memory data in DEMO_MODE.
 // For a live Firestore project, run scripts/seedFirestore.js instead (see that file for usage).
+//
+// Coordinates verified/corrected against Google Places (Jul 2026). A few facilities have no
+// exact standalone listing on Google Maps under that name; those use the nearest verifiable
+// match and are noted below:
+//   - facility-seed-003 (Isolo Ejigbo Comprehensive Health Centre): nearest match is Isolo PHC
+//   - facility-seed-011 (Trade Fair General Hospital): no listing found; pinned to Trade Fair Complex
+//   - facility-seed-012 (Festac Links Hospital): no listing found; pinned to Festac PHC
+//   - facility-seed-018 (Badagry Cottage Hospital, Topo): no listing found; pinned to Badagry town centre
+//   - facility-seed-021 (Epe Cottage Hospital): no listing found; pinned to Epe Maternity Home PHC
+//   - facility-seed-028 (Holy Trinity Hospital, Iju): only an Ikeja branch found on Maps, not Iju
 
 export const seedFacilities = [
   {
@@ -9,8 +19,8 @@ export const seedFacilities = [
     "city": "Agege, Lagos",
     "lga": "Agege",
     "state": "Lagos",
-    "lat": 6.6282,
-    "lng": 3.3363
+    "lat": 6.634995,
+    "lng": 3.3034866
   },
   {
     "id": "facility-seed-002",
@@ -18,8 +28,8 @@ export const seedFacilities = [
     "city": "Agege, Lagos",
     "lga": "Agege",
     "state": "Lagos",
-    "lat": 6.6022,
-    "lng": 3.33
+    "lat": 6.6594032,
+    "lng": 3.3001849
   },
   {
     "id": "facility-seed-003",
@@ -27,8 +37,8 @@ export const seedFacilities = [
     "city": "Agege, Lagos",
     "lga": "Agege",
     "state": "Lagos",
-    "lat": 6.6172,
-    "lng": 3.3212
+    "lat": 6.5286414,
+    "lng": 3.3208427
   },
   {
     "id": "facility-seed-004",
@@ -36,8 +46,8 @@ export const seedFacilities = [
     "city": "Ajeromi-Ifelodun, Lagos",
     "lga": "Ajeromi-Ifelodun",
     "state": "Lagos",
-    "lat": 6.4512,
-    "lng": 3.3227
+    "lat": 6.45523,
+    "lng": 3.3329244
   },
   {
     "id": "facility-seed-005",
@@ -45,8 +55,8 @@ export const seedFacilities = [
     "city": "Ajeromi-Ifelodun, Lagos",
     "lga": "Ajeromi-Ifelodun",
     "state": "Lagos",
-    "lat": 6.4536,
-    "lng": 3.316
+    "lat": 6.459742,
+    "lng": 3.3359972
   },
   {
     "id": "facility-seed-006",
@@ -54,8 +64,8 @@ export const seedFacilities = [
     "city": "Ajeromi-Ifelodun, Lagos",
     "lga": "Ajeromi-Ifelodun",
     "state": "Lagos",
-    "lat": 6.4588,
-    "lng": 3.3217
+    "lat": 6.4562764,
+    "lng": 3.3453815
   },
   {
     "id": "facility-seed-007",
@@ -63,8 +73,8 @@ export const seedFacilities = [
     "city": "Alimosho, Lagos",
     "lga": "Alimosho",
     "state": "Lagos",
-    "lat": 6.5695,
-    "lng": 3.2993
+    "lat": 6.5613452,
+    "lng": 3.2513195
   },
   {
     "id": "facility-seed-008",
@@ -72,8 +82,8 @@ export const seedFacilities = [
     "city": "Alimosho, Lagos",
     "lga": "Alimosho",
     "state": "Lagos",
-    "lat": 6.5744,
-    "lng": 3.2816
+    "lat": 6.6123547,
+    "lng": 3.3017829
   },
   {
     "id": "facility-seed-009",
@@ -81,8 +91,8 @@ export const seedFacilities = [
     "city": "Alimosho, Lagos",
     "lga": "Alimosho",
     "state": "Lagos",
-    "lat": 6.5807,
-    "lng": 3.275
+    "lat": 6.5745265,
+    "lng": 3.3036635
   },
   {
     "id": "facility-seed-010",
@@ -90,8 +100,8 @@ export const seedFacilities = [
     "city": "Amuwo-Odofin, Lagos",
     "lga": "Amuwo-Odofin",
     "state": "Lagos",
-    "lat": 6.4808,
-    "lng": 3.2928
+    "lat": 6.4611632,
+    "lng": 3.3013878
   },
   {
     "id": "facility-seed-011",
@@ -99,8 +109,8 @@ export const seedFacilities = [
     "city": "Amuwo-Odofin, Lagos",
     "lga": "Amuwo-Odofin",
     "state": "Lagos",
-    "lat": 6.4763,
-    "lng": 3.2979
+    "lat": 6.4596142,
+    "lng": 3.2479141
   },
   {
     "id": "facility-seed-012",
@@ -108,8 +118,8 @@ export const seedFacilities = [
     "city": "Amuwo-Odofin, Lagos",
     "lga": "Amuwo-Odofin",
     "state": "Lagos",
-    "lat": 6.4571,
-    "lng": 3.2709
+    "lat": 6.4696481,
+    "lng": 3.2835146
   },
   {
     "id": "facility-seed-013",
@@ -117,8 +127,8 @@ export const seedFacilities = [
     "city": "Apapa, Lagos",
     "lga": "Apapa",
     "state": "Lagos",
-    "lat": 6.4581,
-    "lng": 3.351
+    "lat": 6.4419041,
+    "lng": 3.3688009
   },
   {
     "id": "facility-seed-014",
@@ -126,8 +136,8 @@ export const seedFacilities = [
     "city": "Apapa, Lagos",
     "lga": "Apapa",
     "state": "Lagos",
-    "lat": 6.4527,
-    "lng": 3.3725
+    "lat": 6.4408366,
+    "lng": 3.3588687
   },
   {
     "id": "facility-seed-015",
@@ -135,8 +145,8 @@ export const seedFacilities = [
     "city": "Apapa, Lagos",
     "lga": "Apapa",
     "state": "Lagos",
-    "lat": 6.4415,
-    "lng": 3.3642
+    "lat": 6.4603276,
+    "lng": 3.3514559
   },
   {
     "id": "facility-seed-016",
@@ -144,8 +154,8 @@ export const seedFacilities = [
     "city": "Badagry, Lagos",
     "lga": "Badagry",
     "state": "Lagos",
-    "lat": 6.4288,
-    "lng": 2.8919
+    "lat": 6.4136764,
+    "lng": 2.8972858
   },
   {
     "id": "facility-seed-017",
@@ -153,8 +163,8 @@ export const seedFacilities = [
     "city": "Badagry, Lagos",
     "lga": "Badagry",
     "state": "Lagos",
-    "lat": 6.414,
-    "lng": 2.8834
+    "lat": 6.435701,
+    "lng": 2.9836644
   },
   {
     "id": "facility-seed-018",
@@ -162,8 +172,8 @@ export const seedFacilities = [
     "city": "Badagry, Lagos",
     "lga": "Badagry",
     "state": "Lagos",
-    "lat": 6.4203,
-    "lng": 2.8821
+    "lat": 6.4136764,
+    "lng": 2.8972858
   },
   {
     "id": "facility-seed-019",
@@ -171,8 +181,8 @@ export const seedFacilities = [
     "city": "Epe, Lagos",
     "lga": "Epe",
     "state": "Lagos",
-    "lat": 6.5779,
-    "lng": 3.9905
+    "lat": 6.5864412,
+    "lng": 3.9704396
   },
   {
     "id": "facility-seed-020",
@@ -180,8 +190,8 @@ export const seedFacilities = [
     "city": "Epe, Lagos",
     "lga": "Epe",
     "state": "Lagos",
-    "lat": 6.591,
-    "lng": 3.9706
+    "lat": 6.5864853,
+    "lng": 3.9706656
   },
   {
     "id": "facility-seed-021",
@@ -189,8 +199,8 @@ export const seedFacilities = [
     "city": "Epe, Lagos",
     "lga": "Epe",
     "state": "Lagos",
-    "lat": 6.5849,
-    "lng": 3.9777
+    "lat": 6.5906014,
+    "lng": 3.9781451
   },
   {
     "id": "facility-seed-022",
@@ -198,8 +208,8 @@ export const seedFacilities = [
     "city": "Eti-Osa, Lagos",
     "lga": "Eti-Osa",
     "state": "Lagos",
-    "lat": 6.4329,
-    "lng": 3.4274
+    "lat": 6.4329137,
+    "lng": 3.4203581
   },
   {
     "id": "facility-seed-023",
@@ -207,8 +217,8 @@ export const seedFacilities = [
     "city": "Eti-Osa, Lagos",
     "lga": "Eti-Osa",
     "state": "Lagos",
-    "lat": 6.4257,
-    "lng": 3.4335
+    "lat": 6.432157,
+    "lng": 3.4720166
   },
   {
     "id": "facility-seed-024",
@@ -216,8 +226,8 @@ export const seedFacilities = [
     "city": "Eti-Osa, Lagos",
     "lga": "Eti-Osa",
     "state": "Lagos",
-    "lat": 6.4172,
-    "lng": 3.4197
+    "lat": 6.4312816,
+    "lng": 3.4472163
   },
   {
     "id": "facility-seed-025",
@@ -225,8 +235,8 @@ export const seedFacilities = [
     "city": "Ibeju-Lekki, Lagos",
     "lga": "Ibeju-Lekki",
     "state": "Lagos",
-    "lat": 6.4649,
-    "lng": 3.6796
+    "lat": 6.4870134,
+    "lng": 3.8909286
   },
   {
     "id": "facility-seed-026",
@@ -234,8 +244,8 @@ export const seedFacilities = [
     "city": "Ibeju-Lekki, Lagos",
     "lga": "Ibeju-Lekki",
     "state": "Lagos",
-    "lat": 6.4699,
-    "lng": 3.6771
+    "lat": 6.4385907,
+    "lng": 3.4897678
   },
   {
     "id": "facility-seed-027",
@@ -243,8 +253,8 @@ export const seedFacilities = [
     "city": "Ifako-Ijaiye, Lagos",
     "lga": "Ifako-Ijaiye",
     "state": "Lagos",
-    "lat": 6.6517,
-    "lng": 3.2858
+    "lat": 6.6436077,
+    "lng": 3.3252496
   },
   {
     "id": "facility-seed-028",
@@ -252,8 +262,8 @@ export const seedFacilities = [
     "city": "Ifako-Ijaiye, Lagos",
     "lga": "Ifako-Ijaiye",
     "state": "Lagos",
-    "lat": 6.6566,
-    "lng": 3.3014
+    "lat": 6.6004575,
+    "lng": 3.3441203
   },
   {
     "id": "facility-seed-029",
@@ -261,8 +271,8 @@ export const seedFacilities = [
     "city": "Ikeja, Lagos",
     "lga": "Ikeja",
     "state": "Lagos",
-    "lat": 6.5994,
-    "lng": 3.3453
+    "lat": 6.5904312,
+    "lng": 3.3422622
   },
   {
     "id": "facility-seed-030",
@@ -270,8 +280,8 @@ export const seedFacilities = [
     "city": "Ikeja, Lagos",
     "lga": "Ikeja",
     "state": "Lagos",
-    "lat": 6.6164,
-    "lng": 3.359
+    "lat": 6.5878132,
+    "lng": 3.3576179
   },
   {
     "id": "facility-seed-031",
@@ -279,8 +289,8 @@ export const seedFacilities = [
     "city": "Ikeja, Lagos",
     "lga": "Ikeja",
     "state": "Lagos",
-    "lat": 6.6085,
-    "lng": 3.361
+    "lat": 6.5855929,
+    "lng": 3.3523697
   },
   {
     "id": "facility-seed-032",
@@ -288,8 +298,8 @@ export const seedFacilities = [
     "city": "Ikorodu, Lagos",
     "lga": "Ikorodu",
     "state": "Lagos",
-    "lat": 6.613,
-    "lng": 3.5028
+    "lat": 6.608729,
+    "lng": 3.4993661
   },
   {
     "id": "facility-seed-033",
@@ -297,8 +307,8 @@ export const seedFacilities = [
     "city": "Ikorodu, Lagos",
     "lga": "Ikorodu",
     "state": "Lagos",
-    "lat": 6.6169,
-    "lng": 3.5177
+    "lat": 6.6228702,
+    "lng": 3.5016479
   },
   {
     "id": "facility-seed-034",
@@ -306,8 +316,8 @@ export const seedFacilities = [
     "city": "Kosofe, Lagos",
     "lga": "Kosofe",
     "state": "Lagos",
-    "lat": 6.5743,
-    "lng": 3.3976
+    "lat": 6.552517,
+    "lng": 3.3871859
   },
   {
     "id": "facility-seed-035",
@@ -315,8 +325,8 @@ export const seedFacilities = [
     "city": "Kosofe, Lagos",
     "lga": "Kosofe",
     "state": "Lagos",
-    "lat": 6.5856,
-    "lng": 3.376
+    "lat": 6.5945986,
+    "lng": 3.3899344
   },
   {
     "id": "facility-seed-036",
@@ -324,8 +334,8 @@ export const seedFacilities = [
     "city": "Lagos Island, Lagos",
     "lga": "Lagos Island",
     "state": "Lagos",
-    "lat": 6.4685,
-    "lng": 3.3892
+    "lat": 6.4475284,
+    "lng": 3.39714
   },
   {
     "id": "facility-seed-037",
@@ -333,8 +343,8 @@ export const seedFacilities = [
     "city": "Lagos Island, Lagos",
     "lga": "Lagos Island",
     "state": "Lagos",
-    "lat": 6.4667,
-    "lng": 3.3882
+    "lat": 6.4550034,
+    "lng": 3.3921639
   },
   {
     "id": "facility-seed-038",
@@ -342,8 +352,8 @@ export const seedFacilities = [
     "city": "Lagos Island, Lagos",
     "lga": "Lagos Island",
     "state": "Lagos",
-    "lat": 6.4532,
-    "lng": 3.4017
+    "lat": 6.4491937,
+    "lng": 3.397623
   },
   {
     "id": "facility-seed-039",
@@ -351,8 +361,8 @@ export const seedFacilities = [
     "city": "Lagos Mainland, Lagos",
     "lga": "Lagos Mainland",
     "state": "Lagos",
-    "lat": 6.4913,
-    "lng": 3.3809
+    "lat": 6.4843875,
+    "lng": 3.3803294
   },
   {
     "id": "facility-seed-040",
@@ -360,8 +370,8 @@ export const seedFacilities = [
     "city": "Lagos Mainland, Lagos",
     "lga": "Lagos Mainland",
     "state": "Lagos",
-    "lat": 6.4862,
-    "lng": 3.3969
+    "lat": 6.5176223,
+    "lng": 3.3537453
   },
   {
     "id": "facility-seed-041",
@@ -369,8 +379,8 @@ export const seedFacilities = [
     "city": "Mushin, Lagos",
     "lga": "Mushin",
     "state": "Lagos",
-    "lat": 6.5463,
-    "lng": 3.3486
+    "lat": 6.5312383,
+    "lng": 3.3462853
   },
   {
     "id": "facility-seed-042",
@@ -378,8 +388,8 @@ export const seedFacilities = [
     "city": "Mushin, Lagos",
     "lga": "Mushin",
     "state": "Lagos",
-    "lat": 6.5319,
-    "lng": 3.3456
+    "lat": 6.564862,
+    "lng": 3.3684482
   },
   {
     "id": "facility-seed-043",
@@ -387,8 +397,8 @@ export const seedFacilities = [
     "city": "Ojo, Lagos",
     "lga": "Ojo",
     "state": "Lagos",
-    "lat": 6.4541,
-    "lng": 3.1785
+    "lat": 6.452147,
+    "lng": 3.2831993
   },
   {
     "id": "facility-seed-044",
@@ -396,8 +406,8 @@ export const seedFacilities = [
     "city": "Ojo, Lagos",
     "lga": "Ojo",
     "state": "Lagos",
-    "lat": 6.4684,
-    "lng": 3.1976
+    "lat": 6.462615,
+    "lng": 3.206375
   },
   {
     "id": "facility-seed-045",
@@ -405,8 +415,8 @@ export const seedFacilities = [
     "city": "Oshodi-Isolo, Lagos",
     "lga": "Oshodi-Isolo",
     "state": "Lagos",
-    "lat": 6.5356,
-    "lng": 3.3121
+    "lat": 6.5265246,
+    "lng": 3.3181938
   },
   {
     "id": "facility-seed-046",
@@ -414,8 +424,8 @@ export const seedFacilities = [
     "city": "Oshodi-Isolo, Lagos",
     "lga": "Oshodi-Isolo",
     "state": "Lagos",
-    "lat": 6.5202,
-    "lng": 3.3298
+    "lat": 6.5062828,
+    "lng": 3.3020596
   },
   {
     "id": "facility-seed-047",
@@ -423,8 +433,8 @@ export const seedFacilities = [
     "city": "Somolu, Lagos",
     "lga": "Somolu",
     "state": "Lagos",
-    "lat": 6.539,
-    "lng": 3.3859
+    "lat": 6.5309682,
+    "lng": 3.3712379
   },
   {
     "id": "facility-seed-048",
@@ -432,8 +442,8 @@ export const seedFacilities = [
     "city": "Somolu, Lagos",
     "lga": "Somolu",
     "state": "Lagos",
-    "lat": 6.5279,
-    "lng": 3.3875
+    "lat": 6.5363929,
+    "lng": 3.3721479
   },
   {
     "id": "facility-seed-049",
@@ -441,8 +451,8 @@ export const seedFacilities = [
     "city": "Surulere, Lagos",
     "lga": "Surulere",
     "state": "Lagos",
-    "lat": 6.481,
-    "lng": 3.3556
+    "lat": 6.5083278,
+    "lng": 3.3574615
   },
   {
     "id": "facility-seed-050",
@@ -450,8 +460,8 @@ export const seedFacilities = [
     "city": "Surulere, Lagos",
     "lga": "Surulere",
     "state": "Lagos",
-    "lat": 6.4867,
-    "lng": 3.3637
+    "lat": 6.4900606,
+    "lng": 3.3517906
   },
   {
     "id": "facility-seed-051",
@@ -459,8 +469,8 @@ export const seedFacilities = [
     "city": "Abeokuta North, Ogun",
     "lga": "Abeokuta North",
     "state": "Ogun",
-    "lat": 7.1493,
-    "lng": 3.3411
+    "lat": 7.1434328,
+    "lng": 3.3779479
   },
   {
     "id": "facility-seed-052",
@@ -468,8 +478,8 @@ export const seedFacilities = [
     "city": "Abeokuta South, Ogun",
     "lga": "Abeokuta South",
     "state": "Ogun",
-    "lat": 7.1569,
-    "lng": 3.3615
+    "lat": 7.1635658,
+    "lng": 3.3606108
   },
   {
     "id": "facility-seed-053",
@@ -477,8 +487,8 @@ export const seedFacilities = [
     "city": "Ado-Odo/Ota, Ogun",
     "lga": "Ado-Odo/Ota",
     "state": "Ogun",
-    "lat": 6.6816,
-    "lng": 3.2394
+    "lat": 6.6826263,
+    "lng": 3.2090633
   },
   {
     "id": "facility-seed-054",
@@ -486,8 +496,8 @@ export const seedFacilities = [
     "city": "Yewa North, Ogun",
     "lga": "Yewa North",
     "state": "Ogun",
-    "lat": 7.1638,
-    "lng": 2.8589
+    "lat": 7.2324012,
+    "lng": 3.0114508
   },
   {
     "id": "facility-seed-055",
@@ -495,8 +505,8 @@ export const seedFacilities = [
     "city": "Yewa South, Ogun",
     "lga": "Yewa South",
     "state": "Ogun",
-    "lat": 6.8945,
-    "lng": 2.983
+    "lat": 6.9080041,
+    "lng": 3.0229438
   },
   {
     "id": "facility-seed-056",
@@ -504,8 +514,8 @@ export const seedFacilities = [
     "city": "Ewekoro, Ogun",
     "lga": "Ewekoro",
     "state": "Ogun",
-    "lat": 6.9325,
-    "lng": 3.2187
+    "lat": 6.9337134,
+    "lng": 3.2192469
   },
   {
     "id": "facility-seed-057",
@@ -513,8 +523,8 @@ export const seedFacilities = [
     "city": "Ifo, Ogun",
     "lga": "Ifo",
     "state": "Ogun",
-    "lat": 6.8103,
-    "lng": 3.1834
+    "lat": 6.8326617,
+    "lng": 3.1921398
   },
   {
     "id": "facility-seed-058",
@@ -522,8 +532,8 @@ export const seedFacilities = [
     "city": "Ijebu East, Ogun",
     "lga": "Ijebu East",
     "state": "Ogun",
-    "lat": 6.811,
-    "lng": 4.0385
+    "lat": 6.7431461,
+    "lng": 4.1588763
   },
   {
     "id": "facility-seed-059",
@@ -531,8 +541,8 @@ export const seedFacilities = [
     "city": "Ijebu North, Ogun",
     "lga": "Ijebu North",
     "state": "Ogun",
-    "lat": 6.9702,
-    "lng": 3.9046
+    "lat": 6.9870416,
+    "lng": 4.0034911
   },
   {
     "id": "facility-seed-060",
@@ -540,8 +550,8 @@ export const seedFacilities = [
     "city": "Ijebu North East, Ogun",
     "lga": "Ijebu North East",
     "state": "Ogun",
-    "lat": 6.9401,
-    "lng": 4.0471
+    "lat": 6.89392,
+    "lng": 4.0061259
   },
   {
     "id": "facility-seed-061",
@@ -549,8 +559,8 @@ export const seedFacilities = [
     "city": "Ijebu Ode, Ogun",
     "lga": "Ijebu Ode",
     "state": "Ogun",
-    "lat": 6.8081,
-    "lng": 3.9126
+    "lat": 6.8138575,
+    "lng": 3.9245188
   },
   {
     "id": "facility-seed-062",
@@ -558,8 +568,8 @@ export const seedFacilities = [
     "city": "Ikenne, Ogun",
     "lga": "Ikenne",
     "state": "Ogun",
-    "lat": 6.876,
-    "lng": 3.7207
+    "lat": 6.8695016,
+    "lng": 3.7079407
   },
   {
     "id": "facility-seed-063",
@@ -567,8 +577,8 @@ export const seedFacilities = [
     "city": "Imeko Afon, Ogun",
     "lga": "Imeko Afon",
     "state": "Ogun",
-    "lat": 7.4188,
-    "lng": 2.82
+    "lat": 7.4566921,
+    "lng": 2.8327721
   },
   {
     "id": "facility-seed-064",
@@ -576,8 +586,8 @@ export const seedFacilities = [
     "city": "Ipokia, Ogun",
     "lga": "Ipokia",
     "state": "Ogun",
-    "lat": 6.6543,
-    "lng": 2.8749
+    "lat": 6.5176,
+    "lng": 2.8464
   },
   {
     "id": "facility-seed-065",
@@ -585,8 +595,8 @@ export const seedFacilities = [
     "city": "Obafemi Owode, Ogun",
     "lga": "Obafemi Owode",
     "state": "Ogun",
-    "lat": 6.8007,
-    "lng": 3.4553
+    "lat": 6.9413826,
+    "lng": 3.5097655
   },
   {
     "id": "facility-seed-066",
@@ -594,8 +604,8 @@ export const seedFacilities = [
     "city": "Odeda, Ogun",
     "lga": "Odeda",
     "state": "Ogun",
-    "lat": 7.1696,
-    "lng": 3.4415
+    "lat": 7.2354498,
+    "lng": 3.5265667
   },
   {
     "id": "facility-seed-067",
@@ -603,8 +613,8 @@ export const seedFacilities = [
     "city": "Odogbolu, Ogun",
     "lga": "Odogbolu",
     "state": "Ogun",
-    "lat": 6.8755,
-    "lng": 3.8124
+    "lat": 6.8365,
+    "lng": 3.7641
   },
   {
     "id": "facility-seed-068",
@@ -612,8 +622,8 @@ export const seedFacilities = [
     "city": "Ogun Waterside, Ogun",
     "lga": "Ogun Waterside",
     "state": "Ogun",
-    "lat": 6.4633,
-    "lng": 4.2447
+    "lat": 6.5409436,
+    "lng": 4.3368075
   },
   {
     "id": "facility-seed-069",
@@ -621,8 +631,8 @@ export const seedFacilities = [
     "city": "Remo North, Ogun",
     "lga": "Remo North",
     "state": "Ogun",
-    "lat": 6.9115,
-    "lng": 3.7152
+    "lat": 6.9239627,
+    "lng": 3.6617211
   },
   {
     "id": "facility-seed-070",
@@ -630,10 +640,11 @@ export const seedFacilities = [
     "city": "Sagamu, Ogun",
     "lga": "Sagamu",
     "state": "Ogun",
-    "lat": 6.844,
-    "lng": 3.6366
+    "lat": 6.8490444,
+    "lng": 3.6530228
   }
 ];
+
 
 export const seedShifts = [
   {
@@ -641,8 +652,8 @@ export const seedShifts = [
     "facility": "Agege General Hospital",
     "facilityId": "facility-seed-001",
     "city": "Agege, Lagos",
-    "lat": 6.6282,
-    "lng": 3.3363,
+    "lat": 6.634995,
+    "lng": 3.3034866,
     "unit": "Accident & Emergency",
     "cadre": "RM",
     "date": "2026-07-29",
@@ -659,8 +670,8 @@ export const seedShifts = [
     "facility": "Chygor-Cole Specialist Hospital, Abule-Egba",
     "facilityId": "facility-seed-002",
     "city": "Agege, Lagos",
-    "lat": 6.6022,
-    "lng": 3.33,
+    "lat": 6.6594032,
+    "lng": 3.3001849,
     "unit": "Labour Ward",
     "cadre": "RN",
     "date": "2026-07-30",
@@ -677,8 +688,8 @@ export const seedShifts = [
     "facility": "Isolo Ejigbo Comprehensive Health Centre",
     "facilityId": "facility-seed-003",
     "city": "Agege, Lagos",
-    "lat": 6.6172,
-    "lng": 3.3212,
+    "lat": 6.5286414,
+    "lng": 3.3208427,
     "unit": "General Medicine",
     "cadre": "RN",
     "date": "2026-07-31",
@@ -695,8 +706,8 @@ export const seedShifts = [
     "facility": "Ajeromi General Hospital",
     "facilityId": "facility-seed-004",
     "city": "Ajeromi-Ifelodun, Lagos",
-    "lat": 6.4512,
-    "lng": 3.3227,
+    "lat": 6.45523,
+    "lng": 3.3329244,
     "unit": "Paediatrics",
     "cadre": "RM",
     "date": "2026-08-01",
@@ -713,8 +724,8 @@ export const seedShifts = [
     "facility": "Trinity Specialist Hospital, Ajegunle",
     "facilityId": "facility-seed-005",
     "city": "Ajeromi-Ifelodun, Lagos",
-    "lat": 6.4536,
-    "lng": 3.316,
+    "lat": 6.459742,
+    "lng": 3.3359972,
     "unit": "Theatre",
     "cadre": "RN",
     "date": "2026-08-02",
@@ -731,8 +742,8 @@ export const seedShifts = [
     "facility": "Ajegunle Comprehensive Health Centre",
     "facilityId": "facility-seed-006",
     "city": "Ajeromi-Ifelodun, Lagos",
-    "lat": 6.4588,
-    "lng": 3.3217,
+    "lat": 6.4562764,
+    "lng": 3.3453815,
     "unit": "Renal/Dialysis",
     "cadre": "RN",
     "date": "2026-08-03",
@@ -749,8 +760,8 @@ export const seedShifts = [
     "facility": "Alimosho General Hospital, Igando",
     "facilityId": "facility-seed-007",
     "city": "Alimosho, Lagos",
-    "lat": 6.5695,
-    "lng": 3.2993,
+    "lat": 6.5613452,
+    "lng": 3.2513195,
     "unit": "Psychiatry",
     "cadre": "RM",
     "date": "2026-08-04",
@@ -767,8 +778,8 @@ export const seedShifts = [
     "facility": "Krown Hospital, Egbeda",
     "facilityId": "facility-seed-008",
     "city": "Alimosho, Lagos",
-    "lat": 6.5744,
-    "lng": 3.2816,
+    "lat": 6.6123547,
+    "lng": 3.3017829,
     "unit": "NICU",
     "cadre": "RN",
     "date": "2026-07-28",
@@ -785,8 +796,8 @@ export const seedShifts = [
     "facility": "Mercy Stripes Specialist Hospital, Shasha",
     "facilityId": "facility-seed-009",
     "city": "Alimosho, Lagos",
-    "lat": 6.5807,
-    "lng": 3.275,
+    "lat": 6.5745265,
+    "lng": 3.3036635,
     "unit": "Oncology",
     "cadre": "RN",
     "date": "2026-07-29",
@@ -803,8 +814,8 @@ export const seedShifts = [
     "facility": "Amuwo-Odofin General Hospital, Festac",
     "facilityId": "facility-seed-010",
     "city": "Amuwo-Odofin, Lagos",
-    "lat": 6.4808,
-    "lng": 3.2928,
+    "lat": 6.4611632,
+    "lng": 3.3013878,
     "unit": "ICU",
     "cadre": "RM",
     "date": "2026-07-30",
@@ -821,8 +832,8 @@ export const seedShifts = [
     "facility": "Trade Fair General Hospital",
     "facilityId": "facility-seed-011",
     "city": "Amuwo-Odofin, Lagos",
-    "lat": 6.4763,
-    "lng": 3.2979,
+    "lat": 6.4596142,
+    "lng": 3.2479141,
     "unit": "Accident & Emergency",
     "cadre": "RN",
     "date": "2026-07-31",
@@ -839,8 +850,8 @@ export const seedShifts = [
     "facility": "Festac Links Hospital",
     "facilityId": "facility-seed-012",
     "city": "Amuwo-Odofin, Lagos",
-    "lat": 6.4571,
-    "lng": 3.2709,
+    "lat": 6.4696481,
+    "lng": 3.2835146,
     "unit": "Labour Ward",
     "cadre": "RN",
     "date": "2026-08-01",
@@ -857,8 +868,8 @@ export const seedShifts = [
     "facility": "Apapa General Hospital",
     "facilityId": "facility-seed-013",
     "city": "Apapa, Lagos",
-    "lat": 6.4581,
-    "lng": 3.351,
+    "lat": 6.4419041,
+    "lng": 3.3688009,
     "unit": "General Medicine",
     "cadre": "RM",
     "date": "2026-08-02",
@@ -875,8 +886,8 @@ export const seedShifts = [
     "facility": "Lagoon Hospitals, Apapa",
     "facilityId": "facility-seed-014",
     "city": "Apapa, Lagos",
-    "lat": 6.4527,
-    "lng": 3.3725,
+    "lat": 6.4408366,
+    "lng": 3.3588687,
     "unit": "Paediatrics",
     "cadre": "RN",
     "date": "2026-08-03",
@@ -893,8 +904,8 @@ export const seedShifts = [
     "facility": "Malu Road Health Centre, Apapa",
     "facilityId": "facility-seed-015",
     "city": "Apapa, Lagos",
-    "lat": 6.4415,
-    "lng": 3.3642,
+    "lat": 6.4603276,
+    "lng": 3.3514559,
     "unit": "Theatre",
     "cadre": "RN",
     "date": "2026-08-04",
@@ -911,8 +922,8 @@ export const seedShifts = [
     "facility": "Badagry General Hospital",
     "facilityId": "facility-seed-016",
     "city": "Badagry, Lagos",
-    "lat": 6.4288,
-    "lng": 2.8919,
+    "lat": 6.4136764,
+    "lng": 2.8972858,
     "unit": "Renal/Dialysis",
     "cadre": "RM",
     "date": "2026-07-28",
@@ -929,8 +940,8 @@ export const seedShifts = [
     "facility": "Adebayo Living Tower Hospital, Badagry",
     "facilityId": "facility-seed-017",
     "city": "Badagry, Lagos",
-    "lat": 6.414,
-    "lng": 2.8834,
+    "lat": 6.435701,
+    "lng": 2.9836644,
     "unit": "Psychiatry",
     "cadre": "RN",
     "date": "2026-07-29",
@@ -947,8 +958,8 @@ export const seedShifts = [
     "facility": "Badagry Cottage Hospital, Topo",
     "facilityId": "facility-seed-018",
     "city": "Badagry, Lagos",
-    "lat": 6.4203,
-    "lng": 2.8821,
+    "lat": 6.4136764,
+    "lng": 2.8972858,
     "unit": "NICU",
     "cadre": "RN",
     "date": "2026-07-30",
@@ -965,8 +976,8 @@ export const seedShifts = [
     "facility": "Epe General Hospital",
     "facilityId": "facility-seed-019",
     "city": "Epe, Lagos",
-    "lat": 6.5779,
-    "lng": 3.9905,
+    "lat": 6.5864412,
+    "lng": 3.9704396,
     "unit": "Oncology",
     "cadre": "RM",
     "date": "2026-07-31",
@@ -983,8 +994,8 @@ export const seedShifts = [
     "facility": "Epe Comprehensive Health Centre",
     "facilityId": "facility-seed-020",
     "city": "Epe, Lagos",
-    "lat": 6.591,
-    "lng": 3.9706,
+    "lat": 6.5864853,
+    "lng": 3.9706656,
     "unit": "ICU",
     "cadre": "RN",
     "date": "2026-08-01",
@@ -1001,8 +1012,8 @@ export const seedShifts = [
     "facility": "Epe Cottage Hospital",
     "facilityId": "facility-seed-021",
     "city": "Epe, Lagos",
-    "lat": 6.5849,
-    "lng": 3.9777,
+    "lat": 6.5906014,
+    "lng": 3.9781451,
     "unit": "Accident & Emergency",
     "cadre": "RN",
     "date": "2026-08-02",
@@ -1019,8 +1030,8 @@ export const seedShifts = [
     "facility": "Reddington Hospital, Victoria Island",
     "facilityId": "facility-seed-022",
     "city": "Eti-Osa, Lagos",
-    "lat": 6.4329,
-    "lng": 3.4274,
+    "lat": 6.4329137,
+    "lng": 3.4203581,
     "unit": "Labour Ward",
     "cadre": "RM",
     "date": "2026-08-03",
@@ -1037,8 +1048,8 @@ export const seedShifts = [
     "facility": "Vedic Lifecare Hospital, Lekki Phase 1",
     "facilityId": "facility-seed-023",
     "city": "Eti-Osa, Lagos",
-    "lat": 6.4257,
-    "lng": 3.4335,
+    "lat": 6.432157,
+    "lng": 3.4720166,
     "unit": "General Medicine",
     "cadre": "RN",
     "date": "2026-08-04",
@@ -1055,8 +1066,8 @@ export const seedShifts = [
     "facility": "Ave Maria Hospital, Lekki",
     "facilityId": "facility-seed-024",
     "city": "Eti-Osa, Lagos",
-    "lat": 6.4172,
-    "lng": 3.4197,
+    "lat": 6.4312816,
+    "lng": 3.4472163,
     "unit": "Paediatrics",
     "cadre": "RN",
     "date": "2026-07-28",
@@ -1073,8 +1084,8 @@ export const seedShifts = [
     "facility": "Ibeju-Lekki General Hospital",
     "facilityId": "facility-seed-025",
     "city": "Ibeju-Lekki, Lagos",
-    "lat": 6.4649,
-    "lng": 3.6796,
+    "lat": 6.4870134,
+    "lng": 3.8909286,
     "unit": "Theatre",
     "cadre": "RM",
     "date": "2026-07-29",
@@ -1091,8 +1102,8 @@ export const seedShifts = [
     "facility": "Etta Atlantic Memorial Hospital, Ikate",
     "facilityId": "facility-seed-026",
     "city": "Ibeju-Lekki, Lagos",
-    "lat": 6.4699,
-    "lng": 3.6771,
+    "lat": 6.4385907,
+    "lng": 3.4897678,
     "unit": "Renal/Dialysis",
     "cadre": "RN",
     "date": "2026-07-30",
@@ -1109,8 +1120,8 @@ export const seedShifts = [
     "facility": "Ifako-Ijaiye General Hospital",
     "facilityId": "facility-seed-027",
     "city": "Ifako-Ijaiye, Lagos",
-    "lat": 6.6517,
-    "lng": 3.2858,
+    "lat": 6.6436077,
+    "lng": 3.3252496,
     "unit": "Psychiatry",
     "cadre": "RN",
     "date": "2026-07-31",
@@ -1127,8 +1138,8 @@ export const seedShifts = [
     "facility": "Holy Trinity Hospital, Iju",
     "facilityId": "facility-seed-028",
     "city": "Ifako-Ijaiye, Lagos",
-    "lat": 6.6566,
-    "lng": 3.3014,
+    "lat": 6.6004575,
+    "lng": 3.3441203,
     "unit": "NICU",
     "cadre": "RM",
     "date": "2026-08-01",
@@ -1145,8 +1156,8 @@ export const seedShifts = [
     "facility": "Lagos State University Teaching Hospital (LASUTH)",
     "facilityId": "facility-seed-029",
     "city": "Ikeja, Lagos",
-    "lat": 6.5994,
-    "lng": 3.3453,
+    "lat": 6.5904312,
+    "lng": 3.3422622,
     "unit": "Oncology",
     "cadre": "RN",
     "date": "2026-08-02",
@@ -1163,8 +1174,8 @@ export const seedShifts = [
     "facility": "Eko Hospital, Ikeja",
     "facilityId": "facility-seed-030",
     "city": "Ikeja, Lagos",
-    "lat": 6.6164,
-    "lng": 3.359,
+    "lat": 6.5878132,
+    "lng": 3.3576179,
     "unit": "ICU",
     "cadre": "RN",
     "date": "2026-08-03",
@@ -1181,8 +1192,8 @@ export const seedShifts = [
     "facility": "Duchess International Hospital, Ikeja",
     "facilityId": "facility-seed-031",
     "city": "Ikeja, Lagos",
-    "lat": 6.6085,
-    "lng": 3.361,
+    "lat": 6.5855929,
+    "lng": 3.3523697,
     "unit": "Accident & Emergency",
     "cadre": "RM",
     "date": "2026-08-04",
@@ -1199,8 +1210,8 @@ export const seedShifts = [
     "facility": "Ikorodu General Hospital",
     "facilityId": "facility-seed-032",
     "city": "Ikorodu, Lagos",
-    "lat": 6.613,
-    "lng": 3.5028,
+    "lat": 6.608729,
+    "lng": 3.4993661,
     "unit": "Labour Ward",
     "cadre": "RN",
     "date": "2026-07-28",
@@ -1217,8 +1228,8 @@ export const seedShifts = [
     "facility": "Ikorodu Comprehensive Health Centre",
     "facilityId": "facility-seed-033",
     "city": "Ikorodu, Lagos",
-    "lat": 6.6169,
-    "lng": 3.5177,
+    "lat": 6.6228702,
+    "lng": 3.5016479,
     "unit": "General Medicine",
     "cadre": "RN",
     "date": "2026-07-29",
@@ -1235,8 +1246,8 @@ export const seedShifts = [
     "facility": "Gbagada General Hospital",
     "facilityId": "facility-seed-034",
     "city": "Kosofe, Lagos",
-    "lat": 6.5743,
-    "lng": 3.3976,
+    "lat": 6.552517,
+    "lng": 3.3871859,
     "unit": "Paediatrics",
     "cadre": "RM",
     "date": "2026-07-30",
@@ -1253,8 +1264,8 @@ export const seedShifts = [
     "facility": "Isheri General Hospital, Ketu",
     "facilityId": "facility-seed-035",
     "city": "Kosofe, Lagos",
-    "lat": 6.5856,
-    "lng": 3.376,
+    "lat": 6.5945986,
+    "lng": 3.3899344,
     "unit": "Theatre",
     "cadre": "RN",
     "date": "2026-07-31",
@@ -1271,8 +1282,8 @@ export const seedShifts = [
     "facility": "Lagos Island General Hospital",
     "facilityId": "facility-seed-036",
     "city": "Lagos Island, Lagos",
-    "lat": 6.4685,
-    "lng": 3.3892,
+    "lat": 6.4475284,
+    "lng": 3.39714,
     "unit": "Renal/Dialysis",
     "cadre": "RN",
     "date": "2026-08-01",
@@ -1289,8 +1300,8 @@ export const seedShifts = [
     "facility": "Massey Street Childrens Hospital",
     "facilityId": "facility-seed-037",
     "city": "Lagos Island, Lagos",
-    "lat": 6.4667,
-    "lng": 3.3882,
+    "lat": 6.4550034,
+    "lng": 3.3921639,
     "unit": "Psychiatry",
     "cadre": "RM",
     "date": "2026-08-02",
@@ -1307,8 +1318,8 @@ export const seedShifts = [
     "facility": "St. Nicholas Hospital, Lagos Island",
     "facilityId": "facility-seed-038",
     "city": "Lagos Island, Lagos",
-    "lat": 6.4532,
-    "lng": 3.4017,
+    "lat": 6.4491937,
+    "lng": 3.397623,
     "unit": "NICU",
     "cadre": "RN",
     "date": "2026-08-03",
@@ -1325,8 +1336,8 @@ export const seedShifts = [
     "facility": "Federal Medical Centre, Ebute-Metta",
     "facilityId": "facility-seed-039",
     "city": "Lagos Mainland, Lagos",
-    "lat": 6.4913,
-    "lng": 3.3809,
+    "lat": 6.4843875,
+    "lng": 3.3803294,
     "unit": "Oncology",
     "cadre": "RN",
     "date": "2026-08-04",
@@ -1343,8 +1354,8 @@ export const seedShifts = [
     "facility": "Lagos University Teaching Hospital (LUTH)",
     "facilityId": "facility-seed-040",
     "city": "Lagos Mainland, Lagos",
-    "lat": 6.4862,
-    "lng": 3.3969,
+    "lat": 6.5176223,
+    "lng": 3.3537453,
     "unit": "ICU",
     "cadre": "RM",
     "date": "2026-07-28",
@@ -1361,8 +1372,8 @@ export const seedShifts = [
     "facility": "Mushin General Hospital",
     "facilityId": "facility-seed-041",
     "city": "Mushin, Lagos",
-    "lat": 6.5463,
-    "lng": 3.3486,
+    "lat": 6.5312383,
+    "lng": 3.3462853,
     "unit": "Accident & Emergency",
     "cadre": "RN",
     "date": "2026-07-29",
@@ -1379,8 +1390,8 @@ export const seedShifts = [
     "facility": "Maryland Specialist Hospital, Mushin",
     "facilityId": "facility-seed-042",
     "city": "Mushin, Lagos",
-    "lat": 6.5319,
-    "lng": 3.3456,
+    "lat": 6.564862,
+    "lng": 3.3684482,
     "unit": "Labour Ward",
     "cadre": "RN",
     "date": "2026-07-30",
@@ -1397,8 +1408,8 @@ export const seedShifts = [
     "facility": "Nigerian Navy Reference Hospital, Ojo",
     "facilityId": "facility-seed-043",
     "city": "Ojo, Lagos",
-    "lat": 6.4541,
-    "lng": 3.1785,
+    "lat": 6.452147,
+    "lng": 3.2831993,
     "unit": "General Medicine",
     "cadre": "RM",
     "date": "2026-07-31",
@@ -1415,8 +1426,8 @@ export const seedShifts = [
     "facility": "Ojo General Hospital",
     "facilityId": "facility-seed-044",
     "city": "Ojo, Lagos",
-    "lat": 6.4684,
-    "lng": 3.1976,
+    "lat": 6.462615,
+    "lng": 3.206375,
     "unit": "Paediatrics",
     "cadre": "RN",
     "date": "2026-08-01",
@@ -1433,8 +1444,8 @@ export const seedShifts = [
     "facility": "Isolo General Hospital",
     "facilityId": "facility-seed-045",
     "city": "Oshodi-Isolo, Lagos",
-    "lat": 6.5356,
-    "lng": 3.3121,
+    "lat": 6.5265246,
+    "lng": 3.3181938,
     "unit": "Theatre",
     "cadre": "RN",
     "date": "2026-08-02",
@@ -1451,8 +1462,8 @@ export const seedShifts = [
     "facility": "Wind of Grace Hospital, Okota",
     "facilityId": "facility-seed-046",
     "city": "Oshodi-Isolo, Lagos",
-    "lat": 6.5202,
-    "lng": 3.3298,
+    "lat": 6.5062828,
+    "lng": 3.3020596,
     "unit": "Renal/Dialysis",
     "cadre": "RM",
     "date": "2026-08-03",
@@ -1469,8 +1480,8 @@ export const seedShifts = [
     "facility": "National Orthopaedic Hospital, Igbobi",
     "facilityId": "facility-seed-047",
     "city": "Somolu, Lagos",
-    "lat": 6.539,
-    "lng": 3.3859,
+    "lat": 6.5309682,
+    "lng": 3.3712379,
     "unit": "Psychiatry",
     "cadre": "RN",
     "date": "2026-08-04",
@@ -1487,8 +1498,8 @@ export const seedShifts = [
     "facility": "Somolu General Hospital",
     "facilityId": "facility-seed-048",
     "city": "Somolu, Lagos",
-    "lat": 6.5279,
-    "lng": 3.3875,
+    "lat": 6.5363929,
+    "lng": 3.3721479,
     "unit": "NICU",
     "cadre": "RN",
     "date": "2026-07-28",
@@ -1505,8 +1516,8 @@ export const seedShifts = [
     "facility": "Randle General Hospital, Surulere",
     "facilityId": "facility-seed-049",
     "city": "Surulere, Lagos",
-    "lat": 6.481,
-    "lng": 3.3556,
+    "lat": 6.5083278,
+    "lng": 3.3574615,
     "unit": "Oncology",
     "cadre": "RM",
     "date": "2026-07-29",
@@ -1523,8 +1534,8 @@ export const seedShifts = [
     "facility": "Avon Medical Practice, Surulere",
     "facilityId": "facility-seed-050",
     "city": "Surulere, Lagos",
-    "lat": 6.4867,
-    "lng": 3.3637,
+    "lat": 6.4900606,
+    "lng": 3.3517906,
     "unit": "ICU",
     "cadre": "RN",
     "date": "2026-07-30",
@@ -1541,8 +1552,8 @@ export const seedShifts = [
     "facility": "Federal Medical Centre, Abeokuta",
     "facilityId": "facility-seed-051",
     "city": "Abeokuta North, Ogun",
-    "lat": 7.1493,
-    "lng": 3.3411,
+    "lat": 7.1434328,
+    "lng": 3.3779479,
     "unit": "Accident & Emergency",
     "cadre": "RN",
     "date": "2026-07-31",
@@ -1559,8 +1570,8 @@ export const seedShifts = [
     "facility": "Federal Neuro-Psychiatric Hospital, Aro",
     "facilityId": "facility-seed-052",
     "city": "Abeokuta South, Ogun",
-    "lat": 7.1569,
-    "lng": 3.3615,
+    "lat": 7.1635658,
+    "lng": 3.3606108,
     "unit": "Labour Ward",
     "cadre": "RM",
     "date": "2026-08-01",
@@ -1577,8 +1588,8 @@ export const seedShifts = [
     "facility": "State Hospital, Ota",
     "facilityId": "facility-seed-053",
     "city": "Ado-Odo/Ota, Ogun",
-    "lat": 6.6816,
-    "lng": 3.2394,
+    "lat": 6.6826263,
+    "lng": 3.2090633,
     "unit": "General Medicine",
     "cadre": "RN",
     "date": "2026-08-02",
@@ -1595,8 +1606,8 @@ export const seedShifts = [
     "facility": "General Hospital, Ayetoro",
     "facilityId": "facility-seed-054",
     "city": "Yewa North, Ogun",
-    "lat": 7.1638,
-    "lng": 2.8589,
+    "lat": 7.2324012,
+    "lng": 3.0114508,
     "unit": "Paediatrics",
     "cadre": "RN",
     "date": "2026-08-03",
@@ -1613,8 +1624,8 @@ export const seedShifts = [
     "facility": "General Hospital, Ilaro",
     "facilityId": "facility-seed-055",
     "city": "Yewa South, Ogun",
-    "lat": 6.8945,
-    "lng": 2.983,
+    "lat": 6.9080041,
+    "lng": 3.0229438,
     "unit": "Theatre",
     "cadre": "RM",
     "date": "2026-08-04",
@@ -1631,8 +1642,8 @@ export const seedShifts = [
     "facility": "General Hospital, Itori",
     "facilityId": "facility-seed-056",
     "city": "Ewekoro, Ogun",
-    "lat": 6.9325,
-    "lng": 3.2187,
+    "lat": 6.9337134,
+    "lng": 3.2192469,
     "unit": "Renal/Dialysis",
     "cadre": "RN",
     "date": "2026-07-28",
@@ -1649,8 +1660,8 @@ export const seedShifts = [
     "facility": "General Hospital, Ifo",
     "facilityId": "facility-seed-057",
     "city": "Ifo, Ogun",
-    "lat": 6.8103,
-    "lng": 3.1834,
+    "lat": 6.8326617,
+    "lng": 3.1921398,
     "unit": "Psychiatry",
     "cadre": "RN",
     "date": "2026-07-29",
@@ -1667,8 +1678,8 @@ export const seedShifts = [
     "facility": "General Hospital, Ogbere",
     "facilityId": "facility-seed-058",
     "city": "Ijebu East, Ogun",
-    "lat": 6.811,
-    "lng": 4.0385,
+    "lat": 6.7431461,
+    "lng": 4.1588763,
     "unit": "NICU",
     "cadre": "RM",
     "date": "2026-07-30",
@@ -1685,8 +1696,8 @@ export const seedShifts = [
     "facility": "General Hospital, Ijebu-Igbo",
     "facilityId": "facility-seed-059",
     "city": "Ijebu North, Ogun",
-    "lat": 6.9702,
-    "lng": 3.9046,
+    "lat": 6.9870416,
+    "lng": 4.0034911,
     "unit": "Oncology",
     "cadre": "RN",
     "date": "2026-07-31",
@@ -1703,8 +1714,8 @@ export const seedShifts = [
     "facility": "General Hospital, Atan",
     "facilityId": "facility-seed-060",
     "city": "Ijebu North East, Ogun",
-    "lat": 6.9401,
-    "lng": 4.0471,
+    "lat": 6.89392,
+    "lng": 4.0061259,
     "unit": "ICU",
     "cadre": "RN",
     "date": "2026-08-01",
@@ -1721,8 +1732,8 @@ export const seedShifts = [
     "facility": "State Hospital, Ijebu-Ode",
     "facilityId": "facility-seed-061",
     "city": "Ijebu Ode, Ogun",
-    "lat": 6.8081,
-    "lng": 3.9126,
+    "lat": 6.8138575,
+    "lng": 3.9245188,
     "unit": "Accident & Emergency",
     "cadre": "RM",
     "date": "2026-08-02",
@@ -1739,8 +1750,8 @@ export const seedShifts = [
     "facility": "Dideolu Specialist Hospital, Ikenne",
     "facilityId": "facility-seed-062",
     "city": "Ikenne, Ogun",
-    "lat": 6.876,
-    "lng": 3.7207,
+    "lat": 6.8695016,
+    "lng": 3.7079407,
     "unit": "Labour Ward",
     "cadre": "RN",
     "date": "2026-08-03",
@@ -1757,8 +1768,8 @@ export const seedShifts = [
     "facility": "General Hospital, Imeko",
     "facilityId": "facility-seed-063",
     "city": "Imeko Afon, Ogun",
-    "lat": 7.4188,
-    "lng": 2.82,
+    "lat": 7.4566921,
+    "lng": 2.8327721,
     "unit": "General Medicine",
     "cadre": "RN",
     "date": "2026-08-04",
@@ -1775,8 +1786,8 @@ export const seedShifts = [
     "facility": "General Hospital, Ipokia",
     "facilityId": "facility-seed-064",
     "city": "Ipokia, Ogun",
-    "lat": 6.6543,
-    "lng": 2.8749,
+    "lat": 6.5176,
+    "lng": 2.8464,
     "unit": "Paediatrics",
     "cadre": "RM",
     "date": "2026-07-28",
@@ -1793,8 +1804,8 @@ export const seedShifts = [
     "facility": "General Hospital, Owode-Egba",
     "facilityId": "facility-seed-065",
     "city": "Obafemi Owode, Ogun",
-    "lat": 6.8007,
-    "lng": 3.4553,
+    "lat": 6.9413826,
+    "lng": 3.5097655,
     "unit": "Theatre",
     "cadre": "RN",
     "date": "2026-07-29",
@@ -1811,8 +1822,8 @@ export const seedShifts = [
     "facility": "General Hospital, Odeda",
     "facilityId": "facility-seed-066",
     "city": "Odeda, Ogun",
-    "lat": 7.1696,
-    "lng": 3.4415,
+    "lat": 7.2354498,
+    "lng": 3.5265667,
     "unit": "Renal/Dialysis",
     "cadre": "RN",
     "date": "2026-07-30",
@@ -1829,8 +1840,8 @@ export const seedShifts = [
     "facility": "General Hospital, Odogbolu",
     "facilityId": "facility-seed-067",
     "city": "Odogbolu, Ogun",
-    "lat": 6.8755,
-    "lng": 3.8124,
+    "lat": 6.8365,
+    "lng": 3.7641,
     "unit": "Psychiatry",
     "cadre": "RM",
     "date": "2026-07-31",
@@ -1847,8 +1858,8 @@ export const seedShifts = [
     "facility": "General Hospital, Abigi",
     "facilityId": "facility-seed-068",
     "city": "Ogun Waterside, Ogun",
-    "lat": 6.4633,
-    "lng": 4.2447,
+    "lat": 6.5409436,
+    "lng": 4.3368075,
     "unit": "NICU",
     "cadre": "RN",
     "date": "2026-08-01",
@@ -1865,8 +1876,8 @@ export const seedShifts = [
     "facility": "General Hospital, Iperu",
     "facilityId": "facility-seed-069",
     "city": "Remo North, Ogun",
-    "lat": 6.9115,
-    "lng": 3.7152,
+    "lat": 6.9239627,
+    "lng": 3.6617211,
     "unit": "Oncology",
     "cadre": "RN",
     "date": "2026-08-02",
@@ -1883,8 +1894,8 @@ export const seedShifts = [
     "facility": "Olabisi Onabanjo University Teaching Hospital (OOUTH), Sagamu",
     "facilityId": "facility-seed-070",
     "city": "Sagamu, Ogun",
-    "lat": 6.844,
-    "lng": 3.6366,
+    "lat": 6.8490444,
+    "lng": 3.6530228,
     "unit": "ICU",
     "cadre": "RM",
     "date": "2026-08-03",
