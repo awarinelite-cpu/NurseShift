@@ -16,6 +16,7 @@ import Login from './pages/Login';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminReview from './pages/admin/AdminReview';
 import AdminFacilities from './pages/admin/AdminFacilities';
+import AdminFacilityDetail from './pages/admin/AdminFacilityDetail';
 import AdminFacilityImport from './pages/admin/AdminFacilityImport';
 import FacilityLogin from './pages/facility/FacilityLogin';
 import FacilitySignUp from './pages/facility/FacilitySignUp';
@@ -34,6 +35,7 @@ export default function App() {
               <Route path="/admin" element={<RequireAdmin><AdminReview /></RequireAdmin>} />
               <Route path="/admin/facilities" element={<RequireAdmin><AdminFacilities /></RequireAdmin>} />
               <Route path="/admin/facilities/import" element={<RequireAdmin><AdminFacilityImport /></RequireAdmin>} />
+              <Route path="/admin/facilities/:facilityId" element={<RequireAdmin><AdminFacilityDetail /></RequireAdmin>} />
 
               {/* Facility surface — own layout, own auth */}
               <Route path="/facility/login" element={<FacilityLogin />} />

@@ -177,7 +177,7 @@ export default function AdminFacilities() {
         <div className="empty-state">No facilities yet. Add one or bulk-import a CSV.</div>
       ) : (
         facilities.map((f) => (
-          <div className="claim-card" key={f.id}>
+          <Link to={`/admin/facilities/${f.id}`} className="claim-card" key={f.id} style={{ textDecoration: 'none', color: 'inherit' }}>
             <div>
               <div className="facility">{f.name}</div>
               <div className="meta">
@@ -185,7 +185,7 @@ export default function AdminFacilities() {
                 {f.lat != null && f.lng != null ? ` · ${f.lat}, ${f.lng}` : ' · no location set'}
               </div>
             </div>
-          </div>
+          </Link>
         ))
       )}
     </div>

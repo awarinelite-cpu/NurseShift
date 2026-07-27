@@ -6,6 +6,7 @@ import {
   demoAddShift,
   demoListFacilities,
   demoListShifts,
+  demoGetFacility,
 } from './demoStore';
 
 const DEMO_ADMIN_PASSCODE = 'admin-demo';
@@ -82,6 +83,17 @@ export async function listFacilitiesForAdmin() {
   return facilities
     .map((f) => ({ ...f, shiftCount: shifts.filter((s) => s.facilityId === f.id).length }))
     .reverse();
+}
+
+// Reads any facility by id, regardless of whether it has a matching auth
+// account — unlike getFacilityProfile in facilityAuth.js, this isn't scoped
+// to "the currently signed-in facility". Used by the admin facility detail page.
+export async function getFacilityById(facilityId) {
+  if (DEMO_MODE) return Promise.resolve(demoGetFacility(facilityId));
+
+  const { doc, getDoc } = await import('firebase/firestore');
+  const snap = await getDoc(doc(db, 'facilities', facilityId));
+  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
 }
 
 // Creates a single facility, and optionally one open shift for it if unit +
