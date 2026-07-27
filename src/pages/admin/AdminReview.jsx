@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { listNursesByStatus, setNurseVerification } from '../../lib/admin';
 import { useAdmin } from '../../context/AdminContext';
 import Badge from '../../components/Badge';
@@ -43,7 +43,10 @@ export default function AdminReview() {
           <h1 className="page-title">License Review</h1>
           <p className="page-sub">Check the license document against the number and name before approving.</p>
         </div>
-        <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+          <Link to="/admin/facilities" className="clock-btn" style={{ textDecoration: 'none' }}>Import facilities</Link>
+          <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
+        </div>
       </div>
 
       {loading ? (

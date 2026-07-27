@@ -15,6 +15,7 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminReview from './pages/admin/AdminReview';
+import AdminFacilityImport from './pages/admin/AdminFacilityImport';
 import FacilityLogin from './pages/facility/FacilityLogin';
 import FacilitySignUp from './pages/facility/FacilitySignUp';
 import PostShift from './pages/facility/PostShift';
@@ -30,6 +31,7 @@ export default function App() {
               {/* Admin surface — separate login, not linked from nurse nav */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<RequireAdmin><AdminReview /></RequireAdmin>} />
+              <Route path="/admin/facilities" element={<RequireAdmin><AdminFacilityImport /></RequireAdmin>} />
 
               {/* Facility surface — own layout, own auth */}
               <Route path="/facility/login" element={<FacilityLogin />} />
