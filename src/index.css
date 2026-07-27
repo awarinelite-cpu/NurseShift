@@ -1,0 +1,58 @@
+:root {
+  /* Color tokens */
+  --ink: #14213D;          /* deep navy — authority, trust */
+  --ink-soft: #2C3B5C;
+  --paper: #EEF1F4;        /* cool off-white, not the AI-default cream */
+  --surface: #FFFFFF;
+  --slate: #5B6472;        /* muted secondary text */
+  --line: #D9DEE3;         /* hairline dividers */
+  --gold: #E3B23C;         /* accent — pay, highlights */
+  --gold-deep: #B8871F;
+  --green: #2F8F5B;        /* open / confirmed */
+  --green-soft: #E4F3EC;
+  --red: #C1443A;          /* urgent / closes soon */
+  --red-soft: #FBEAE8;
+  --amber-soft: #FBF1DD;
+
+  /* Type */
+  --font-display: 'Archivo', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
