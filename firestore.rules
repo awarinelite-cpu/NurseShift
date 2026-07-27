@@ -1,0 +1,56 @@
+rules_version = '2';
+// Starting-point rules — good enough to keep the app usable while wiring up
+// Firebase, NOT a finished security model. Known gaps to close before real
+// production use:
+//   - A nurse's own write access to /nurses/{uid} currently covers the whole
+//     doc, so nothing stops them from setting their own `verification` field
+//     to "verified" via a raw Firestore write (bypassing the app's UI).
+//   - Facility ratings (`rating`, `shiftsCompleted`) are written by a
+//     facility-authenticated session, which this file doesn't model as a
+//     distinct role yet — tighten by adding field-level checks once ratings
+//     go live, or move both verification and rating writes into a Cloud
+//     Function that runs with admin privileges instead of client writes.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Nurses can read/write their own profile. Admins can also update a
+    // nurse's doc (this is how the admin review screen flips
+    // verification to "verified"/"rejected") — the client itself never
+    // grants a nurse permission to verify their own license.
+    match /nurses/{uid} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == uid;
+      allow update: if request.auth != null && (request.auth.uid == uid || isAdmin());
+    }
+
+    match /facilities/{uid} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Any signed-in nurse can read open shifts; only the owning facility
+    // should be able to create/update its own shifts in a hardened setup.
+    match /shifts/{shiftId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+    }
+
+    match /shiftClaims/{claimId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+    }
+
+    // Presence of a doc here grants admin access in the app's client code.
+    // Only create these by hand (Console) or via a trusted backend —
+    // never allow client writes to this collection.
+    match /admins/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+  }
+}

@@ -58,21 +58,33 @@ service firebase.storage {
 }
 ```
 
-**Firestore rules** — nurses can read/write their own profile only; verification
-status should only be changed by an admin (Cloud Function or Console, not the client):
+**Storage security rules** — lock license documents down so only the owner
+and your (future) admin tooling can read them. A ready-to-deploy version is
+in `storage.rules` at the repo root:
 
 ```
 rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /nurses/{uid} {
-      allow read, create: if request.auth != null && request.auth.uid == uid;
-      allow update: if request.auth != null && request.auth.uid == uid
-                    && request.resource.data.verification == resource.data.verification;
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /license-documents/{uid}/{fileName} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if request.auth != null && request.auth.uid == uid
+                   && request.resource.size < 8 * 1024 * 1024;
     }
   }
 }
 ```
+
+**Firestore rules** — a starting-point version is in `firestore.rules` at the
+repo root, with the known gaps called out in comments (a nurse can currently
+self-verify via a raw write; facility rating writes aren't modeled as a
+distinct role yet). Deploy either with the Firebase CLI:
+
+```bash
+firebase deploy --only firestore:rules,storage:rules
+```
+
+or paste them into Console → Firestore/Storage → Rules directly.
 
 ### Facility dashboard
 
