@@ -13,6 +13,17 @@ function formatDateFull(dateStr) {
   return d.toLocaleDateString('en-NG', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 }
 
+// Prefer exact coordinates when the facility set them; fall back to a text
+// search of facility name + city so the link still works for older facilities
+// that signed up before location capture existed.
+function mapUrl(shift) {
+  if (shift.lat != null && shift.lng != null) {
+    return `https://www.google.com/maps/search/?api=1&query=${shift.lat},${shift.lng}`;
+  }
+  const q = encodeURIComponent(`${shift.facility} ${shift.city}`);
+  return `https://www.google.com/maps/search/?api=1&query=${q}`;
+}
+
 export default function ShiftDetail() {
   const { shiftId } = useParams();
   const navigate = useNavigate();
@@ -50,7 +61,15 @@ export default function ShiftDetail() {
         <div className="detail-top">
           <div>
             <p className="detail-facility">{shift.facility}</p>
-            <p className="detail-city">{shift.unit} · {shift.city}</p>
+            <a
+              href={mapUrl(shift)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="detail-city"
+              style={{ textDecoration: 'underline', textUnderlineOffset: 3 }}
+            >
+              {shift.unit} · {shift.city} · 📍 View on map
+            </a>
           </div>
           {claimed ? (
             <Badge status="pending">Pending approval</Badge>
