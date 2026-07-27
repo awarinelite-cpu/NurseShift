@@ -1,16 +1,30 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useFacility } from '../../context/FacilityContext';
+import { getCurrentLocation } from '../../lib/geo';
 
 export default function FacilitySignUp() {
   const navigate = useNavigate();
   const { signUp } = useFacility();
-  const [form, setForm] = useState({ name: '', city: '', email: '', password: '' });
+  const [form, setForm] = useState({ name: '', city: '', email: '', password: '', lat: null, lng: null });
   const [submitting, setSubmitting] = useState(false);
+  const [locating, setLocating] = useState(false);
   const [error, setError] = useState('');
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
+  }
+
+  async function handleUseLocation() {
+    setLocating(true);
+    const loc = await getCurrentLocation();
+    setLocating(false);
+    if (!loc) {
+      setError('Could not get location — check your browser location permission and try again.');
+      return;
+    }
+    setError('');
+    setForm((f) => ({ ...f, lat: loc.lat, lng: loc.lng }));
   }
 
   async function handleSubmit(e) {
@@ -47,6 +61,16 @@ export default function FacilitySignUp() {
         <div className="form-row">
           <label htmlFor="city">City / area</label>
           <input id="city" placeholder="e.g. Victoria Island, Lagos" value={form.city} onChange={(e) => update('city', e.target.value)} required />
+        </div>
+        <div className="form-row">
+          <label>Location for distance sorting</label>
+          <button type="button" className="clock-btn" onClick={handleUseLocation} disabled={locating}>
+            {locating ? 'Getting location…' : form.lat ? 'Location captured ✓' : 'Use current location'}
+          </button>
+          <p className="page-sub" style={{ marginTop: 6 }}>
+            Nurses see shifts sorted by distance from them. Skip this and your shifts will still
+            show, just without a distance.
+          </p>
         </div>
         <div className="form-row">
           <label htmlFor="email">Email</label>

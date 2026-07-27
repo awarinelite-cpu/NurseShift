@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listOpenShifts } from '../lib/shifts';
+import { getCurrentLocation, distanceKm } from '../lib/geo';
 import Badge from '../components/Badge';
 
 const UNITS = ['All units', 'ICU', 'Accident & Emergency', 'Labour Ward', 'Paediatrics', 'Theatre', 'General Medicine'];
@@ -14,22 +15,52 @@ function formatDate(dateStr) {
   return d.toLocaleDateString('en-NG', { weekday: 'short', day: 'numeric', month: 'short' });
 }
 
+function formatDistance(km) {
+  if (km == null) return null;
+  if (km < 1) return '<1 km away';
+  return `${Math.round(km)} km away`;
+}
+
 export default function ShiftBoard() {
   const [shifts, setShifts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [unitFilter, setUnitFilter] = useState('All units');
+  const [userLoc, setUserLoc] = useState(null);
+  const [locDenied, setLocDenied] = useState(false);
 
   useEffect(() => {
     listOpenShifts().then((data) => {
       setShifts(data);
       setLoading(false);
     });
+    getCurrentLocation().then((loc) => {
+      if (loc) setUserLoc(loc);
+      else setLocDenied(true);
+    });
   }, []);
 
+  // Attach distance to each shift (null when either side is missing coordinates),
+  // then sort closest-first — shifts with no known distance sink to the bottom
+  // rather than being hidden, since the shift itself may still be worth taking.
+  const withDistance = useMemo(() => {
+    return shifts.map((s) => ({
+      ...s,
+      distanceKm:
+        userLoc && s.lat != null && s.lng != null
+          ? distanceKm(userLoc.lat, userLoc.lng, s.lat, s.lng)
+          : null,
+    }));
+  }, [shifts, userLoc]);
+
   const filtered = useMemo(() => {
-    if (unitFilter === 'All units') return shifts;
-    return shifts.filter((s) => s.unit === unitFilter);
-  }, [shifts, unitFilter]);
+    const list = unitFilter === 'All units' ? withDistance : withDistance.filter((s) => s.unit === unitFilter);
+    return [...list].sort((a, b) => {
+      if (a.distanceKm == null && b.distanceKm == null) return 0;
+      if (a.distanceKm == null) return 1;
+      if (b.distanceKm == null) return -1;
+      return a.distanceKm - b.distanceKm;
+    });
+  }, [withDistance, unitFilter]);
 
   return (
     <div className="page">
@@ -50,6 +81,12 @@ export default function ShiftBoard() {
           </button>
         ))}
       </div>
+
+      {locDenied && (
+        <p className="page-sub" style={{ marginTop: -8, marginBottom: 16 }}>
+          Turn on location access to see shifts sorted by distance from you.
+        </p>
+      )}
 
       {loading ? (
         <div className="empty-state">Loading shifts…</div>
@@ -75,7 +112,10 @@ export default function ShiftBoard() {
               <div className="board-code">{s.id}</div>
               <div className="board-main">
                 <div className="facility">{s.facility}</div>
-                <div className="meta">{s.unit} · {s.city} · {s.cadre}</div>
+                <div className="meta">
+                  {s.unit} · {s.city} · {s.cadre}
+                  {formatDistance(s.distanceKm) && <> · {formatDistance(s.distanceKm)}</>}
+                </div>
               </div>
               <div className="board-time">
                 {s.start}–{s.end}

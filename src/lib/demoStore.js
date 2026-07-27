@@ -41,7 +41,7 @@ export function demoRateNurse(id, rating) {
 
 // ---------- Facilities ----------
 let _facilities = [
-  { id: 'facility-demo-seed', name: 'Reddington Hospital', city: 'Victoria Island, Lagos' },
+  { id: 'facility-demo-seed', name: 'Reddington Hospital', city: 'Victoria Island, Lagos', lat: 6.4281, lng: 3.4219 },
 ];
 let _nextFacilityId = 1;
 

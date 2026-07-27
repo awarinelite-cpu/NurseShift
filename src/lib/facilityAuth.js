@@ -3,9 +3,9 @@ import { demoAddFacility, demoGetFacility } from './demoStore';
 
 let _demoSignedInId = null;
 
-export async function signUpFacility({ name, city, email, password }) {
+export async function signUpFacility({ name, city, email, password, lat, lng }) {
   if (DEMO_MODE) {
-    const facility = demoAddFacility({ name, city });
+    const facility = demoAddFacility({ name, city, lat: lat ?? null, lng: lng ?? null });
     _demoSignedInId = facility.id;
     return Promise.resolve(facility);
   }
@@ -16,7 +16,7 @@ export async function signUpFacility({ name, city, email, password }) {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
   await updateProfile(cred.user, { displayName: name });
 
-  const facilityProfile = { name, city, createdAt: serverTimestamp() };
+  const facilityProfile = { name, city, lat: lat ?? null, lng: lng ?? null, createdAt: serverTimestamp() };
   await setDoc(doc(db, 'facilities', cred.user.uid), facilityProfile);
   return { id: cred.user.uid, ...facilityProfile };
 }

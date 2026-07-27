@@ -15,6 +15,8 @@ export async function postShift(facility, shiftFields) {
     facility: facility.name,
     facilityId: facility.id,
     city: facility.city,
+    lat: facility.lat ?? null,
+    lng: facility.lng ?? null,
     status: 'open',
     ...shiftFields,
   };
