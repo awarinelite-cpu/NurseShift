@@ -31,10 +31,18 @@ npm run dev
 ### Nurse sign-up flow
 
 `/signup` collects name, email, password, cadre, specialty, years of experience,
-NMCN license number, and a license document (PDF/JPG/PNG, 8MB max). On submit:
+NMCN license number, and an **optional** license document (PDF/JPG/PNG, 8MB
+max). The document upload is optional because Firebase Storage now requires
+the Blaze (pay-as-you-go) plan even for light usage — if your project is still
+on Spark, sign-up still works fine, just without the file attached. If a file
+is attached and the Storage upload fails or hangs (e.g. Storage isn't
+provisioned), sign-up continues anyway after a timeout rather than getting
+stuck — the account and profile still save, and the license file can be
+requested separately. On submit:
 
 1. Creates the account with `createUserWithEmailAndPassword`.
-2. Uploads the license file to Storage at `license-documents/{uid}/{filename}`.
+2. If a file was attached and Storage is available, uploads it to
+   `license-documents/{uid}/{filename}`.
 3. Writes a `nurses/{uid}` Firestore doc with `verification: "pending"`.
 
 Nobody can claim shifts until an admin flips `verification` to `"verified"` —

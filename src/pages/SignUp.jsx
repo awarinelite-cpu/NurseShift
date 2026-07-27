@@ -52,10 +52,6 @@ export default function SignUp() {
     e.preventDefault();
     setFormError('');
 
-    if (!licenseFile) {
-      setFileError('Upload a copy of your NMCN license to continue.');
-      return;
-    }
     if (!form.name || !form.email || !form.password || !form.licenseNumber) {
       setFormError('Fill in all required fields.');
       return;
@@ -79,6 +75,7 @@ export default function SignUp() {
         <h1 className="page-title">Join the duty board</h1>
         <p className="page-sub">
           Your license is reviewed manually before you can claim shifts — most nurses hear back within 48 hours.
+          Document upload is optional for now; you can also send a copy separately if asked.
         </p>
       </div>
 
@@ -122,7 +119,7 @@ export default function SignUp() {
         </div>
 
         <div className="form-row">
-          <label htmlFor="license-file">License document (PDF, JPG, or PNG)</label>
+          <label htmlFor="license-file">License document (PDF, JPG, or PNG) — optional</label>
           <input id="license-file" type="file" accept=".pdf,.jpg,.jpeg,.png" onChange={handleFile} />
           {licenseFile && <p className="file-picked">Selected: {licenseFile.name}</p>}
           {fileError && <p className="form-error">{fileError}</p>}

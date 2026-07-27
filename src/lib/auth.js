@@ -31,11 +31,20 @@ export async function signUpNurse({ name, email, password, cadre, specialty, yea
   let licenseFileUrl = null;
   let licenseFileName = null;
   if (licenseFile) {
-    const path = `license-documents/${cred.user.uid}/${licenseFile.name}`;
-    const storageRef = ref(storage, path);
-    await uploadBytes(storageRef, licenseFile);
-    licenseFileUrl = await getDownloadURL(storageRef);
-    licenseFileName = licenseFile.name;
+    try {
+      const path = `license-documents/${cred.user.uid}/${licenseFile.name}`;
+      const storageRef = ref(storage, path);
+      const timeout = (ms) => new Promise((_, reject) => setTimeout(() => reject(new Error('Upload timed out')), ms));
+      await Promise.race([uploadBytes(storageRef, licenseFile), timeout(15000)]);
+      licenseFileUrl = await Promise.race([getDownloadURL(storageRef), timeout(10000)]);
+      licenseFileName = licenseFile.name;
+    } catch (uploadErr) {
+      // Storage may not be provisioned yet (requires the Blaze plan on
+      // newer Firebase projects) — don't let a failed or hung upload block
+      // account creation. The nurse's account and other details still save;
+      // the file just isn't attached, and can be requested separately.
+      console.warn('License upload failed, continuing without it:', uploadErr);
+    }
   }
 
   const nurseProfile = {
