@@ -105,20 +105,29 @@ export async function getFacilityById(facilityId) {
 // bulkImportFacilities below — kept as a thin wrapper over the same path so
 // the single-add form and CSV import can never drift out of sync.
 export async function createFacility(fields) {
-  const { created, skipped } = await bulkImportFacilities([fields]);
+  const { created, updated, skipped } = await bulkImportFacilities([fields]);
   if (skipped.length > 0) {
     throw new Error(skipped[0].reason);
   }
-  return created[0];
+  return created[0] || updated[0];
 }
 
-// Bulk-creates facilities (and one shift each, if shift fields are present on
-// the row) from parsed CSV rows. Each row shape — see parseFacilityCsv in
-// src/lib/csv.js for the exact columns expected.
-// Returns { created, skipped } where skipped holds { row, reason } entries
-// for rows that failed validation, so the admin UI can show what to fix.
+// Bulk-creates or updates facilities (and one shift each, if shift fields are
+// present on the row) from parsed CSV rows. Each row shape — see
+// parseFacilityCsv in src/lib/csv.js for the exact columns expected.
+//
+// Upserts by exact (name, city) match against existing facilities: a row
+// that matches an existing facility patches that facility's lat/lng (and
+// the lat/lng of all its existing shifts) instead of creating a duplicate —
+// this makes it safe to re-upload a corrected version of a CSV you already
+// imported. A row with no match is created as a new facility as before.
+//
+// Returns { created, updated, skipped } where skipped holds { row, reason }
+// entries for rows that failed validation, so the admin UI can show what to
+// fix.
 export async function bulkImportFacilities(rows) {
   const created = [];
+  const updated = [];
   const skipped = [];
 
   const valid = [];
@@ -136,8 +145,45 @@ export async function bulkImportFacilities(rows) {
     valid.push({ ...row, lat, lng });
   }
 
+  const matchKey = (name, city) => `${name.trim().toLowerCase()}|${city.trim().toLowerCase()}`;
+
   if (DEMO_MODE) {
+    const existingByKey = new Map(
+      demoListFacilities().map((f) => [matchKey(f.name, f.city), f])
+    );
+
     for (const row of valid) {
+      const existing = existingByKey.get(matchKey(row.name, row.city));
+
+      if (existing) {
+        demoUpdateFacilityLocation(existing.id, row.lat, row.lng);
+        const facilityShifts = demoListShiftsByFacility(existing.id);
+        if (facilityShifts.length > 0) {
+          for (const shift of facilityShifts) {
+            demoSetShiftLocation(shift.id, row.lat, row.lng);
+          }
+        } else if (row.unit && row.date) {
+          demoAddShift({
+            facility: existing.name,
+            facilityId: existing.id,
+            city: existing.city,
+            lat: row.lat,
+            lng: row.lng,
+            unit: row.unit,
+            cadre: row.cadre || 'RN',
+            date: row.date,
+            start: row.start || '07:00',
+            end: row.end || '19:00',
+            hours: row.hours ? Number(row.hours) : 12,
+            rate: row.rate ? Number(row.rate) : 8000,
+            urgency: row.urgency || 'normal',
+            facilityRating: 4.5,
+          });
+        }
+        updated.push({ ...existing, lat: row.lat, lng: row.lng });
+        continue;
+      }
+
       const facility = demoAddFacility({ name: row.name, city: row.city, lat: row.lat, lng: row.lng });
       if (row.unit && row.date) {
         demoAddShift({
@@ -159,17 +205,34 @@ export async function bulkImportFacilities(rows) {
       }
       created.push(facility);
     }
-    return { created, skipped };
+    return { created, updated, skipped };
   }
 
-  const { collection, doc, writeBatch } = await import('firebase/firestore');
+  const { collection, doc, getDocs, query, where, writeBatch } = await import('firebase/firestore');
+
+  const existingSnap = await getDocs(collection(db, 'facilities'));
+  const existingByKey = new Map(
+    existingSnap.docs.map((d) => [matchKey(d.data().name || '', d.data().city || ''), { id: d.id, ...d.data() }])
+  );
+
   // Firestore batches cap at 500 writes; a facility + its shift is 2 writes,
   // so chunk at 200 rows to stay comfortably under that per batch.
   const chunkSize = 200;
   for (let i = 0; i < valid.length; i += chunkSize) {
     const chunk = valid.slice(i, i + chunkSize);
     const batch = writeBatch(db);
+    const shiftlessMatches = []; // { row, facilityId } needing a fresh shift after batch commits
+
     for (const row of chunk) {
+      const existing = existingByKey.get(matchKey(row.name, row.city));
+
+      if (existing) {
+        batch.update(doc(db, 'facilities', existing.id), { lat: row.lat, lng: row.lng });
+        updated.push({ ...existing, lat: row.lat, lng: row.lng });
+        shiftlessMatches.push({ row, facilityId: existing.id });
+        continue;
+      }
+
       const facilityRef = doc(collection(db, 'facilities'));
       const facility = { name: row.name, city: row.city, lat: row.lat, lng: row.lng };
       batch.set(facilityRef, facility);
@@ -197,12 +260,44 @@ export async function bulkImportFacilities(rows) {
       created.push({ id: facilityRef.id, ...facility });
     }
     await batch.commit();
+
+    // For matched facilities: patch lat/lng on their existing shifts, or if
+    // they have none and the row supplied unit+date, create one. Done after
+    // the facility batch commits so the shift query below sees fresh data.
+    for (const { row, facilityId } of shiftlessMatches) {
+      const shiftsSnap = await getDocs(query(collection(db, 'shifts'), where('facilityId', '==', facilityId)));
+      if (!shiftsSnap.empty) {
+        const shiftBatch = writeBatch(db);
+        shiftsSnap.docs.forEach((shiftDoc) => {
+          shiftBatch.update(shiftDoc.ref, { lat: row.lat, lng: row.lng });
+        });
+        await shiftBatch.commit();
+      } else if (row.unit && row.date) {
+        const shiftRef = doc(collection(db, 'shifts'));
+        await writeBatch(db)
+          .set(shiftRef, {
+            facility: row.name,
+            facilityId,
+            city: row.city,
+            lat: row.lat,
+            lng: row.lng,
+            unit: row.unit,
+            cadre: row.cadre || 'RN',
+            date: row.date,
+            start: row.start || '07:00',
+            end: row.end || '19:00',
+            hours: row.hours ? Number(row.hours) : 12,
+            rate: row.rate ? Number(row.rate) : 8000,
+            status: 'open',
+            urgency: row.urgency || 'normal',
+          })
+          .commit();
+      }
+    }
   }
 
-  return { created, skipped };
+  return { created, updated, skipped };
 }
-
-// Patches corrected lat/lng from src/lib/seedData.js onto the matching
 // facility docs (by seed id) and their shifts (by facilityId, since live
 // shift docs have auto-generated ids, not the seed ids). Runs under the
 // signed-in admin's session — no service-account script needed. Only the

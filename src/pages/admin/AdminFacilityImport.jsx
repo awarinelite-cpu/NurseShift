@@ -80,7 +80,8 @@ export default function AdminFacilityImport() {
           Required columns: <code>name</code>, <code>city</code>. Optional: <code>lat</code>, <code>lng</code>,{' '}
           <code>unit</code>, <code>cadre</code>, <code>date</code>, <code>start</code>, <code>end</code>,{' '}
           <code>hours</code>, <code>rate</code>, <code>urgency</code>. Include <code>unit</code> and{' '}
-          <code>date</code> to also create one open shift per facility.
+          <code>date</code> to also create one open shift per facility. A row whose name and city exactly
+          match an existing facility updates that facility's coordinates instead of creating a duplicate.
         </p>
         <a href="/facilities-template.csv" download>Download a ready-made template (70 Lagos + Ogun facilities)</a>
       </div>
@@ -120,6 +121,7 @@ export default function AdminFacilityImport() {
         <div className="detail-card" style={{ marginTop: 16 }}>
           <p className="detail-facility" style={{ color: 'var(--green)' }}>
             Created {result.created.length} facilit{result.created.length === 1 ? 'y' : 'ies'}
+            {result.updated.length > 0 && `, updated ${result.updated.length} existing facilit${result.updated.length === 1 ? 'y' : 'ies'}`}
           </p>
           {result.skipped.length > 0 && (
             <>
