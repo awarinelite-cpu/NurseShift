@@ -238,6 +238,8 @@
 .badge.pending { background: var(--amber-soft); color: var(--gold-deep); }
 .badge.completed { background: var(--line); color: var(--slate); }
 .badge.approved { background: var(--green-soft); color: var(--green); }
+.badge.resolved { background: var(--green-soft); color: var(--green); }
+.badge.dismissed { background: var(--line); color: var(--slate); }
 
 /* ---------- Shift detail ---------- */
 
@@ -439,13 +441,20 @@
 }
 
 .form-row input,
-.form-row select {
+.form-row select,
+.form-row textarea {
   padding: 10px 12px;
   border: 1px solid var(--line);
   border-radius: 7px;
   font-size: 14px;
   background: var(--surface);
   color: var(--ink);
+  font-family: inherit;
+}
+
+.form-row textarea {
+  resize: vertical;
+  min-height: 64px;
 }
 
 .form-row input[type="file"] {

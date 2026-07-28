@@ -66,6 +66,7 @@ export default function AdminShifts() {
         </div>
         <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
           <Link to="/admin" className="clock-btn" style={{ textDecoration: 'none' }}>Dashboard</Link>
+          <Link to="/admin/disputes" className="clock-btn" style={{ textDecoration: 'none' }}>Disputes</Link>
           <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
         </div>
       </div>

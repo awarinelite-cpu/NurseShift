@@ -77,6 +77,17 @@ export function demoUpdateFacilityPhone(id, phone) {
   return demoGetFacility(id);
 }
 
+export function demoRateFacility(id, rating) {
+  _facilities = _facilities.map((f) => {
+    if (f.id !== id) return f;
+    const priorCount = f.ratingCount ?? 0;
+    const priorRating = f.rating ?? rating;
+    const newRating = Math.round(((priorRating * priorCount + rating) / (priorCount + 1)) * 10) / 10;
+    return { ...f, rating: newRating, ratingCount: priorCount + 1 };
+  });
+  return demoGetFacility(id);
+}
+
 // ---------- Shifts ----------
 let _shifts = [...mockShifts, ...seedShifts];
 let _nextShiftSeq = 200;
@@ -141,6 +152,30 @@ export function demoAddClaim(claim) {
 export function demoUpdateClaim(id, patch) {
   _claims = _claims.map((c) => (c.id === id ? { ...c, ...patch } : c));
   return demoGetClaim(id);
+}
+
+// ---------- Disputes ----------
+let _disputes = [];
+let _nextDisputeSeq = 1;
+
+export function demoAddDispute(dispute) {
+  const id = `DSP-${_nextDisputeSeq++}`;
+  const newDispute = { id, status: 'open', createdAt: Date.now(), ...dispute };
+  _disputes = [..._disputes, newDispute];
+  return newDispute;
+}
+
+export function demoListDisputes() {
+  return [..._disputes].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+}
+
+export function demoGetDispute(id) {
+  return _disputes.find((d) => d.id === id) ?? null;
+}
+
+export function demoUpdateDispute(id, patch) {
+  _disputes = _disputes.map((d) => (d.id === id ? { ...d, ...patch } : d));
+  return demoGetDispute(id);
 }
 
 // ---------- Chat (demo mode) ----------

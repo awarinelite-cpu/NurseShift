@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFacility } from '../../context/FacilityContext';
 import { listClaimsForFacility, approveClaim, rejectClaim, rateNurseForClaim } from '../../lib/facility';
+import { fileDispute } from '../../lib/disputes';
 import { getCurrentLocation } from '../../lib/geo';
 import { getOrCreateConversation } from '../../lib/chat';
 import Badge from '../../components/Badge';
+import ReportIssueForm from '../../components/ReportIssueForm';
 
 function formatNaira(amount) {
   return `₦${(amount ?? 0).toLocaleString('en-NG')}`;
@@ -25,6 +27,8 @@ export default function FacilityDashboard() {
   const [phoneInput, setPhoneInput] = useState('');
   const [savingPhone, setSavingPhone] = useState(false);
   const [phoneError, setPhoneError] = useState('');
+  const [reportingFor, setReportingFor] = useState(null);
+  const [reportSent, setReportSent] = useState(null);
 
   async function refresh() {
     const data = await listClaimsForFacility(facility.id);
@@ -57,6 +61,25 @@ export default function FacilityDashboard() {
     await refresh();
     setActingOn(null);
     setRatingFor(null);
+  }
+
+  async function handleReport(claim, { reason, description }) {
+    await fileDispute({
+      claimId: claim.id,
+      shiftId: claim.shiftId,
+      facilityId: facility.id,
+      nurseId: claim.nurseId,
+      reporterId: facility.id,
+      reporterRole: 'facility',
+      reporterName: facility.name,
+      otherPartyName: claim.nurse?.name ?? 'Unknown nurse',
+      shiftLabel: `${claim.shift?.unit ?? ''} · ${claim.shift?.date ?? ''}`.trim(),
+      reason,
+      description,
+    });
+    setReportingFor(null);
+    setReportSent(claim.id);
+    refresh();
   }
 
   async function handleMessage(c) {
@@ -222,45 +245,71 @@ export default function FacilityDashboard() {
           {active.length > 0 && (
             <>
               <p className="eyebrow" style={{ marginTop: 24, marginBottom: 10 }}>Approved — upcoming or in progress</p>
-              {active.map((c) => (
-                <div className="claim-card" key={c.id}>
-                  <div>
-                    <div className="facility">{c.nurse?.name}</div>
-                    <div className="meta">{c.shift?.unit} · {c.shift?.date} · {c.clockIn ? 'Clocked in' : 'Not clocked in yet'}</div>
+              {active.map((c) => {
+                const alreadyReported = c.disputeFiled || reportSent === c.id;
+                return (
+                  <div className="claim-card" key={c.id} style={{ flexWrap: 'wrap' }}>
+                    <div>
+                      <div className="facility">{c.nurse?.name}</div>
+                      <div className="meta">{c.shift?.unit} · {c.shift?.date} · {c.clockIn ? 'Clocked in' : 'Not clocked in yet'}</div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                      <button className="clock-btn" disabled={messaging === c.id} onClick={() => handleMessage(c)}>
+                        {messaging === c.id ? 'Opening…' : 'Message'}
+                      </button>
+                      <Badge status="approved">Approved</Badge>
+                      {!alreadyReported && reportingFor !== c.id && (
+                        <button className="clock-btn" style={{ color: 'var(--red)' }} onClick={() => setReportingFor(c.id)}>
+                          Report an issue
+                        </button>
+                      )}
+                      {alreadyReported && <span style={{ fontSize: 12.5, color: 'var(--slate)' }}>Reported — under review</span>}
+                    </div>
+                    {reportingFor === c.id && (
+                      <ReportIssueForm onSubmit={(payload) => handleReport(c, payload)} onCancel={() => setReportingFor(null)} />
+                    )}
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <button className="clock-btn" disabled={messaging === c.id} onClick={() => handleMessage(c)}>
-                      {messaging === c.id ? 'Opening…' : 'Message'}
-                    </button>
-                    <Badge status="approved">Approved</Badge>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </>
           )}
 
           {toRate.length > 0 && (
             <>
               <p className="eyebrow" style={{ marginTop: 24, marginBottom: 10 }}>Completed — rate the nurse</p>
-              {toRate.map((c) => (
-                <div className="claim-card" key={c.id} style={{ flexWrap: 'wrap' }}>
-                  <div>
-                    <div className="facility">{c.nurse?.name}</div>
-                    <div className="meta">{c.shift?.unit} · {c.shift?.date}</div>
-                  </div>
-                  {ratingFor === c.id ? (
-                    <div style={{ display: 'flex', gap: 4 }}>
-                      {[1, 2, 3, 4, 5].map((n) => (
-                        <button key={n} className="clock-btn" disabled={actingOn === c.id} onClick={() => handleRate(c, n)}>
-                          {n} ★
-                        </button>
-                      ))}
+              {toRate.map((c) => {
+                const alreadyReported = c.disputeFiled || reportSent === c.id;
+                return (
+                  <div className="claim-card" key={c.id} style={{ flexWrap: 'wrap' }}>
+                    <div>
+                      <div className="facility">{c.nurse?.name}</div>
+                      <div className="meta">{c.shift?.unit} · {c.shift?.date}</div>
                     </div>
-                  ) : (
-                    <button className="clock-btn" onClick={() => setRatingFor(c.id)}>Rate nurse</button>
-                  )}
-                </div>
-              ))}
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                      {ratingFor === c.id ? (
+                        <div style={{ display: 'flex', gap: 4 }}>
+                          {[1, 2, 3, 4, 5].map((n) => (
+                            <button key={n} className="clock-btn" disabled={actingOn === c.id} onClick={() => handleRate(c, n)}>
+                              {n} ★
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <button className="clock-btn" onClick={() => setRatingFor(c.id)}>Rate nurse</button>
+                      )}
+                      {!alreadyReported && reportingFor !== c.id && (
+                        <button className="clock-btn" style={{ color: 'var(--red)' }} onClick={() => setReportingFor(c.id)}>
+                          Report an issue
+                        </button>
+                      )}
+                      {alreadyReported && <span style={{ fontSize: 12.5, color: 'var(--slate)' }}>Reported — under review</span>}
+                    </div>
+                    {reportingFor === c.id && (
+                      <ReportIssueForm onSubmit={(payload) => handleReport(c, payload)} onCancel={() => setReportingFor(null)} />
+                    )}
+                  </div>
+                );
+              })}
             </>
           )}
 

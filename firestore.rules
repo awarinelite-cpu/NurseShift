@@ -2,14 +2,12 @@ rules_version = '2';
 // Starting-point rules — good enough to keep the app usable while wiring up
 // Firebase, NOT a finished security model. Known gaps to close before real
 // production use:
-//   - A nurse's own write access to /nurses/{uid} currently covers the whole
-//     doc, so nothing stops them from setting their own `verification` field
-//     to "verified" via a raw Firestore write (bypassing the app's UI).
-//   - Facility ratings (`rating`, `shiftsCompleted`) are written by a
-//     facility-authenticated session, which this file doesn't model as a
-//     distinct role yet — tighten by adding field-level checks once ratings
-//     go live, or move both verification and rating writes into a Cloud
-//     Function that runs with admin privileges instead of client writes.
+//   - A nurse's own write access to /nurses/{uid} still covers the whole
+//     doc, so nothing stops them from setting their own `verification`
+//     field to "verified" via a raw Firestore write (bypassing the app's
+//     UI). Rating fields are scoped (see onlyFieldsChanged below), but
+//     verification is not — move that write into a Cloud Function running
+//     with admin privileges to close this properly.
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -18,23 +16,38 @@ service cloud.firestore {
         exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
 
+    // True if this update only touches the given fields — used to let a
+    // counterparty (e.g. the facility on a nurse's shift claim) write a
+    // narrow rating aggregate onto someone else's doc without granting
+    // them full write access to that doc.
+    function onlyFieldsChanged(keys) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys);
+    }
+
     // Nurses can read/write their own profile. Admins can also update a
     // nurse's doc (this is how the admin review screen flips
     // verification to "verified"/"rejected") — the client itself never
-    // grants a nurse permission to verify their own license.
+    // grants a nurse permission to verify their own license. A signed-in
+    // facility may also update just the rating aggregate after rating a
+    // nurse for a completed shift.
     match /nurses/{uid} {
       allow read: if request.auth != null;
       allow create: if request.auth != null && request.auth.uid == uid;
-      allow update: if request.auth != null && (request.auth.uid == uid || isAdmin());
+      allow update: if request.auth != null &&
+        (request.auth.uid == uid || isAdmin() || onlyFieldsChanged(['rating', 'shiftsCompleted']));
     }
 
     // A facility can create/update its own doc (uid == facilityId, from
     // sign-up). Admins can also create/update any facility doc — this is
     // what the admin single-add form and CSV bulk import rely on, since
-    // those facilities have no matching auth account at all.
+    // those facilities have no matching auth account at all. A signed-in
+    // nurse may also update just the rating aggregate after rating a
+    // facility for a completed shift.
     match /facilities/{facilityId} {
       allow read: if request.auth != null;
-      allow create, update: if request.auth != null && (request.auth.uid == facilityId || isAdmin());
+      allow create: if request.auth != null && (request.auth.uid == facilityId || isAdmin());
+      allow update: if request.auth != null &&
+        (request.auth.uid == facilityId || isAdmin() || onlyFieldsChanged(['rating', 'ratingCount']));
     }
 
     // Any signed-in nurse can read open shifts; only the owning facility
@@ -47,6 +60,17 @@ service cloud.firestore {
     match /shiftClaims/{claimId} {
       allow read: if request.auth != null;
       allow create, update: if request.auth != null;
+    }
+
+    // Disputes: either party on a claim can file one (reporterId must match
+    // the signed-in user), the reporter can read their own, and only an
+    // admin can read the full list or resolve/dismiss one.
+    match /disputes/{disputeId} {
+      allow read: if request.auth != null &&
+        (isAdmin() || request.auth.uid == resource.data.reporterId);
+      allow list: if isAdmin();
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.reporterId;
+      allow update: if isAdmin();
     }
 
     // Presence of a doc here grants admin access in the app's client code.

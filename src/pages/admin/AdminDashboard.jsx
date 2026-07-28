@@ -39,6 +39,7 @@ export default function AdminDashboard() {
         <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', flexWrap: 'wrap' }}>
           <Link to="/admin/review" className="clock-btn" style={{ textDecoration: 'none' }}>License review</Link>
           <Link to="/admin/facilities" className="clock-btn" style={{ textDecoration: 'none' }}>Facilities</Link>
+          <Link to="/admin/disputes" className="clock-btn" style={{ textDecoration: 'none' }}>Disputes</Link>
           <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
         </div>
       </div>

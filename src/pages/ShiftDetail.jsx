@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getShift, claimShift } from '../lib/shifts';
+import { getFacility } from '../lib/facility';
 import { useAuth } from '../context/AuthContext';
 import { getOrCreateConversation } from '../lib/chat';
 import Badge from '../components/Badge';
@@ -20,6 +21,7 @@ export default function ShiftDetail() {
   const navigate = useNavigate();
   const { nurse } = useAuth();
   const [shift, setShift] = useState(null);
+  const [facility, setFacility] = useState(null);
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
   const [claimed, setClaimed] = useState(false);
@@ -30,6 +32,7 @@ export default function ShiftDetail() {
     getShift(shiftId).then((data) => {
       setShift(data);
       setLoading(false);
+      if (data?.facilityId) getFacility(data.facilityId).then(setFacility);
     });
   }, [shiftId]);
 
@@ -113,7 +116,11 @@ export default function ShiftDetail() {
           <div className="detail-stat">
             <p className="label">Facility rating</p>
             <p className="value">
-              {shift.facilityRating != null ? `★ ${shift.facilityRating.toFixed(1)}` : 'Not yet rated'}
+              {facility?.rating != null
+                ? `★ ${facility.rating.toFixed(1)} (${facility.ratingCount} review${facility.ratingCount === 1 ? '' : 's'})`
+                : shift.facilityRating != null
+                ? `★ ${shift.facilityRating.toFixed(1)}`
+                : 'Not yet rated'}
             </p>
           </div>
         </div>

@@ -24,6 +24,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminNurses from './pages/admin/AdminNurses';
 import AdminShifts from './pages/admin/AdminShifts';
 import AdminReview from './pages/admin/AdminReview';
+import AdminDisputes from './pages/admin/AdminDisputes';
 import AdminFacilities from './pages/admin/AdminFacilities';
 import AdminFacilityDetail from './pages/admin/AdminFacilityDetail';
 import AdminFacilityImport from './pages/admin/AdminFacilityImport';
@@ -47,6 +48,7 @@ export default function App() {
                 <Route path="/admin/nurses" element={<ErrorBoundary><RequireAdmin><AdminNurses /></RequireAdmin></ErrorBoundary>} />
                 <Route path="/admin/shifts" element={<ErrorBoundary><RequireAdmin><AdminShifts /></RequireAdmin></ErrorBoundary>} />
                 <Route path="/admin/review" element={<ErrorBoundary><RequireAdmin><AdminReview /></RequireAdmin></ErrorBoundary>} />
+                <Route path="/admin/disputes" element={<ErrorBoundary><RequireAdmin><AdminDisputes /></RequireAdmin></ErrorBoundary>} />
                 <Route path="/admin/facilities" element={<ErrorBoundary><RequireAdmin><AdminFacilities /></RequireAdmin></ErrorBoundary>} />
                 <Route path="/admin/facilities/import" element={<ErrorBoundary><RequireAdmin><AdminFacilityImport /></RequireAdmin></ErrorBoundary>} />
                 <Route path="/admin/facilities/:facilityId" element={<ErrorBoundary><RequireAdmin><AdminFacilityDetail /></RequireAdmin></ErrorBoundary>} />

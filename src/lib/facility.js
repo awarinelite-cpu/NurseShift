@@ -5,10 +5,19 @@ import {
   demoSetShiftStatus,
   demoListClaimsByFacility,
   demoUpdateClaim,
-  demoGetClaim,
   demoGetNurse,
   demoRateNurse,
+  demoGetFacility,
 } from './demoStore';
+
+export async function getFacility(facilityId) {
+  if (!facilityId) return null;
+  if (DEMO_MODE) return Promise.resolve(demoGetFacility(facilityId));
+
+  const { doc, getDoc } = await import('firebase/firestore');
+  const snap = await getDoc(doc(db, 'facilities', facilityId));
+  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+}
 
 export async function postShift(facility, shiftFields) {
   const shift = {
@@ -96,17 +105,27 @@ export async function rejectClaim(claimId, shiftId) {
   return true;
 }
 
-export async function rateNurseForClaim(claimId, nurseId, rating) {
+export async function rateNurseForClaim(claimId, nurseId, rating, comment = '') {
   if (DEMO_MODE) {
-    demoUpdateClaim(claimId, { rated: true });
+    demoUpdateClaim(claimId, { rated: true, nurseRatingValue: rating, nurseRatingComment: comment });
     demoRateNurse(nurseId, rating);
     return Promise.resolve(true);
   }
-  const { doc, updateDoc, increment } = await import('firebase/firestore');
-  await updateDoc(doc(db, 'shiftClaims', claimId), { rated: true });
-  // A transaction would be more correct for averaging in production;
-  // kept simple here since this is the first cut of ratings.
-  const nurseRef = doc(db, 'nurses', nurseId);
-  await updateDoc(nurseRef, { shiftsCompleted: increment(1) });
+  const { doc, runTransaction, serverTimestamp } = await import('firebase/firestore');
+  await runTransaction(db, async (tx) => {
+    const nurseRef = doc(db, 'nurses', nurseId);
+    const nurseSnap = await tx.get(nurseRef);
+    const prior = nurseSnap.exists() ? nurseSnap.data() : {};
+    const priorCount = prior.shiftsCompleted ?? 0;
+    const priorRating = prior.rating ?? rating;
+    const newRating = Math.round(((priorRating * priorCount + rating) / (priorCount + 1)) * 10) / 10;
+    tx.update(nurseRef, { rating: newRating, shiftsCompleted: priorCount + 1 });
+    tx.update(doc(db, 'shiftClaims', claimId), {
+      rated: true,
+      nurseRatingValue: rating,
+      nurseRatingComment: comment,
+      ratedAt: serverTimestamp(),
+    });
+  });
   return true;
 }
