@@ -7,15 +7,26 @@ export default function Messages() {
   const me = useCurrentIdentity();
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     if (!me) return;
-    const unsub = subscribeToConversations(me.id, (list) => {
-      setConversations(list);
-      setLoading(false);
-    });
+    setLoading(true);
+    setError(null);
+    const unsub = subscribeToConversations(
+      me.id,
+      (list) => {
+        setConversations(list);
+        setLoading(false);
+      },
+      (err) => {
+        setError(err.message);
+        setLoading(false);
+      }
+    );
     return () => unsub();
-  }, [me?.id]);
+  }, [me?.id, retryKey]);
 
   if (!me) return null;
 
@@ -26,11 +37,16 @@ export default function Messages() {
       <div className="page-header">
         <p className="eyebrow">Chat</p>
         <h1 className="page-title">Messages</h1>
-        <p className="page-sub">Text, voice, and video calling with facilities and other nurses.</p>
+        <p className="page-sub">Text and voice calling with facilities and other nurses.</p>
       </div>
 
       {loading ? (
         <div className="empty-state">Loading…</div>
+      ) : error ? (
+        <div className="empty-state">
+          <p className="form-error" style={{ marginBottom: 12 }}>{error}</p>
+          <button className="clock-btn" onClick={() => setRetryKey((k) => k + 1)}>Try again</button>
+        </div>
       ) : conversations.length === 0 ? (
         <div className="empty-state">
           No conversations yet. Message a facility from a shift, or a fellow nurse from the directory.

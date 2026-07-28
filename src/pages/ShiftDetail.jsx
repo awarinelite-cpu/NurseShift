@@ -24,6 +24,7 @@ export default function ShiftDetail() {
   const [claiming, setClaiming] = useState(false);
   const [claimed, setClaimed] = useState(false);
   const [messaging, setMessaging] = useState(false);
+  const [messageError, setMessageError] = useState(null);
 
   useEffect(() => {
     getShift(shiftId).then((data) => {
@@ -41,13 +42,19 @@ export default function ShiftDetail() {
 
   async function handleMessage() {
     setMessaging(true);
-    const conv = await getOrCreateConversation(
-      { id: nurse.id, type: 'nurse', name: nurse.name },
-      { id: shift.facilityId, type: 'facility', name: shift.facility },
-      { type: 'shift', shiftId: shift.id }
-    );
-    setMessaging(false);
-    navigate(`/messages/${conv.id}`);
+    setMessageError(null);
+    try {
+      const conv = await getOrCreateConversation(
+        { id: nurse.id, type: 'nurse', name: nurse.name },
+        { id: shift.facilityId, type: 'facility', name: shift.facility },
+        { type: 'shift', shiftId: shift.id }
+      );
+      navigate(`/messages/${conv.id}`);
+    } catch (err) {
+      setMessageError(err.message);
+    } finally {
+      setMessaging(false);
+    }
   }
 
   if (loading) return <div className="page"><div className="empty-state">Loading…</div></div>;
@@ -146,6 +153,7 @@ export default function ShiftDetail() {
           >
             {messaging ? 'Opening…' : `Message ${shift.facility}`}
           </button>
+          {messageError && <p className="form-error" style={{ width: '100%' }}>{messageError}</p>}
         </div>
 
         {claimed && (

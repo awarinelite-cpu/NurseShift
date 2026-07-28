@@ -15,6 +15,7 @@ export default function MyShifts() {
   const [claims, setClaims] = useState([]);
   const [loading, setLoading] = useState(true);
   const [messaging, setMessaging] = useState(null);
+  const [messageError, setMessageError] = useState(null);
 
   async function refresh() {
     const data = await listMyClaims(nurse.id);
@@ -39,13 +40,19 @@ export default function MyShifts() {
 
   async function handleMessage(c) {
     setMessaging(c.id);
-    const conv = await getOrCreateConversation(
-      { id: nurse.id, type: 'nurse', name: nurse.name },
-      { id: c.shift?.facilityId, type: 'facility', name: c.shift?.facility },
-      { type: 'shift', shiftId: c.shiftId }
-    );
-    setMessaging(null);
-    navigate(`/messages/${conv.id}`);
+    setMessageError(null);
+    try {
+      const conv = await getOrCreateConversation(
+        { id: nurse.id, type: 'nurse', name: nurse.name },
+        { id: c.shift?.facilityId, type: 'facility', name: c.shift?.facility },
+        { type: 'shift', shiftId: c.shiftId }
+      );
+      navigate(`/messages/${conv.id}`);
+    } catch (err) {
+      setMessageError(err.message);
+    } finally {
+      setMessaging(null);
+    }
   }
 
   return (
@@ -55,6 +62,8 @@ export default function MyShifts() {
         <h1 className="page-title">My Shifts</h1>
         <p className="page-sub">Track approvals, clock in when your shift starts, and clock out when it ends.</p>
       </div>
+
+      {messageError && <p className="form-error" style={{ marginBottom: 16 }}>{messageError}</p>}
 
       {loading ? (
         <div className="empty-state">Loading…</div>

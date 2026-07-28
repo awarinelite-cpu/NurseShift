@@ -890,6 +890,13 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 18px 16px;
+  display: block;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.admin-stat-card:hover {
+  border-color: var(--ink-soft);
+  transform: translateY(-1px);
 }
 
 .admin-stat-label {

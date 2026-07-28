@@ -4,13 +4,13 @@ import { subscribeAdminStats } from '../../lib/admin';
 import { useAdmin } from '../../context/AdminContext';
 
 const CARDS = [
-  { key: 'totalUsers', label: 'Nurses (total)' },
-  { key: 'activeUsers', label: 'Active right now', live: true },
-  { key: 'verifiedNurses', label: 'Verified nurses' },
-  { key: 'totalFacilities', label: 'Facilities' },
-  { key: 'totalShifts', label: 'Shifts (total)' },
-  { key: 'shiftsTaken', label: 'Shifts taken' },
-  { key: 'shiftsNotTaken', label: 'Shifts not taken' },
+  { key: 'totalUsers', label: 'Nurses (total)', to: '/admin/nurses' },
+  { key: 'activeUsers', label: 'Active right now', live: true, to: '/admin/nurses?filter=active' },
+  { key: 'verifiedNurses', label: 'Verified nurses', to: '/admin/nurses?filter=verified' },
+  { key: 'totalFacilities', label: 'Facilities', to: '/admin/facilities' },
+  { key: 'totalShifts', label: 'Shifts (total)', to: '/admin/shifts' },
+  { key: 'shiftsTaken', label: 'Shifts taken', to: '/admin/shifts?filter=taken' },
+  { key: 'shiftsNotTaken', label: 'Shifts not taken', to: '/admin/shifts?filter=open' },
 ];
 
 export default function AdminDashboard() {
@@ -47,12 +47,17 @@ export default function AdminDashboard() {
         <div className="empty-state">Loading live stats…</div>
       ) : (
         <div className="admin-stats-grid">
-          {CARDS.map(({ key, label, live }) => (
-            <div className="admin-stat-card" key={key}>
+          {CARDS.map(({ key, label, live, to }) => (
+            <Link
+              to={to}
+              className="admin-stat-card"
+              key={key}
+              style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+            >
               {live && <span className="admin-stat-live" aria-hidden="true" />}
               <p className="admin-stat-label">{label}</p>
               <p className="admin-stat-value">{stats[key]}</p>
-            </div>
+            </Link>
           ))}
         </div>
       )}

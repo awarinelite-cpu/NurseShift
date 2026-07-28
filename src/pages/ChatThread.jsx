@@ -18,20 +18,25 @@ export default function ChatThread() {
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const [otherPhone, setOtherPhone] = useState(null);
+  const [error, setError] = useState(null);
   const bottomRef = useRef(null);
 
   useEffect(() => {
     let cancelled = false;
-    getConversation(conversationId).then((c) => {
-      if (!cancelled) setConversation(c);
-    });
+    getConversation(conversationId)
+      .then((c) => {
+        if (!cancelled) setConversation(c);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err.message);
+      });
     return () => {
       cancelled = true;
     };
   }, [conversationId]);
 
   useEffect(() => {
-    const unsub = subscribeToMessages(conversationId, setMessages);
+    const unsub = subscribeToMessages(conversationId, setMessages, (err) => setError(err.message));
     return () => unsub();
   }, [conversationId]);
 
@@ -59,8 +64,14 @@ export default function ChatThread() {
     if (!value || sending) return;
     setSending(true);
     setText('');
-    await sendMessage(conversationId, me, value);
-    setSending(false);
+    try {
+      await sendMessage(conversationId, me, value);
+    } catch (err) {
+      setError(err.message);
+      setText(value);
+    } finally {
+      setSending(false);
+    }
   }
 
   function handleCall() {
@@ -96,7 +107,8 @@ export default function ChatThread() {
         </div>
 
         <div className="chat-messages">
-          {messages.length === 0 && <p className="empty-state">No messages yet — say hello.</p>}
+          {error && <p className="form-error">{error}</p>}
+          {messages.length === 0 && !error && <p className="empty-state">No messages yet — say hello.</p>}
           {messages.map((m) => (
             <div
               key={m.id}

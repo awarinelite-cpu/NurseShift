@@ -21,6 +21,8 @@ import ChatThread from './pages/ChatThread';
 import NurseDirectory from './pages/NurseDirectory';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminNurses from './pages/admin/AdminNurses';
+import AdminShifts from './pages/admin/AdminShifts';
 import AdminReview from './pages/admin/AdminReview';
 import AdminFacilities from './pages/admin/AdminFacilities';
 import AdminFacilityDetail from './pages/admin/AdminFacilityDetail';
@@ -42,6 +44,8 @@ export default function App() {
                 {/* Admin surface — separate login, not linked from nurse nav */}
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/admin" element={<ErrorBoundary><RequireAdmin><AdminDashboard /></RequireAdmin></ErrorBoundary>} />
+                <Route path="/admin/nurses" element={<ErrorBoundary><RequireAdmin><AdminNurses /></RequireAdmin></ErrorBoundary>} />
+                <Route path="/admin/shifts" element={<ErrorBoundary><RequireAdmin><AdminShifts /></RequireAdmin></ErrorBoundary>} />
                 <Route path="/admin/review" element={<ErrorBoundary><RequireAdmin><AdminReview /></RequireAdmin></ErrorBoundary>} />
                 <Route path="/admin/facilities" element={<ErrorBoundary><RequireAdmin><AdminFacilities /></RequireAdmin></ErrorBoundary>} />
                 <Route path="/admin/facilities/import" element={<ErrorBoundary><RequireAdmin><AdminFacilityImport /></RequireAdmin></ErrorBoundary>} />

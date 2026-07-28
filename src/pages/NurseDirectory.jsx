@@ -8,6 +8,7 @@ export default function NurseDirectory() {
   const [nurses, setNurses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [messaging, setMessaging] = useState(null);
+  const [messageError, setMessageError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,9 +21,15 @@ export default function NurseDirectory() {
 
   async function handleMessage(n) {
     setMessaging(n.id);
-    const conv = await getOrCreateConversation(me, { id: n.id, type: 'nurse', name: n.name }, { type: 'peer' });
-    setMessaging(null);
-    navigate(`/messages/${conv.id}`);
+    setMessageError(null);
+    try {
+      const conv = await getOrCreateConversation(me, { id: n.id, type: 'nurse', name: n.name }, { type: 'peer' });
+      navigate(`/messages/${conv.id}`);
+    } catch (err) {
+      setMessageError(err.message);
+    } finally {
+      setMessaging(null);
+    }
   }
 
   if (!me) return null;
@@ -34,6 +41,8 @@ export default function NurseDirectory() {
         <h1 className="page-title">Nurses</h1>
         <p className="page-sub">Message or call another nurse on the platform.</p>
       </div>
+
+      {messageError && <p className="form-error" style={{ marginBottom: 16 }}>{messageError}</p>}
 
       {loading ? (
         <div className="empty-state">Loading…</div>

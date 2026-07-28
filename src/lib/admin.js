@@ -356,7 +356,51 @@ export async function fixSeedFacilityCoordinates() {
   return { facilitiesUpdated, facilitiesSkipped, shiftsUpdated };
 }
 
-// Powers the admin dashboard's stat cards. Streams live counts for users,
+// Lists every nurse for the admin "Nurses" drill-down page, with presence
+// merged in so the page can show/filter on "active right now" the same way
+// the dashboard stat card does.
+export async function listAllNursesForAdmin() {
+  if (DEMO_MODE) {
+    const nurses = demoListNurses();
+    const presence = demoListPresence();
+    const now = Date.now();
+    return nurses
+      .map((n) => {
+        const p = presence.find((row) => row.id === n.id);
+        return { ...n, active: !!p && now - p.lastActiveAt <= ACTIVE_WINDOW_MS };
+      })
+      .reverse();
+  }
+
+  const { collection, getDocs } = await import('firebase/firestore');
+  const [nursesSnap, presenceSnap] = await Promise.all([
+    getDocs(collection(db, 'nurses')),
+    getDocs(collection(db, 'presence')),
+  ]);
+  const now = Date.now();
+  const presence = presenceSnap.docs.map((d) => ({ id: d.id, lastActiveAt: d.data().lastActiveAt?.toMillis?.() ?? 0 }));
+  return nursesSnap.docs
+    .map((d) => {
+      const n = { id: d.id, ...d.data() };
+      const p = presence.find((row) => row.id === n.id);
+      return { ...n, active: !!p && now - p.lastActiveAt <= ACTIVE_WINDOW_MS };
+    })
+    .reverse();
+}
+
+// Lists every shift for the admin "Shifts" drill-down page, newest first
+// where we can tell.
+export async function listAllShiftsForAdmin() {
+  if (DEMO_MODE) {
+    return demoListShifts().slice().reverse();
+  }
+
+  const { collection, getDocs } = await import('firebase/firestore');
+  const snap = await getDocs(collection(db, 'shifts'));
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() })).reverse();
+}
+
+
 // facilities, and shifts, plus a rolling "active right now" figure computed
 // from presence heartbeats (see src/lib/presence.js for how those are
 // written and why Firestore needs this heartbeat approach instead of a

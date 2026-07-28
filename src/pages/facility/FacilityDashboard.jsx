@@ -20,6 +20,7 @@ export default function FacilityDashboard() {
   const [locating, setLocating] = useState(false);
   const [locError, setLocError] = useState('');
   const [messaging, setMessaging] = useState(null);
+  const [messageError, setMessageError] = useState(null);
   const [editingPhone, setEditingPhone] = useState(false);
   const [phoneInput, setPhoneInput] = useState('');
   const [savingPhone, setSavingPhone] = useState(false);
@@ -60,13 +61,19 @@ export default function FacilityDashboard() {
 
   async function handleMessage(c) {
     setMessaging(c.id);
-    const conv = await getOrCreateConversation(
-      { id: facility.id, type: 'facility', name: facility.name },
-      { id: c.nurseId, type: 'nurse', name: c.nurse?.name ?? 'Nurse' },
-      { type: 'shift', shiftId: c.shiftId }
-    );
-    setMessaging(null);
-    navigate(`/facility/messages/${conv.id}`);
+    setMessageError(null);
+    try {
+      const conv = await getOrCreateConversation(
+        { id: facility.id, type: 'facility', name: facility.name },
+        { id: c.nurseId, type: 'nurse', name: c.nurse?.name ?? 'Nurse' },
+        { type: 'shift', shiftId: c.shiftId }
+      );
+      navigate(`/facility/messages/${conv.id}`);
+    } catch (err) {
+      setMessageError(err.message);
+    } finally {
+      setMessaging(null);
+    }
   }
 
   async function handleUpdateLocation() {
@@ -169,6 +176,8 @@ export default function FacilityDashboard() {
           </>
         )}
       </div>
+
+      {messageError && <p className="form-error" style={{ marginBottom: 16 }}>{messageError}</p>}
 
       {loading ? (
         <div className="empty-state">Loading…</div>
