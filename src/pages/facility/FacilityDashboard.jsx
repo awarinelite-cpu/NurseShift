@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFacility } from '../../context/FacilityContext';
 import { listClaimsForFacility, approveClaim, rejectClaim, rateNurseForClaim } from '../../lib/facility';
 import { getCurrentLocation } from '../../lib/geo';
+import { getOrCreateConversation } from '../../lib/chat';
 import Badge from '../../components/Badge';
 
 function formatNaira(amount) {
@@ -10,12 +12,14 @@ function formatNaira(amount) {
 
 export default function FacilityDashboard() {
   const { facility, updateLocation } = useFacility();
+  const navigate = useNavigate();
   const [claims, setClaims] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actingOn, setActingOn] = useState(null);
   const [ratingFor, setRatingFor] = useState(null);
   const [locating, setLocating] = useState(false);
   const [locError, setLocError] = useState('');
+  const [messaging, setMessaging] = useState(null);
 
   async function refresh() {
     const data = await listClaimsForFacility(facility.id);
@@ -48,6 +52,17 @@ export default function FacilityDashboard() {
     await refresh();
     setActingOn(null);
     setRatingFor(null);
+  }
+
+  async function handleMessage(c) {
+    setMessaging(c.id);
+    const conv = await getOrCreateConversation(
+      { id: facility.id, type: 'facility', name: facility.name },
+      { id: c.nurseId, type: 'nurse', name: c.nurse?.name ?? 'Nurse' },
+      { type: 'shift', shiftId: c.shiftId }
+    );
+    setMessaging(null);
+    navigate(`/facility/messages/${conv.id}`);
   }
 
   async function handleUpdateLocation() {
@@ -123,6 +138,9 @@ export default function FacilityDashboard() {
                     <button className="claim-btn" style={{ background: 'var(--red)' }} disabled={actingOn === c.id} onClick={() => handleReject(c)}>
                       Reject
                     </button>
+                    <button className="claim-btn" style={{ background: 'var(--ink-soft)' }} disabled={messaging === c.id} onClick={() => handleMessage(c)}>
+                      {messaging === c.id ? 'Opening…' : 'Message'}
+                    </button>
                   </div>
                 </div>
               ))}
@@ -138,7 +156,12 @@ export default function FacilityDashboard() {
                     <div className="facility">{c.nurse?.name}</div>
                     <div className="meta">{c.shift?.unit} · {c.shift?.date} · {c.clockIn ? 'Clocked in' : 'Not clocked in yet'}</div>
                   </div>
-                  <Badge status="approved">Approved</Badge>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <button className="clock-btn" disabled={messaging === c.id} onClick={() => handleMessage(c)}>
+                      {messaging === c.id ? 'Opening…' : 'Message'}
+                    </button>
+                    <Badge status="approved">Approved</Badge>
+                  </div>
                 </div>
               ))}
             </>

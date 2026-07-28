@@ -56,5 +56,39 @@ service cloud.firestore {
       allow read: if request.auth != null && request.auth.uid == uid;
       allow write: if false;
     }
+
+    // Chat: only the two participants of a conversation can read/write it
+    // or its messages. participantIds is set once at creation and never
+    // changes, so this also stops someone from adding themselves later.
+    match /conversations/{conversationId} {
+      allow read: if request.auth != null && request.auth.uid in resource.data.participantIds;
+      allow create: if request.auth != null && request.auth.uid in request.resource.data.participantIds;
+      allow update: if request.auth != null && request.auth.uid in resource.data.participantIds;
+
+      match /messages/{messageId} {
+        allow read, create: if request.auth != null &&
+          request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participantIds;
+      }
+    }
+
+    // Calling (WebRTC signaling): only the caller/callee can read or update
+    // a call doc. ICE candidate subcollections are left open to any signed-in
+    // user rather than re-checking caller/callee on every candidate write,
+    // since call IDs aren't guessable and candidates alone reveal only
+    // network routing info, not app data.
+    match /calls/{callId} {
+      allow read: if request.auth != null &&
+        (request.auth.uid == resource.data.callerId || request.auth.uid == resource.data.calleeId);
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.callerId;
+      allow update: if request.auth != null &&
+        (request.auth.uid == resource.data.callerId || request.auth.uid == resource.data.calleeId);
+
+      match /callerCandidates/{candidateId} {
+        allow read, create: if request.auth != null;
+      }
+      match /calleeCandidates/{candidateId} {
+        allow read, create: if request.auth != null;
+      }
+    }
   }
 }

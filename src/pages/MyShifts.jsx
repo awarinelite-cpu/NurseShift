@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { listMyClaims, clockIn, clockOut } from '../lib/shifts';
 import { useAuth } from '../context/AuthContext';
+import { getOrCreateConversation } from '../lib/chat';
 import Badge from '../components/Badge';
 
 function formatNaira(amount) {
@@ -9,8 +11,10 @@ function formatNaira(amount) {
 
 export default function MyShifts() {
   const { nurse } = useAuth();
+  const navigate = useNavigate();
   const [claims, setClaims] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [messaging, setMessaging] = useState(null);
 
   async function refresh() {
     const data = await listMyClaims(nurse.id);
@@ -31,6 +35,17 @@ export default function MyShifts() {
   async function handleClockOut(claimId) {
     await clockOut(claimId);
     refresh();
+  }
+
+  async function handleMessage(c) {
+    setMessaging(c.id);
+    const conv = await getOrCreateConversation(
+      { id: nurse.id, type: 'nurse', name: nurse.name },
+      { id: c.shift?.facilityId, type: 'facility', name: c.shift?.facility },
+      { type: 'shift', shiftId: c.shiftId }
+    );
+    setMessaging(null);
+    navigate(`/messages/${conv.id}`);
   }
 
   return (
@@ -58,6 +73,9 @@ export default function MyShifts() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <Badge status={c.status}>{c.status}</Badge>
+              <button className="clock-btn" disabled={messaging === c.id} onClick={() => handleMessage(c)}>
+                {messaging === c.id ? 'Opening…' : 'Message'}
+              </button>
               {c.status === 'approved' && !c.clockIn && (
                 <button className="clock-btn" onClick={() => handleClockIn(c.id)}>Clock in</button>
               )}

@@ -25,6 +25,9 @@ export default function FacilityLayout() {
             <NavLink to="/facility/post" className={({ isActive }) => (isActive ? 'active' : '')}>
               Post a Shift
             </NavLink>
+            <NavLink to="/facility/messages" className={({ isActive }) => (isActive ? 'active' : '')}>
+              Messages
+            </NavLink>
             <a onClick={handleSignOut} role="button">Sign out</a>
           </nav>
         )}

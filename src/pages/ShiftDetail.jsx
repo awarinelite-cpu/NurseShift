@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getShift, claimShift } from '../lib/shifts';
 import { useAuth } from '../context/AuthContext';
+import { getOrCreateConversation } from '../lib/chat';
 import Badge from '../components/Badge';
 import MapModal from '../components/MapModal';
 
@@ -22,6 +23,7 @@ export default function ShiftDetail() {
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
   const [claimed, setClaimed] = useState(false);
+  const [messaging, setMessaging] = useState(false);
 
   useEffect(() => {
     getShift(shiftId).then((data) => {
@@ -35,6 +37,17 @@ export default function ShiftDetail() {
     await claimShift(shiftId, nurse.id);
     setClaiming(false);
     setClaimed(true);
+  }
+
+  async function handleMessage() {
+    setMessaging(true);
+    const conv = await getOrCreateConversation(
+      { id: nurse.id, type: 'nurse', name: nurse.name },
+      { id: shift.facilityId, type: 'facility', name: shift.facility },
+      { type: 'shift', shiftId: shift.id }
+    );
+    setMessaging(false);
+    navigate(`/messages/${conv.id}`);
   }
 
   if (loading) return <div className="page"><div className="empty-state">Loading…</div></div>;
@@ -108,21 +121,32 @@ export default function ShiftDetail() {
           </p>
         ) : null}
 
-        <button
-          className="claim-btn"
-          disabled={!isOpen || claiming}
-          onClick={handleClaim}
-        >
-          {claiming
-            ? 'Claiming…'
-            : claimed
-            ? 'Claimed'
-            : !isVerified
-            ? 'License pending review'
-            : isOpen
-            ? 'Claim this shift'
-            : 'No longer available'}
-        </button>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button
+            className="claim-btn"
+            disabled={!isOpen || claiming}
+            onClick={handleClaim}
+          >
+            {claiming
+              ? 'Claiming…'
+              : claimed
+              ? 'Claimed'
+              : !isVerified
+              ? 'License pending review'
+              : isOpen
+              ? 'Claim this shift'
+              : 'No longer available'}
+          </button>
+          <button
+            type="button"
+            className="claim-btn"
+            style={{ background: 'var(--ink-soft)', flex: '0 0 auto' }}
+            disabled={messaging}
+            onClick={handleMessage}
+          >
+            {messaging ? 'Opening…' : `Message ${shift.facility}`}
+          </button>
+        </div>
 
         {claimed && (
           <div style={{ marginTop: 12, textAlign: 'center' }}>

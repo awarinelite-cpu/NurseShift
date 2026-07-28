@@ -132,3 +132,102 @@ export function demoUpdateClaim(id, patch) {
   _claims = _claims.map((c) => (c.id === id ? { ...c, ...patch } : c));
   return demoGetClaim(id);
 }
+
+// ---------- Chat (demo mode) ----------
+// Demo mode only ever has one identity signed in per browser tab, so this is
+// a local, single-participant simulation good enough to click through the UI.
+// Real two-way messaging and calling need live Firebase — see README.
+let _conversations = [];
+let _nextConvId = 1;
+let _messages = {}; // conversationId -> array of messages
+const _convListeners = new Set(); // { userId, callback }
+const _msgListeners = {}; // conversationId -> Set(callback)
+
+function _notifyConvListeners() {
+  _convListeners.forEach(({ userId, callback }) => {
+    callback(
+      _conversations
+        .filter((c) => c.participantIds.includes(userId))
+        .sort((a, b) => (b.lastMessageAt || 0) - (a.lastMessageAt || 0))
+    );
+  });
+}
+
+function _notifyMsgListeners(conversationId) {
+  (_msgListeners[conversationId] || new Set()).forEach((cb) => cb([...(_messages[conversationId] || [])]));
+}
+
+export function demoGetOrCreateConversation(me, other, opts = {}) {
+  const existing = _conversations.find(
+    (c) =>
+      c.participantIds.includes(me.id) &&
+      c.participantIds.includes(other.id) &&
+      (opts.shiftId ? c.shiftId === opts.shiftId : !c.shiftId)
+  );
+  if (existing) return existing;
+
+  const id = `conv-demo-${_nextConvId++}`;
+  const conversation = {
+    id,
+    participantIds: [me.id, other.id],
+    participants: [
+      { id: me.id, type: me.type, name: me.name },
+      { id: other.id, type: other.type, name: other.name },
+    ],
+    type: opts.type || 'peer',
+    shiftId: opts.shiftId || null,
+    lastMessage: '',
+    lastMessageAt: Date.now(),
+    lastSenderId: null,
+    createdAt: Date.now(),
+  };
+  _conversations = [..._conversations, conversation];
+  _messages[id] = [];
+  _notifyConvListeners();
+  return conversation;
+}
+
+export function demoGetConversation(id) {
+  return _conversations.find((c) => c.id === id) ?? null;
+}
+
+export function demoSubscribeConversations(userId, callback) {
+  const entry = { userId, callback };
+  _convListeners.add(entry);
+  callback(
+    _conversations
+      .filter((c) => c.participantIds.includes(userId))
+      .sort((a, b) => (b.lastMessageAt || 0) - (a.lastMessageAt || 0))
+  );
+  return () => _convListeners.delete(entry);
+}
+
+export function demoSubscribeMessages(conversationId, callback) {
+  if (!_msgListeners[conversationId]) _msgListeners[conversationId] = new Set();
+  _msgListeners[conversationId].add(callback);
+  callback([...(_messages[conversationId] || [])]);
+  return () => _msgListeners[conversationId].delete(callback);
+}
+
+export function demoSendMessage(conversationId, sender, text, type = 'text') {
+  const msg = {
+    id: `msg-demo-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    senderId: sender.id,
+    senderType: sender.type,
+    senderName: sender.name,
+    text,
+    type,
+    createdAt: Date.now(),
+  };
+  _messages[conversationId] = [...(_messages[conversationId] || []), msg];
+  _conversations = _conversations.map((c) =>
+    c.id === conversationId ? { ...c, lastMessage: text, lastMessageAt: Date.now(), lastSenderId: sender.id } : c
+  );
+  _notifyMsgListeners(conversationId);
+  _notifyConvListeners();
+  return msg;
+}
+
+export function demoListNurseDirectory(excludeId) {
+  return _nurses.filter((n) => n.id !== excludeId && n.verification === 'verified');
+}

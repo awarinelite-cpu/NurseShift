@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
+import CallModal from './components/CallModal';
 import { AuthProvider } from './context/AuthContext';
 import { AdminProvider } from './context/AdminContext';
 import { FacilityProvider } from './context/FacilityContext';
+import { CallProvider } from './context/CallContext';
 import RequireAuth from './components/RequireAuth';
 import RequireAdmin from './components/RequireAdmin';
 import RequireFacility from './components/RequireFacility';
@@ -14,6 +16,9 @@ import MyShifts from './pages/MyShifts';
 import Profile from './pages/Profile';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
+import Messages from './pages/Messages';
+import ChatThread from './pages/ChatThread';
+import NurseDirectory from './pages/NurseDirectory';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminReview from './pages/admin/AdminReview';
 import AdminFacilities from './pages/admin/AdminFacilities';
@@ -29,34 +34,42 @@ export default function App() {
     <AuthProvider>
       <AdminProvider>
         <FacilityProvider>
-          <BrowserRouter>
-            <Routes>
-              {/* Admin surface — separate login, not linked from nurse nav */}
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin" element={<ErrorBoundary><RequireAdmin><AdminReview /></RequireAdmin></ErrorBoundary>} />
-              <Route path="/admin/facilities" element={<ErrorBoundary><RequireAdmin><AdminFacilities /></RequireAdmin></ErrorBoundary>} />
-              <Route path="/admin/facilities/import" element={<ErrorBoundary><RequireAdmin><AdminFacilityImport /></RequireAdmin></ErrorBoundary>} />
-              <Route path="/admin/facilities/:facilityId" element={<ErrorBoundary><RequireAdmin><AdminFacilityDetail /></RequireAdmin></ErrorBoundary>} />
+          <CallProvider>
+            <BrowserRouter>
+              <CallModal />
+              <Routes>
+                {/* Admin surface — separate login, not linked from nurse nav */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin" element={<ErrorBoundary><RequireAdmin><AdminReview /></RequireAdmin></ErrorBoundary>} />
+                <Route path="/admin/facilities" element={<ErrorBoundary><RequireAdmin><AdminFacilities /></RequireAdmin></ErrorBoundary>} />
+                <Route path="/admin/facilities/import" element={<ErrorBoundary><RequireAdmin><AdminFacilityImport /></RequireAdmin></ErrorBoundary>} />
+                <Route path="/admin/facilities/:facilityId" element={<ErrorBoundary><RequireAdmin><AdminFacilityDetail /></RequireAdmin></ErrorBoundary>} />
 
-              {/* Facility surface — own layout, own auth */}
-              <Route path="/facility/login" element={<FacilityLogin />} />
-              <Route path="/facility/signup" element={<FacilitySignUp />} />
-              <Route element={<FacilityLayout />}>
-                <Route path="/facility" element={<RequireFacility><FacilityDashboard /></RequireFacility>} />
-                <Route path="/facility/post" element={<RequireFacility><PostShift /></RequireFacility>} />
-              </Route>
+                {/* Facility surface — own layout, own auth */}
+                <Route path="/facility/login" element={<FacilityLogin />} />
+                <Route path="/facility/signup" element={<FacilitySignUp />} />
+                <Route element={<FacilityLayout />}>
+                  <Route path="/facility" element={<RequireFacility><FacilityDashboard /></RequireFacility>} />
+                  <Route path="/facility/post" element={<RequireFacility><PostShift /></RequireFacility>} />
+                  <Route path="/facility/messages" element={<RequireFacility><Messages /></RequireFacility>} />
+                  <Route path="/facility/messages/:conversationId" element={<RequireFacility><ChatThread /></RequireFacility>} />
+                </Route>
 
-              {/* Nurse-facing surface, shares TopBar via layout route */}
-              <Route element={<NurseLayout />}>
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/" element={<RequireAuth><ShiftBoard /></RequireAuth>} />
-                <Route path="/shifts/:shiftId" element={<RequireAuth><ShiftDetail /></RequireAuth>} />
-                <Route path="/my-shifts" element={<RequireAuth><MyShifts /></RequireAuth>} />
-                <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
+                {/* Nurse-facing surface, shares TopBar via layout route */}
+                <Route element={<NurseLayout />}>
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/" element={<RequireAuth><ShiftBoard /></RequireAuth>} />
+                  <Route path="/shifts/:shiftId" element={<RequireAuth><ShiftDetail /></RequireAuth>} />
+                  <Route path="/my-shifts" element={<RequireAuth><MyShifts /></RequireAuth>} />
+                  <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
+                  <Route path="/messages" element={<RequireAuth><Messages /></RequireAuth>} />
+                  <Route path="/messages/:conversationId" element={<RequireAuth><ChatThread /></RequireAuth>} />
+                  <Route path="/nurses" element={<RequireAuth><NurseDirectory /></RequireAuth>} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </CallProvider>
         </FacilityProvider>
       </AdminProvider>
     </AuthProvider>

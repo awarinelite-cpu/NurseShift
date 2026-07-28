@@ -25,6 +25,12 @@ export default function TopBar() {
               <NavLink to="/my-shifts" className={({ isActive }) => (isActive ? 'active' : '')}>
                 My Shifts
               </NavLink>
+              <NavLink to="/messages" className={({ isActive }) => (isActive ? 'active' : '')}>
+                Messages
+              </NavLink>
+              <NavLink to="/nurses" className={({ isActive }) => (isActive ? 'active' : '')}>
+                Nurses
+              </NavLink>
               <NavLink to="/profile" className={({ isActive }) => (isActive ? 'active' : '')}>
                 Profile
               </NavLink>
