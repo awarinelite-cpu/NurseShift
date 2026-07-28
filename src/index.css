@@ -1,12 +1,13 @@
 :root {
-  /* Color tokens */
-  --ink: #14213D;          /* deep navy — authority, trust */
-  --ink-soft: #2C3B5C;
-  --paper: #EEF1F4;        /* cool off-white, not the AI-default cream */
+  /* Color tokens — teal/mint theme */
+  --ink: #0E4B40;          /* deep teal — primary buttons, topbar, headings */
+  --ink-soft: #146357;
+  --paper: #EDF5F2;        /* light mint page background */
   --surface: #FFFFFF;
-  --slate: #5B6472;        /* muted secondary text */
-  --line: #D9DEE3;         /* hairline dividers */
-  --gold: #E3B23C;         /* accent — pay, highlights */
+  --slate: #5C6B67;        /* muted secondary text, teal-leaning gray */
+  --line: #D8E6E1;         /* mint-tinted hairline dividers */
+  --accent: #8FE6CC;       /* bright mint — brand mark on dark backgrounds */
+  --gold: #E3B23C;         /* status accent — kept for "pending"/call-log chips */
   --gold-deep: #B8871F;
   --green: #2F8F5B;        /* open / confirmed */
   --green-soft: #E4F3EC;
