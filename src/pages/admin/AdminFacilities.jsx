@@ -94,11 +94,14 @@ export default function AdminFacilities() {
           <h1 className="page-title">Facilities</h1>
           <p className="page-sub">Review registered facilities, add one, or bulk-import a list.</p>
         </div>
-        <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+          <Link to="/admin" className="clock-btn" style={{ textDecoration: 'none' }}>Dashboard</Link>
+          <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
+        </div>
       </div>
 
       <p style={{ marginBottom: 16 }}>
-        <Link to="/admin">← Back to license review</Link>
+        <Link to="/admin/review">← Back to license review</Link>
       </p>
 
       <div style={{ display: 'flex', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>

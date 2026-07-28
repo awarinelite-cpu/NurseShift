@@ -18,6 +18,7 @@ export default function SignUp() {
     specialty: '',
     yearsExperience: '',
     licenseNumber: '',
+    phone: '',
   });
   const [licenseFile, setLicenseFile] = useState(null);
   const [fileError, setFileError] = useState('');
@@ -111,6 +112,20 @@ export default function SignUp() {
         <div className="form-row">
           <label htmlFor="specialty">Specialty</label>
           <input id="specialty" placeholder="e.g. Critical Care, Labour Ward" value={form.specialty} onChange={(e) => update('specialty', e.target.value)} />
+        </div>
+
+        <div className="form-row">
+          <label htmlFor="phone">Phone number</label>
+          <input
+            id="phone"
+            type="tel"
+            placeholder="e.g. 0803 123 4567"
+            value={form.phone}
+            onChange={(e) => update('phone', e.target.value)}
+          />
+          <p className="page-sub" style={{ marginTop: 6 }}>
+            Used as a direct-call fallback if an in-app voice call can't connect.
+          </p>
         </div>
 
         <div className="form-row">

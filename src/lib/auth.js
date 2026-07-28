@@ -4,7 +4,7 @@ import { demoAddNurse, demoGetNurse } from './demoStore';
 // --- Demo-mode: tracks which nurse (if any) is "signed in" this session ---
 let _demoSignedInId = null;
 
-export async function signUpNurse({ name, email, password, cadre, specialty, yearsExperience, licenseNumber, licenseFile }) {
+export async function signUpNurse({ name, email, password, cadre, specialty, yearsExperience, licenseNumber, phone, licenseFile }) {
   if (DEMO_MODE) {
     const nurse = demoAddNurse({
       name,
@@ -12,6 +12,7 @@ export async function signUpNurse({ name, email, password, cadre, specialty, yea
       specialty,
       yearsExperience: Number(yearsExperience),
       licenseNumber,
+      phone: phone || null,
       verification: 'pending',
       rating: null,
       shiftsCompleted: 0,
@@ -53,6 +54,7 @@ export async function signUpNurse({ name, email, password, cadre, specialty, yea
     specialty,
     yearsExperience: Number(yearsExperience),
     licenseNumber,
+    phone: phone || null,
     verification: 'pending', // an admin flips this to "verified" after manual review
     rating: null,
     shiftsCompleted: 0,

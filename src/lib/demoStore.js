@@ -231,3 +231,18 @@ export function demoSendMessage(conversationId, sender, text, type = 'text') {
 export function demoListNurseDirectory(excludeId) {
   return _nurses.filter((n) => n.id !== excludeId && n.verification === 'verified');
 }
+
+// ---------- Presence (demo mode) ----------
+// Keyed by identity id -> { id, name, type, lastActiveAt: epoch ms }.
+// Used only so the admin "active users" stat has something to show while
+// clicking through the app without real Firebase wired up.
+let _presence = {};
+
+export function demoTouchPresence(identity) {
+  if (!identity) return;
+  _presence[identity.id] = { id: identity.id, name: identity.name, type: identity.type, lastActiveAt: Date.now() };
+}
+
+export function demoListPresence() {
+  return Object.values(_presence);
+}

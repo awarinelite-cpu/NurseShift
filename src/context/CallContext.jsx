@@ -2,10 +2,19 @@ import { createContext, useContext, useEffect, useRef, useState, useCallback } f
 import { DEMO_MODE, db } from '../lib/firebase';
 import { useAuth } from './AuthContext';
 import { useFacility } from './FacilityContext';
-import { sendMessage } from '../lib/chat';
+import { sendMessage, getParticipantPhone } from '../lib/chat';
 import { ICE_SERVERS } from '../lib/webrtc';
+import { startPresenceHeartbeat } from '../lib/presence';
 
 const CallContext = createContext(null);
+
+// How long an outgoing call can ring with no answer before we give up and
+// surface the "call directly" phone fallback.
+const RING_TIMEOUT_MS = 30000;
+// How long we wait for the WebRTC connection to actually establish (STUN-only
+// has no TURN relay, so this can fail on strict/carrier-grade mobile NAT —
+// see src/lib/webrtc.js) before offering the phone fallback.
+const CONNECT_TIMEOUT_MS = 15000;
 
 // Works out "who is currently browsing this app" regardless of whether
 // they're signed in as a nurse or a facility — chat and calling are
@@ -26,10 +35,19 @@ export function CallProvider({ children }) {
   const localStreamRef = useRef(null);
   const unsubsRef = useRef([]);
   const activeCallRef = useRef(null); // mirrors activeCall for use inside listeners
+  const timeoutsRef = useRef([]);
 
   useEffect(() => {
     activeCallRef.current = activeCall;
   }, [activeCall]);
+
+  // Real-time "active users" on the admin dashboard depends on a live
+  // heartbeat from every signed-in session — this is the one place both
+  // nurse and facility identities already flow through.
+  useEffect(() => {
+    if (!me) return;
+    return startPresenceHeartbeat(me);
+  }, [me?.id]);
 
   // Listen for calls addressed to me that are still ringing.
   useEffect(() => {
@@ -54,6 +72,11 @@ export function CallProvider({ children }) {
     };
   }, [me?.id]);
 
+  const clearTimers = useCallback(() => {
+    timeoutsRef.current.forEach((t) => clearTimeout(t));
+    timeoutsRef.current = [];
+  }, []);
+
   const teardown = useCallback(() => {
     pcRef.current?.getSenders().forEach((s) => s.track && s.track.stop());
     pcRef.current?.close();
@@ -62,7 +85,8 @@ export function CallProvider({ children }) {
     localStreamRef.current = null;
     unsubsRef.current.forEach((fn) => fn());
     unsubsRef.current = [];
-  }, []);
+    clearTimers();
+  }, [clearTimers]);
 
   async function createPeerConnection(callId, myCandidatesField) {
     const { collection, addDoc } = await import('firebase/firestore');
@@ -75,14 +99,28 @@ export function CallProvider({ children }) {
     pc.ontrack = (e) => {
       setActiveCall((prev) => (prev ? { ...prev, remoteStream: e.streams[0] } : prev));
     };
+    pc.oniceconnectionstatechange = () => {
+      if (pc.iceConnectionState === 'connected' || pc.iceConnectionState === 'completed') {
+        setActiveCall((prev) => (prev ? { ...prev, status: 'active', connectionIssue: false } : prev));
+      }
+      if (pc.iceConnectionState === 'failed' || pc.iceConnectionState === 'disconnected') {
+        setActiveCall((prev) => (prev ? { ...prev, connectionIssue: true } : prev));
+      }
+    };
     pcRef.current = pc;
     return pc;
   }
 
-  async function logCallEnd(conversationId, type, status) {
+  async function logCallEnd(conversationId, status) {
     if (!conversationId || !me) return;
-    const label = type === 'video' ? 'Video call' : 'Voice call';
-    const text = status === 'declined' ? `${label} declined` : status === 'missed' ? `Missed ${label.toLowerCase()}` : `${label} ended`;
+    const text =
+      status === 'declined'
+        ? 'Voice call declined'
+        : status === 'missed'
+        ? 'Missed voice call'
+        : status === 'unavailable'
+        ? 'Voice call could not connect — try calling directly'
+        : 'Voice call ended';
     try {
       await sendMessage(conversationId, me, text, 'call-log');
     } catch {
@@ -90,21 +128,40 @@ export function CallProvider({ children }) {
     }
   }
 
-  async function startCall(conversation, other, type) {
-    if (DEMO_MODE) {
-      alert('Calling needs live Firebase mode to connect two real users — see the README to go live.');
-      return;
-    }
+  // Opens the device's native phone dialer as a fallback when the in-app
+  // free voice call can't be used (no phone number saved, or the WebRTC
+  // connection isn't working on this network).
+  function callByPhone(phone) {
+    if (!phone) return;
+    window.location.href = `tel:${phone.replace(/[^\d+]/g, '')}`;
+  }
+
+  async function startCall(conversation, other) {
     if (activeCallRef.current) return;
 
+    const otherPhone = await getParticipantPhone(other).catch(() => null);
+
+    if (DEMO_MODE) {
+      if (otherPhone) {
+        callByPhone(otherPhone);
+      } else {
+        alert('Calling needs live Firebase mode to connect two real users — see the README to go live.');
+      }
+      return;
+    }
+
     const { collection, addDoc, doc, onSnapshot, updateDoc, serverTimestamp } = await import('firebase/firestore');
-    const constraints = type === 'video' ? { audio: true, video: true } : { audio: true, video: false };
 
     let localStream;
     try {
-      localStream = await navigator.mediaDevices.getUserMedia(constraints);
+      localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
     } catch (err) {
-      alert('Could not access microphone/camera. Check browser permissions and try again.');
+      // No mic access — go straight to the phone fallback if we have a number.
+      if (otherPhone) {
+        callByPhone(otherPhone);
+      } else {
+        alert('Could not access the microphone. Check browser permissions and try again.');
+      }
       return;
     }
     localStreamRef.current = localStream;
@@ -117,7 +174,7 @@ export function CallProvider({ children }) {
       calleeId: other.id,
       calleeName: other.name,
       calleeType: other.type,
-      type,
+      type: 'audio',
       status: 'ringing',
       offer: null,
       answer: null,
@@ -127,14 +184,15 @@ export function CallProvider({ children }) {
     setActiveCall({
       id: callRef.id,
       conversationId: conversation.id,
-      type,
+      type: 'audio',
       direction: 'outgoing',
       status: 'ringing',
       otherName: other.name,
+      otherPhone,
       localStream,
       remoteStream: null,
       muted: false,
-      videoOff: false,
+      connectionIssue: false,
     });
 
     const pc = await createPeerConnection(callRef.id, 'callerCandidates');
@@ -149,7 +207,6 @@ export function CallProvider({ children }) {
       if (!data) return;
       if (data.answer && !pc.currentRemoteDescription) {
         await pc.setRemoteDescription(new RTCSessionDescription(data.answer));
-        setActiveCall((prev) => (prev ? { ...prev, status: 'active' } : prev));
       }
       if (data.status === 'declined' || data.status === 'ended') {
         teardown();
@@ -162,6 +219,20 @@ export function CallProvider({ children }) {
       });
     });
     unsubsRef.current = [unsubDoc, unsubCandidates];
+
+    // No answer within the ring window — mark it unreachable rather than
+    // ringing forever, and log it so the callee sees they missed it.
+    const ringTimer = setTimeout(() => {
+      setActiveCall((prev) => (prev && prev.status === 'ringing' ? { ...prev, status: 'no-answer' } : prev));
+    }, RING_TIMEOUT_MS);
+    // Connection never established — likely no TURN relay on this network.
+    const connectTimer = setTimeout(() => {
+      const state = pcRef.current?.iceConnectionState;
+      if (state && state !== 'connected' && state !== 'completed') {
+        setActiveCall((prev) => (prev ? { ...prev, connectionIssue: true } : prev));
+      }
+    }, CONNECT_TIMEOUT_MS);
+    timeoutsRef.current = [ringTimer, connectTimer];
   }
 
   async function answerCall() {
@@ -170,30 +241,32 @@ export function CallProvider({ children }) {
     setIncomingCall(null);
 
     const { doc, collection, updateDoc, onSnapshot } = await import('firebase/firestore');
-    const constraints = call.type === 'video' ? { audio: true, video: true } : { audio: true, video: false };
 
     let localStream;
     try {
-      localStream = await navigator.mediaDevices.getUserMedia(constraints);
+      localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
     } catch (err) {
-      alert('Could not access microphone/camera. Check browser permissions and try again.');
+      alert('Could not access the microphone. Check browser permissions and try again.');
       const { updateDoc: upd } = await import('firebase/firestore');
       await upd(doc(db, 'calls', call.id), { status: 'declined' }).catch(() => {});
       return;
     }
     localStreamRef.current = localStream;
 
+    const callerPhone = await getParticipantPhone({ id: call.callerId, type: call.callerType }).catch(() => null);
+
     setActiveCall({
       id: call.id,
       conversationId: call.conversationId,
-      type: call.type,
+      type: 'audio',
       direction: 'incoming',
       status: 'active',
       otherName: call.callerName,
+      otherPhone: callerPhone,
       localStream,
       remoteStream: null,
       muted: false,
-      videoOff: false,
+      connectionIssue: false,
     });
 
     const pc = await createPeerConnection(call.id, 'calleeCandidates');
@@ -218,6 +291,14 @@ export function CallProvider({ children }) {
       });
     });
     unsubsRef.current = [unsubDoc, unsubCandidates];
+
+    const connectTimer = setTimeout(() => {
+      const state = pcRef.current?.iceConnectionState;
+      if (state && state !== 'connected' && state !== 'completed') {
+        setActiveCall((prev) => (prev ? { ...prev, connectionIssue: true } : prev));
+      }
+    }, CONNECT_TIMEOUT_MS);
+    timeoutsRef.current = [connectTimer];
   }
 
   async function declineCall() {
@@ -226,18 +307,25 @@ export function CallProvider({ children }) {
     setIncomingCall(null);
     const { doc, updateDoc } = await import('firebase/firestore');
     await updateDoc(doc(db, 'calls', call.id), { status: 'declined' }).catch(() => {});
-    await logCallEnd(call.conversationId, call.type, 'declined');
+    await logCallEnd(call.conversationId, 'declined');
   }
 
   async function hangUp() {
     const call = activeCallRef.current;
+    const wasUnreachable = call?.status === 'no-answer' || call?.connectionIssue;
     teardown();
     setActiveCall(null);
     if (call?.id) {
       const { doc, updateDoc } = await import('firebase/firestore');
       await updateDoc(doc(db, 'calls', call.id), { status: 'ended' }).catch(() => {});
-      await logCallEnd(call.conversationId, call.type, 'ended');
+      await logCallEnd(call.conversationId, wasUnreachable ? 'unavailable' : 'ended');
     }
+  }
+
+  // Falls back to a direct phone call, keeping the in-app record consistent.
+  function callDirectly() {
+    const call = activeCallRef.current;
+    if (call?.otherPhone) callByPhone(call.otherPhone);
   }
 
   function toggleMute() {
@@ -245,14 +333,20 @@ export function CallProvider({ children }) {
     setActiveCall((prev) => (prev ? { ...prev, muted: !prev.muted } : prev));
   }
 
-  function toggleVideo() {
-    localStreamRef.current?.getVideoTracks().forEach((t) => (t.enabled = !t.enabled));
-    setActiveCall((prev) => (prev ? { ...prev, videoOff: !prev.videoOff } : prev));
-  }
-
   return (
     <CallContext.Provider
-      value={{ me, incomingCall, activeCall, startCall, answerCall, declineCall, hangUp, toggleMute, toggleVideo }}
+      value={{
+        me,
+        incomingCall,
+        activeCall,
+        startCall,
+        answerCall,
+        declineCall,
+        hangUp,
+        toggleMute,
+        callDirectly,
+        callByPhone,
+      }}
     >
       {children}
     </CallContext.Provider>

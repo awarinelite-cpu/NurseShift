@@ -10,8 +10,10 @@ import {
   demoUpdateFacilityLocation,
   demoListShiftsByFacility,
   demoSetShiftLocation,
+  demoListPresence,
 } from './demoStore';
 import { seedFacilities } from './seedData';
+import { ACTIVE_WINDOW_MS } from './presence';
 
 const DEMO_ADMIN_PASSCODE = 'admin-demo';
 
@@ -352,4 +354,96 @@ export async function fixSeedFacilityCoordinates() {
   }
 
   return { facilitiesUpdated, facilitiesSkipped, shiftsUpdated };
+}
+
+// Powers the admin dashboard's stat cards. Streams live counts for users,
+// facilities, and shifts, plus a rolling "active right now" figure computed
+// from presence heartbeats (see src/lib/presence.js for how those are
+// written and why Firestore needs this heartbeat approach instead of a
+// built-in online/offline signal).
+//
+// Calls `callback` immediately and again on every relevant change; returns
+// a single function that tears down everything this started.
+export function subscribeAdminStats(callback) {
+  function countActive(presenceRecords, nowMs) {
+    return presenceRecords.filter((p) => nowMs - p.lastActiveAt <= ACTIVE_WINDOW_MS).length;
+  }
+
+  if (DEMO_MODE) {
+    function tick() {
+      const nurses = demoListNurses();
+      const facilities = demoListFacilities();
+      const shifts = demoListShifts();
+      const presence = demoListPresence();
+      callback({
+        totalUsers: nurses.length,
+        verifiedNurses: nurses.filter((n) => n.verification === 'verified').length,
+        activeUsers: countActive(presence, Date.now()),
+        totalFacilities: facilities.length,
+        totalShifts: shifts.length,
+        shiftsTaken: shifts.filter((s) => s.status && s.status !== 'open').length,
+        shiftsNotTaken: shifts.filter((s) => !s.status || s.status === 'open').length,
+      });
+    }
+    tick();
+    const interval = setInterval(tick, 3000);
+    return () => clearInterval(interval);
+  }
+
+  let cancelled = false;
+  let unsubNurses = () => {};
+  let unsubFacilities = () => {};
+  let unsubShifts = () => {};
+  let unsubPresence = () => {};
+  let recomputeInterval = null;
+
+  let nurses = [];
+  let facilities = [];
+  let shifts = [];
+  let presence = []; // { lastActiveAt: epoch ms }[]
+
+  function emit() {
+    callback({
+      totalUsers: nurses.length,
+      verifiedNurses: nurses.filter((n) => n.verification === 'verified').length,
+      activeUsers: countActive(presence, Date.now()),
+      totalFacilities: facilities.length,
+      totalShifts: shifts.length,
+      shiftsTaken: shifts.filter((s) => s.status && s.status !== 'open').length,
+      shiftsNotTaken: shifts.filter((s) => !s.status || s.status === 'open').length,
+    });
+  }
+
+  import('firebase/firestore').then(({ collection, onSnapshot }) => {
+    if (cancelled) return;
+    unsubNurses = onSnapshot(collection(db, 'nurses'), (snap) => {
+      nurses = snap.docs.map((d) => d.data());
+      emit();
+    });
+    unsubFacilities = onSnapshot(collection(db, 'facilities'), (snap) => {
+      facilities = snap.docs.map((d) => d.data());
+      emit();
+    });
+    unsubShifts = onSnapshot(collection(db, 'shifts'), (snap) => {
+      shifts = snap.docs.map((d) => d.data());
+      emit();
+    });
+    unsubPresence = onSnapshot(collection(db, 'presence'), (snap) => {
+      presence = snap.docs.map((d) => ({ lastActiveAt: d.data().lastActiveAt?.toMillis?.() ?? 0 }));
+      emit();
+    });
+    // Presence docs don't change just because time passes, so the "active
+    // now" count needs its own clock to age people out of the window even
+    // with no new writes.
+    recomputeInterval = setInterval(emit, 15000);
+  });
+
+  return () => {
+    cancelled = true;
+    unsubNurses();
+    unsubFacilities();
+    unsubShifts();
+    unsubPresence();
+    if (recomputeInterval) clearInterval(recomputeInterval);
+  };
 }

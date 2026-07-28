@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCurrentIdentity, useCall } from '../context/CallContext';
-import { getConversation, subscribeToMessages, sendMessage } from '../lib/chat';
+import { getConversation, subscribeToMessages, sendMessage, getParticipantPhone } from '../lib/chat';
 
 function formatTime(ts) {
   const ms = ts?.toMillis?.() ?? ts;
@@ -12,11 +12,12 @@ function formatTime(ts) {
 export default function ChatThread() {
   const { conversationId } = useParams();
   const me = useCurrentIdentity();
-  const { startCall } = useCall();
+  const { startCall, callByPhone } = useCall();
   const [conversation, setConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
+  const [otherPhone, setOtherPhone] = useState(null);
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -41,6 +42,17 @@ export default function ChatThread() {
   const other = conversation?.participants?.find((p) => p.id !== me?.id);
   const backPath = me?.type === 'facility' ? '/facility/messages' : '/messages';
 
+  useEffect(() => {
+    let cancelled = false;
+    if (!other) return;
+    getParticipantPhone(other).then((phone) => {
+      if (!cancelled) setOtherPhone(phone);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [other?.id]);
+
   async function handleSend(e) {
     e.preventDefault();
     const value = text.trim();
@@ -51,9 +63,9 @@ export default function ChatThread() {
     setSending(false);
   }
 
-  function handleCall(type) {
+  function handleCall() {
     if (!conversation || !other) return;
-    startCall(conversation, other, type);
+    startCall(conversation, other);
   }
 
   if (!me) return null;
@@ -69,8 +81,17 @@ export default function ChatThread() {
             {conversation?.shiftId && <span>About shift {conversation.shiftId}</span>}
           </div>
           <div className="chat-header-actions">
-            <button type="button" onClick={() => handleCall('audio')} title="Voice call" aria-label="Voice call">📞</button>
-            <button type="button" onClick={() => handleCall('video')} title="Video call" aria-label="Video call">🎥</button>
+            <button type="button" onClick={handleCall} title="Free voice call" aria-label="Free voice call">📞</button>
+            {otherPhone && (
+              <button
+                type="button"
+                onClick={() => callByPhone(otherPhone)}
+                title={`Call ${other?.name ?? ''} directly`}
+                aria-label="Call directly"
+              >
+                📱
+              </button>
+            )}
           </div>
         </div>
 

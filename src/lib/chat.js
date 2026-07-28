@@ -6,6 +6,8 @@ import {
   demoSubscribeMessages,
   demoSendMessage,
   demoListNurseDirectory,
+  demoGetNurse,
+  demoGetFacility,
 } from './demoStore';
 
 // A "participant" is { id, type: 'nurse' | 'facility', name }.
@@ -111,6 +113,21 @@ export async function sendMessage(conversationId, sender, text, type = 'text') {
     lastMessageAt: serverTimestamp(),
     lastSenderId: sender.id,
   });
+}
+
+// Looks up a conversation participant's phone number for the "call directly"
+// fallback — participants embedded on the conversation doc are just
+// { id, type, name }, so this fetches the fuller nurses/facilities record.
+export async function getParticipantPhone(participant) {
+  if (!participant) return null;
+  if (DEMO_MODE) {
+    const record = participant.type === 'facility' ? demoGetFacility(participant.id) : demoGetNurse(participant.id);
+    return record?.phone || null;
+  }
+  const { doc, getDoc } = await import('firebase/firestore');
+  const col = participant.type === 'facility' ? 'facilities' : 'nurses';
+  const snap = await getDoc(doc(db, col, participant.id));
+  return snap.exists() ? snap.data()?.phone || null : null;
 }
 
 // Verified nurses only, for the peer-chat directory — excludes the current nurse.

@@ -6,7 +6,7 @@ import { getCurrentLocation } from '../../lib/geo';
 export default function FacilitySignUp() {
   const navigate = useNavigate();
   const { signUp } = useFacility();
-  const [form, setForm] = useState({ name: '', city: '', email: '', password: '', lat: null, lng: null });
+  const [form, setForm] = useState({ name: '', city: '', email: '', password: '', phone: '', lat: null, lng: null });
   const [submitting, setSubmitting] = useState(false);
   const [locating, setLocating] = useState(false);
   const [error, setError] = useState('');
@@ -70,6 +70,19 @@ export default function FacilitySignUp() {
           <p className="page-sub" style={{ marginTop: 6 }}>
             Nurses see shifts sorted by distance from them. Skip this and your shifts will still
             show, just without a distance.
+          </p>
+        </div>
+        <div className="form-row">
+          <label htmlFor="phone">Phone number</label>
+          <input
+            id="phone"
+            type="tel"
+            placeholder="e.g. 0803 123 4567"
+            value={form.phone}
+            onChange={(e) => update('phone', e.target.value)}
+          />
+          <p className="page-sub" style={{ marginTop: 6 }}>
+            Used as a direct-call fallback if an in-app voice call can't connect.
           </p>
         </div>
         <div className="form-row">

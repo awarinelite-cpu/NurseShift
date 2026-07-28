@@ -42,6 +42,10 @@ export default function Profile() {
             <p className="value">{nurse.rating ? `★ ${nurse.rating}` : 'No shifts yet'}</p>
           </div>
           <div>
+            <p className="label">Phone</p>
+            <p className="value">{nurse.phone || 'Not provided'}</p>
+          </div>
+          <div>
             <p className="label">Shifts completed</p>
             <p className="value">{nurse.shiftsCompleted}</p>
           </div>

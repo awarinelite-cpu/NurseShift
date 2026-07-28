@@ -1,24 +1,19 @@
 import { useEffect, useRef } from 'react';
 import { useCall } from '../context/CallContext';
 
+function statusText(activeCall) {
+  if (activeCall.status === 'ringing') return activeCall.direction === 'outgoing' ? 'Calling…' : 'Connecting…';
+  if (activeCall.status === 'no-answer') return 'No answer';
+  return 'Voice call in progress';
+}
+
 export default function CallModal() {
-  const { incomingCall, activeCall, answerCall, declineCall, hangUp, toggleMute, toggleVideo } = useCall();
-  const localVideoRef = useRef(null);
-  const remoteVideoRef = useRef(null);
+  const { incomingCall, activeCall, answerCall, declineCall, hangUp, toggleMute, callDirectly } = useCall();
   const remoteAudioRef = useRef(null);
 
   useEffect(() => {
-    if (localVideoRef.current) localVideoRef.current.srcObject = activeCall?.localStream ?? null;
-  }, [activeCall?.localStream]);
-
-  useEffect(() => {
-    if (activeCall?.type === 'video' && remoteVideoRef.current) {
-      remoteVideoRef.current.srcObject = activeCall?.remoteStream ?? null;
-    }
-    if (activeCall?.type === 'audio' && remoteAudioRef.current) {
-      remoteAudioRef.current.srcObject = activeCall?.remoteStream ?? null;
-    }
-  }, [activeCall?.remoteStream, activeCall?.type]);
+    if (remoteAudioRef.current) remoteAudioRef.current.srcObject = activeCall?.remoteStream ?? null;
+  }, [activeCall?.remoteStream]);
 
   if (incomingCall && !activeCall) {
     return (
@@ -26,9 +21,7 @@ export default function CallModal() {
         <div className="call-card">
           <div className="call-avatar">{incomingCall.callerName?.[0]?.toUpperCase() ?? '?'}</div>
           <h3>{incomingCall.callerName}</h3>
-          <p className="call-status-text">
-            Incoming {incomingCall.type === 'video' ? 'video' : 'voice'} call…
-          </p>
+          <p className="call-status-text">Incoming voice call…</p>
           <div className="call-actions">
             <button className="call-btn decline" onClick={declineCall}>Decline</button>
             <button className="call-btn accept" onClick={answerCall}>Accept</button>
@@ -39,34 +32,37 @@ export default function CallModal() {
   }
 
   if (activeCall) {
+    const showFallback = activeCall.status === 'no-answer' || activeCall.connectionIssue;
     return (
       <div className="call-overlay in-call">
-        {activeCall.type === 'video' ? (
-          <div className="video-stage">
-            <video ref={remoteVideoRef} autoPlay playsInline className="remote-video" />
-            <video ref={localVideoRef} autoPlay playsInline muted className="local-video" />
-            <div className="video-caption">
-              <strong>{activeCall.otherName}</strong>
-              <span>{activeCall.status === 'ringing' ? 'Calling…' : 'Connected'}</span>
+        <div className="call-card">
+          <div className="call-avatar">{activeCall.otherName?.[0]?.toUpperCase() ?? '?'}</div>
+          <h3>{activeCall.otherName}</h3>
+          <p className="call-status-text">{statusText(activeCall)}</p>
+          <audio ref={remoteAudioRef} autoPlay />
+
+          {showFallback && (
+            <div className="call-fallback">
+              <p className="call-fallback-text">
+                {activeCall.status === 'no-answer'
+                  ? "They haven't picked up the free call."
+                  : "This connection isn't going through — free calls can struggle on some mobile networks."}
+              </p>
+              {activeCall.otherPhone ? (
+                <button type="button" className="call-btn accept" onClick={callDirectly}>
+                  📱 Call {activeCall.otherName} directly
+                </button>
+              ) : (
+                <p className="call-fallback-text">No phone number on file to fall back to.</p>
+              )}
             </div>
-          </div>
-        ) : (
-          <div className="call-card">
-            <div className="call-avatar">{activeCall.otherName?.[0]?.toUpperCase() ?? '?'}</div>
-            <h3>{activeCall.otherName}</h3>
-            <p className="call-status-text">{activeCall.status === 'ringing' ? 'Calling…' : 'Voice call in progress'}</p>
-            <audio ref={remoteAudioRef} autoPlay />
-          </div>
-        )}
+          )}
+        </div>
+
         <div className="call-controls">
           <button onClick={toggleMute} className={`call-icon-btn ${activeCall.muted ? 'active' : ''}`}>
             {activeCall.muted ? 'Unmute' : 'Mute'}
           </button>
-          {activeCall.type === 'video' && (
-            <button onClick={toggleVideo} className={`call-icon-btn ${activeCall.videoOff ? 'active' : ''}`}>
-              {activeCall.videoOff ? 'Video on' : 'Video off'}
-            </button>
-          )}
           <button onClick={hangUp} className="call-btn decline">End</button>
         </div>
       </div>

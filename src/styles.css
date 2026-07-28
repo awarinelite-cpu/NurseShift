@@ -858,42 +858,69 @@
 
 .call-icon-btn.active { background: var(--paper); color: var(--ink); }
 
-.video-stage {
-  position: relative;
-  width: min(100%, 720px);
-  aspect-ratio: 16 / 10;
-  background: #000;
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-.remote-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.local-video {
-  position: absolute;
-  bottom: 14px;
-  right: 14px;
-  width: 110px;
-  height: 148px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 2px solid var(--paper);
-}
-
-.video-caption {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  color: var(--paper);
+.call-fallback {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(238, 241, 244, 0.25);
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  align-items: center;
+  gap: 10px;
+  max-width: 280px;
 }
 
-.video-caption strong { font-family: var(--font-display); font-size: 15px; }
-.video-caption span { font-size: 12px; opacity: 0.85; }
+.call-fallback-text {
+  margin: 0;
+  color: rgba(238, 241, 244, 0.72);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ---------- Admin dashboard ---------- */
+
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.admin-stat-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px 16px;
+}
+
+.admin-stat-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--slate);
+  margin: 0 0 8px;
+}
+
+.admin-stat-value {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 30px;
+  margin: 0;
+  color: var(--ink);
+}
+
+.admin-stat-live {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: admin-stat-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes admin-stat-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
