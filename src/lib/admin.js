@@ -7,7 +7,11 @@ import {
   demoListFacilities,
   demoListShifts,
   demoGetFacility,
+  demoUpdateFacilityLocation,
+  demoListShiftsByFacility,
+  demoSetShiftLocation,
 } from './demoStore';
+import { seedFacilities } from './seedData';
 
 const DEMO_ADMIN_PASSCODE = 'admin-demo';
 
@@ -196,4 +200,61 @@ export async function bulkImportFacilities(rows) {
   }
 
   return { created, skipped };
+}
+
+// Patches corrected lat/lng from src/lib/seedData.js onto the matching
+// facility docs (by seed id) and their shifts (by facilityId, since live
+// shift docs have auto-generated ids, not the seed ids). Runs under the
+// signed-in admin's session — no service-account script needed. Only the
+// lat/lng fields are touched; everything else (status, claims, ratings)
+// is left alone. Skips any seed facility that doesn't exist in Firestore
+// (e.g. it was never seeded) rather than creating it.
+export async function fixSeedFacilityCoordinates() {
+  let facilitiesUpdated = 0;
+  let facilitiesSkipped = 0;
+  let shiftsUpdated = 0;
+
+  if (DEMO_MODE) {
+    for (const { id, lat, lng } of seedFacilities) {
+      const facility = demoGetFacility(id);
+      if (!facility) {
+        facilitiesSkipped++;
+        continue;
+      }
+      demoUpdateFacilityLocation(id, lat, lng);
+      facilitiesUpdated++;
+      for (const shift of demoListShiftsByFacility(id)) {
+        demoSetShiftLocation(shift.id, lat, lng);
+        shiftsUpdated++;
+      }
+    }
+    return { facilitiesUpdated, facilitiesSkipped, shiftsUpdated };
+  }
+
+  const { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } =
+    await import('firebase/firestore');
+
+  for (const { id, lat, lng } of seedFacilities) {
+    const facilityRef = doc(db, 'facilities', id);
+    const facilitySnap = await getDoc(facilityRef);
+    if (!facilitySnap.exists()) {
+      facilitiesSkipped++;
+      continue;
+    }
+
+    await updateDoc(facilityRef, { lat, lng });
+    facilitiesUpdated++;
+
+    const shiftsSnap = await getDocs(query(collection(db, 'shifts'), where('facilityId', '==', id)));
+    if (shiftsSnap.empty) continue;
+
+    const batch = writeBatch(db);
+    shiftsSnap.docs.forEach((shiftDoc) => {
+      batch.update(shiftDoc.ref, { lat, lng });
+    });
+    await batch.commit();
+    shiftsUpdated += shiftsSnap.size;
+  }
+
+  return { facilitiesUpdated, facilitiesSkipped, shiftsUpdated };
 }

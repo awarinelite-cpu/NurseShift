@@ -95,6 +95,11 @@ export function demoSetShiftStatus(id, status) {
   return demoGetShift(id);
 }
 
+export function demoSetShiftLocation(id, lat, lng) {
+  _shifts = _shifts.map((s) => (s.id === id ? { ...s, lat, lng } : s));
+  return demoGetShift(id);
+}
+
 // ---------- Shift claims ----------
 let _claims = [...mockClaims];
 let _nextClaimSeq = 200;

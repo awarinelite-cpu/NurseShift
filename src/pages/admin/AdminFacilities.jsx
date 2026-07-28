@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { listFacilitiesForAdmin, createFacility } from '../../lib/admin';
+import { listFacilitiesForAdmin, createFacility, fixSeedFacilityCoordinates } from '../../lib/admin';
 import { useAdmin } from '../../context/AdminContext';
 
 const EMPTY_FORM = {
@@ -27,6 +27,9 @@ export default function AdminFacilities() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState('');
+  const [fixingCoords, setFixingCoords] = useState(false);
+  const [fixResult, setFixResult] = useState(null);
+  const [fixError, setFixError] = useState('');
 
   async function refresh() {
     setLoading(true);
@@ -68,6 +71,21 @@ export default function AdminFacilities() {
     navigate('/admin/login');
   }
 
+  async function handleFixCoordinates() {
+    setFixingCoords(true);
+    setFixError('');
+    setFixResult(null);
+    try {
+      const result = await fixSeedFacilityCoordinates();
+      setFixResult(result);
+      await refresh();
+    } catch (err) {
+      setFixError(err.message || 'Could not fix coordinates.');
+    } finally {
+      setFixingCoords(false);
+    }
+  }
+
   return (
     <div className="page">
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -83,14 +101,28 @@ export default function AdminFacilities() {
         <Link to="/admin">← Back to license review</Link>
       </p>
 
-      <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
+      <div style={{ display: 'flex', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
         <button className="claim-btn" onClick={() => setShowForm((s) => !s)}>
           {showForm ? 'Cancel' : '+ Add facility'}
         </button>
         <Link to="/admin/facilities/import" className="clock-btn" style={{ textDecoration: 'none' }}>
           Bulk import CSV
         </Link>
+        <button className="clock-btn" onClick={handleFixCoordinates} disabled={fixingCoords}>
+          {fixingCoords ? 'Fixing coordinates…' : 'Fix seed facility coordinates'}
+        </button>
       </div>
+
+      {fixResult && (
+        <p className="detail-city" style={{ marginBottom: 20 }}>
+          Updated {fixResult.facilitiesUpdated} facilit{fixResult.facilitiesUpdated === 1 ? 'y' : 'ies'} and{' '}
+          {fixResult.shiftsUpdated} shift{fixResult.shiftsUpdated === 1 ? '' : 's'}
+          {fixResult.facilitiesSkipped > 0 ? ` (${fixResult.facilitiesSkipped} seed facilities not found in Firestore, skipped)` : ''}.
+        </p>
+      )}
+      {fixError && (
+        <p className="form-error" style={{ marginBottom: 20 }}>{fixError}</p>
+      )}
 
       {showForm && (
         <form className="detail-card" style={{ marginBottom: 20, display: 'flex', flexDirection: 'column', gap: 12 }} onSubmit={handleSubmit}>
