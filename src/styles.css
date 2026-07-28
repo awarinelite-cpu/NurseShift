@@ -13,9 +13,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
   position: sticky;
   top: 0;
   z-index: 10;
+  max-width: 100%;
 }
 
 .brand {
@@ -33,6 +36,8 @@
 .topbar nav {
   display: flex;
   gap: 4px;
+  flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .topbar nav a {
@@ -477,6 +482,31 @@
 /* ---------- Responsive ---------- */
 
 @media (max-width: 640px) {
+  .page {
+    padding: 20px 14px 48px;
+  }
+
+  .topbar {
+    padding: 12px 14px;
+  }
+
+  .topbar nav a,
+  .topbar nav a[role="button"] {
+    font-size: 12px;
+    padding: 7px 9px;
+  }
+
+  /* Rows that use display:flex + justify-content:space-between inline (page
+     headers with action buttons, admin toolbars) still allow flex-wrap via
+     CSS since inline styles in the JSX don't set flex-wrap themselves. */
+  .page-header[style*="flex"] {
+    flex-wrap: wrap;
+  }
+  .page-header[style*="flex"] > div {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
   .board-row {
     grid-template-columns: 1fr auto;
     grid-template-areas:
@@ -492,8 +522,21 @@
   .board-time { grid-area: time; }
   .board-rate { grid-area: rate; text-align: left; }
 
-  .detail-grid { grid-template-columns: repeat(2, 1fr); }
+  .detail-grid { grid-template-columns: repeat(2, 1fr) !important; }
   .profile-grid { grid-template-columns: 1fr; }
+  .form-grid-2 { grid-template-columns: 1fr; }
+
+  .detail-card, .profile-card { padding: 18px; }
+  .chat-thread { height: min(78vh, 640px); }
+  .chat-bubble { max-width: 88%; }
+}
+
+@media (max-width: 420px) {
+  .detail-grid { grid-template-columns: 1fr !important; }
+  .admin-stats-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+  .detail-top { flex-direction: column; }
+  .claim-card { flex-direction: column; align-items: flex-start; }
+  .clock-btn { width: 100%; text-align: center; }
 }
 
 /* In-app Google Maps modal (see components/MapModal.jsx) */
