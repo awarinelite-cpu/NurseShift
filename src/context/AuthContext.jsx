@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { DEMO_MODE, auth } from '../lib/firebase';
-import { signUpNurse, signInNurse, signOutNurse, getNurseProfile } from '../lib/auth';
+import { signUpNurse, signInNurse, signOutNurse, getNurseProfile, updateNursePhone } from '../lib/auth';
 
 const AuthContext = createContext(null);
 
@@ -52,8 +52,14 @@ export function AuthProvider({ children }) {
     setNurse(null);
   }
 
+  async function updatePhone(phone) {
+    const updated = await updateNursePhone(nurse.id, phone);
+    setNurse(updated);
+    return updated;
+  }
+
   return (
-    <AuthContext.Provider value={{ nurse, loading, isDemo: DEMO_MODE, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ nurse, loading, isDemo: DEMO_MODE, signUp, signIn, signOut, updatePhone }}>
       {children}
     </AuthContext.Provider>
   );

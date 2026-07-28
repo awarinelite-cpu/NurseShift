@@ -386,7 +386,7 @@ export function subscribeAdminStats(callback) {
       });
     }
     tick();
-    const interval = setInterval(tick, 3000);
+    const interval = setInterval(tick, 2000);
     return () => clearInterval(interval);
   }
 
@@ -434,8 +434,9 @@ export function subscribeAdminStats(callback) {
     });
     // Presence docs don't change just because time passes, so the "active
     // now" count needs its own clock to age people out of the window even
-    // with no new writes.
-    recomputeInterval = setInterval(emit, 15000);
+    // with no new writes. Kept close to ACTIVE_WINDOW_MS so the count
+    // doesn't lag noticeably behind someone going inactive.
+    recomputeInterval = setInterval(emit, 2000);
   });
 
   return () => {

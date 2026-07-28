@@ -29,6 +29,11 @@ export function demoSetVerification(id, verification) {
   return demoGetNurse(id);
 }
 
+export function demoUpdateNursePhone(id, phone) {
+  _nurses = _nurses.map((n) => (n.id === id ? { ...n, phone } : n));
+  return demoGetNurse(id);
+}
+
 export function demoRateNurse(id, rating) {
   _nurses = _nurses.map((n) => {
     if (n.id !== id) return n;
@@ -64,6 +69,11 @@ export function demoListFacilities() {
 
 export function demoUpdateFacilityLocation(id, lat, lng) {
   _facilities = _facilities.map((f) => (f.id === id ? { ...f, lat, lng } : f));
+  return demoGetFacility(id);
+}
+
+export function demoUpdateFacilityPhone(id, phone) {
+  _facilities = _facilities.map((f) => (f.id === id ? { ...f, phone } : f));
   return demoGetFacility(id);
 }
 

@@ -6,8 +6,13 @@ import { demoTouchPresence } from './demoStore';
 // presence + onDisconnect), so this app approximates it: each signed-in
 // client writes a heartbeat on a timer, and anyone who's stopped heartbeating
 // simply ages out of the "active" window on the admin dashboard.
-export const ACTIVE_WINDOW_MS = 2 * 60 * 1000; // 2 minutes
-const HEARTBEAT_INTERVAL_MS = 30 * 1000; // 30 seconds
+//
+// Note: a 5s heartbeat means every signed-in session writes ~17,000
+// times/day to Firestore. Fine at NurseShift's current scale; if the user
+// base grows a lot, widen HEARTBEAT_INTERVAL_MS (and ACTIVE_WINDOW_MS to
+// match) rather than eating that write volume indefinitely.
+export const ACTIVE_WINDOW_MS = 6 * 1000; // 6 seconds
+const HEARTBEAT_INTERVAL_MS = 5 * 1000; // 5 seconds
 
 async function writeHeartbeat(identity) {
   if (DEMO_MODE) {

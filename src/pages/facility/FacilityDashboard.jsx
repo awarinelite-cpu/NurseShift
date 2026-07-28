@@ -11,7 +11,7 @@ function formatNaira(amount) {
 }
 
 export default function FacilityDashboard() {
-  const { facility, updateLocation } = useFacility();
+  const { facility, updateLocation, updatePhone } = useFacility();
   const navigate = useNavigate();
   const [claims, setClaims] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,6 +20,10 @@ export default function FacilityDashboard() {
   const [locating, setLocating] = useState(false);
   const [locError, setLocError] = useState('');
   const [messaging, setMessaging] = useState(null);
+  const [editingPhone, setEditingPhone] = useState(false);
+  const [phoneInput, setPhoneInput] = useState('');
+  const [savingPhone, setSavingPhone] = useState(false);
+  const [phoneError, setPhoneError] = useState('');
 
   async function refresh() {
     const data = await listClaimsForFacility(facility.id);
@@ -77,6 +81,26 @@ export default function FacilityDashboard() {
     await updateLocation(loc.lat, loc.lng);
   }
 
+  function startEditingPhone() {
+    setPhoneInput(facility?.phone || '');
+    setPhoneError('');
+    setEditingPhone(true);
+  }
+
+  async function handleSavePhone(e) {
+    e.preventDefault();
+    setSavingPhone(true);
+    setPhoneError('');
+    try {
+      await updatePhone(phoneInput.trim());
+      setEditingPhone(false);
+    } catch (err) {
+      setPhoneError(err?.message ?? 'Could not save phone number. Try again.');
+    } finally {
+      setSavingPhone(false);
+    }
+  }
+
   const pending = claims.filter((c) => c.status === 'pending');
   const active = claims.filter((c) => c.status === 'approved');
   const toRate = claims.filter((c) => c.status === 'completed' && !c.rated);
@@ -105,6 +129,45 @@ export default function FacilityDashboard() {
         <button className="clock-btn" onClick={handleUpdateLocation} disabled={locating}>
           {locating ? 'Getting location…' : facility?.lat != null ? 'Update location' : 'Set location'}
         </button>
+      </div>
+
+      <div className="detail-card" style={{ marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        {editingPhone ? (
+          <form onSubmit={handleSavePhone} style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1, minWidth: 220 }}>
+            <label htmlFor="facility-phone" className="detail-facility" style={{ fontSize: 14 }}>Phone number</label>
+            <input
+              id="facility-phone"
+              type="tel"
+              value={phoneInput}
+              onChange={(e) => setPhoneInput(e.target.value)}
+              placeholder="e.g. 0803 123 4567"
+              autoFocus
+            />
+            {phoneError && <p className="form-error" style={{ margin: 0 }}>{phoneError}</p>}
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button type="submit" className="claim-btn" disabled={savingPhone}>
+                {savingPhone ? 'Saving…' : 'Save'}
+              </button>
+              <button type="button" className="clock-btn" onClick={() => setEditingPhone(false)} disabled={savingPhone}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        ) : (
+          <>
+            <div>
+              <p className="detail-facility" style={{ fontSize: 14 }}>
+                {facility?.phone ? `📱 ${facility.phone}` : 'No phone number set'}
+              </p>
+              <p className="detail-city">
+                Used as a direct-call fallback if a nurse's free in-app voice call can't connect.
+              </p>
+            </div>
+            <button className="clock-btn" onClick={startEditingPhone}>
+              {facility?.phone ? 'Edit phone' : 'Add phone'}
+            </button>
+          </>
+        )}
       </div>
 
       {loading ? (

@@ -1,5 +1,5 @@
 import { DEMO_MODE, auth, db } from './firebase';
-import { demoAddFacility, demoGetFacility, demoUpdateFacilityLocation } from './demoStore';
+import { demoAddFacility, demoGetFacility, demoUpdateFacilityLocation, demoUpdateFacilityPhone } from './demoStore';
 
 let _demoSignedInId = null;
 
@@ -55,5 +55,16 @@ export async function updateFacilityLocation(facilityId, lat, lng) {
 
   const { doc, updateDoc } = await import('firebase/firestore');
   await updateDoc(doc(db, 'facilities', facilityId), { lat, lng });
+  return getFacilityProfile(facilityId);
+}
+
+// Lets a facility add/update its phone number after the fact — this is the
+// number the direct-call fallback dials when a free in-app voice call can't
+// connect (see src/context/CallContext.jsx).
+export async function updateFacilityPhone(facilityId, phone) {
+  if (DEMO_MODE) return Promise.resolve(demoUpdateFacilityPhone(facilityId, phone || null));
+
+  const { doc, updateDoc } = await import('firebase/firestore');
+  await updateDoc(doc(db, 'facilities', facilityId), { phone: phone || null });
   return getFacilityProfile(facilityId);
 }

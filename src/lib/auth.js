@@ -1,5 +1,5 @@
 import { DEMO_MODE, auth, db, storage } from './firebase';
-import { demoAddNurse, demoGetNurse } from './demoStore';
+import { demoAddNurse, demoGetNurse, demoUpdateNursePhone } from './demoStore';
 
 // --- Demo-mode: tracks which nurse (if any) is "signed in" this session ---
 let _demoSignedInId = null;
@@ -93,4 +93,16 @@ export async function getNurseProfile(uid) {
   const { doc, getDoc } = await import('firebase/firestore');
   const snap = await getDoc(doc(db, 'nurses', uid));
   return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+}
+
+// Lets a nurse update their own phone number after sign-up — used by the
+// Profile page's "Edit phone" control, and important beyond convenience:
+// it's the number the direct-call fallback dials when a free in-app voice
+// call can't connect (see src/context/CallContext.jsx).
+export async function updateNursePhone(nurseId, phone) {
+  if (DEMO_MODE) return Promise.resolve(demoUpdateNursePhone(nurseId, phone || null));
+
+  const { doc, updateDoc } = await import('firebase/firestore');
+  await updateDoc(doc(db, 'nurses', nurseId), { phone: phone || null });
+  return getNurseProfile(nurseId);
 }
