@@ -24,8 +24,8 @@
 .brand {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 18px;
-  letter-spacing: -0.02em;
+  font-size: 20px;
+  letter-spacing: -0.01em;
   display: flex;
   align-items: baseline;
   gap: 6px;
@@ -76,9 +76,10 @@
 }
 
 .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--slate);
   margin: 0 0 6px;
@@ -87,14 +88,14 @@
 .page-title {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 28px;
-  letter-spacing: -0.02em;
+  font-size: 32px;
+  letter-spacing: -0.01em;
   margin: 0 0 4px;
 }
 
 .page-sub {
   color: var(--slate);
-  font-size: 14px;
+  font-size: 15px;
   margin: 0;
 }
 
@@ -261,7 +262,7 @@
 .detail-facility {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 22px;
+  font-size: 23px;
   letter-spacing: -0.01em;
   margin: 0 0 4px;
 }
