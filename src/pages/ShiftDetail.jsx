@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getShift, claimShift } from '../lib/shifts';
 import { useAuth } from '../context/AuthContext';
 import Badge from '../components/Badge';
+import MapModal from '../components/MapModal';
 
 function formatNaira(amount) {
   return `₦${(amount ?? 0).toLocaleString('en-NG')}`;
@@ -11,17 +12,6 @@ function formatNaira(amount) {
 function formatDateFull(dateStr) {
   const d = new Date(dateStr + 'T00:00:00');
   return d.toLocaleDateString('en-NG', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-}
-
-// Prefer exact coordinates when the facility set them; fall back to a text
-// search of facility name + city so the link still works for older facilities
-// that signed up before location capture existed.
-function mapUrl(shift) {
-  if (shift.lat != null && shift.lng != null) {
-    return `https://www.google.com/maps/search/?api=1&query=${shift.lat},${shift.lng}`;
-  }
-  const q = encodeURIComponent(`${shift.facility} ${shift.city}`);
-  return `https://www.google.com/maps/search/?api=1&query=${q}`;
 }
 
 export default function ShiftDetail() {
@@ -61,15 +51,16 @@ export default function ShiftDetail() {
         <div className="detail-top">
           <div>
             <p className="detail-facility">{shift.facility}</p>
-            <a
-              href={mapUrl(shift)}
-              target="_blank"
-              rel="noopener noreferrer"
+            <MapModal
+              lat={shift.lat}
+              lng={shift.lng}
+              label={shift.facility}
+              city={shift.city}
               className="detail-city"
               style={{ textDecoration: 'underline', textUnderlineOffset: 3 }}
             >
               {shift.unit} · {shift.city} · 📍 View on map
-            </a>
+            </MapModal>
           </div>
           {claimed ? (
             <Badge status="pending">Pending approval</Badge>

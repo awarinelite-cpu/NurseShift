@@ -3,18 +3,10 @@ import { useParams, Link } from 'react-router-dom';
 import { getFacilityById } from '../../lib/admin';
 import { listShiftsForFacility } from '../../lib/facility';
 import Badge from '../../components/Badge';
+import MapModal from '../../components/MapModal';
 
 function formatNaira(amount) {
   return `₦${(amount ?? 0).toLocaleString('en-NG')}`;
-}
-
-// Prefer exact coordinates when set; fall back to a text search of name + city.
-function mapUrl(facility) {
-  if (facility.lat != null && facility.lng != null) {
-    return `https://www.google.com/maps/search/?api=1&query=${facility.lat},${facility.lng}`;
-  }
-  const q = encodeURIComponent(`${facility.name} ${facility.city}`);
-  return `https://www.google.com/maps/search/?api=1&query=${q}`;
 }
 
 export default function AdminFacilityDetail() {
@@ -51,15 +43,16 @@ export default function AdminFacilityDetail() {
         <div className="detail-top">
           <div>
             <p className="detail-facility">{facility.name}</p>
-            <a
-              href={mapUrl(facility)}
-              target="_blank"
-              rel="noopener noreferrer"
+            <MapModal
+              lat={facility.lat}
+              lng={facility.lng}
+              label={facility.name}
+              city={facility.city}
               className="detail-city"
               style={{ textDecoration: 'underline', textUnderlineOffset: 3 }}
             >
               {facility.city} · 📍 View on map
-            </a>
+            </MapModal>
           </div>
         </div>
 
