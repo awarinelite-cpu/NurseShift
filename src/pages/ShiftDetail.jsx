@@ -128,9 +128,10 @@ export default function ShiftDetail() {
           </p>
         ) : null}
 
-        <div style={{ display: 'flex', gap: 10 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
           <button
             className="claim-btn"
+            style={{ flex: '1 1 160px', minWidth: 0 }}
             disabled={!isOpen || claiming}
             onClick={handleClaim}
           >
@@ -147,7 +148,7 @@ export default function ShiftDetail() {
           <button
             type="button"
             className="claim-btn"
-            style={{ background: 'var(--ink-soft)', flex: '0 0 auto' }}
+            style={{ background: 'var(--ink-soft)', flex: '1 1 160px', minWidth: 0, whiteSpace: 'normal', wordBreak: 'break-word' }}
             disabled={messaging}
             onClick={handleMessage}
           >
