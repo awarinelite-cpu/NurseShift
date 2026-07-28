@@ -7,7 +7,7 @@ import Badge from '../components/Badge';
 const UNITS = ['All units', 'ICU', 'Accident & Emergency', 'Labour Ward', 'Paediatrics', 'Theatre', 'General Medicine'];
 
 function formatNaira(amount) {
-  return `₦${amount.toLocaleString('en-NG')}`;
+  return `₦${(amount ?? 0).toLocaleString('en-NG')}`;
 }
 
 function formatDate(dateStr) {

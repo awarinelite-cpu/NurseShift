@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import Badge from '../components/Badge';
 
 function formatNaira(amount) {
-  return `₦${amount.toLocaleString('en-NG')}`;
+  return `₦${(amount ?? 0).toLocaleString('en-NG')}`;
 }
 
 export default function MyShifts() {

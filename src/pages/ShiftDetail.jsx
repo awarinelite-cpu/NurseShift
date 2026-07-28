@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import Badge from '../components/Badge';
 
 function formatNaira(amount) {
-  return `₦${amount.toLocaleString('en-NG')}`;
+  return `₦${(amount ?? 0).toLocaleString('en-NG')}`;
 }
 
 function formatDateFull(dateStr) {
@@ -101,7 +101,9 @@ export default function ShiftDetail() {
           </div>
           <div className="detail-stat">
             <p className="label">Facility rating</p>
-            <p className="value">★ {shift.facilityRating.toFixed(1)}</p>
+            <p className="value">
+              {shift.facilityRating != null ? `★ ${shift.facilityRating.toFixed(1)}` : 'Not yet rated'}
+            </p>
           </div>
         </div>
 

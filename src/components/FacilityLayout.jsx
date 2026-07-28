@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useFacility } from '../context/FacilityContext';
+import ErrorBoundary from './ErrorBoundary';
 
 export default function FacilityLayout() {
   const { facility, isDemo, signOut } = useFacility();
@@ -33,7 +34,9 @@ export default function FacilityLayout() {
           Demo mode — signed in as the seeded facility (Reddington Hospital). Add Firebase config to go live.
         </div>
       )}
-      <Outlet />
+      <ErrorBoundary>
+        <Outlet />
+      </ErrorBoundary>
     </div>
   );
 }

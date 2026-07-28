@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ErrorBoundary from './components/ErrorBoundary';
 import { AuthProvider } from './context/AuthContext';
 import { AdminProvider } from './context/AdminContext';
 import { FacilityProvider } from './context/FacilityContext';
@@ -32,10 +33,10 @@ export default function App() {
             <Routes>
               {/* Admin surface — separate login, not linked from nurse nav */}
               <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin" element={<RequireAdmin><AdminReview /></RequireAdmin>} />
-              <Route path="/admin/facilities" element={<RequireAdmin><AdminFacilities /></RequireAdmin>} />
-              <Route path="/admin/facilities/import" element={<RequireAdmin><AdminFacilityImport /></RequireAdmin>} />
-              <Route path="/admin/facilities/:facilityId" element={<RequireAdmin><AdminFacilityDetail /></RequireAdmin>} />
+              <Route path="/admin" element={<ErrorBoundary><RequireAdmin><AdminReview /></RequireAdmin></ErrorBoundary>} />
+              <Route path="/admin/facilities" element={<ErrorBoundary><RequireAdmin><AdminFacilities /></RequireAdmin></ErrorBoundary>} />
+              <Route path="/admin/facilities/import" element={<ErrorBoundary><RequireAdmin><AdminFacilityImport /></RequireAdmin></ErrorBoundary>} />
+              <Route path="/admin/facilities/:facilityId" element={<ErrorBoundary><RequireAdmin><AdminFacilityDetail /></RequireAdmin></ErrorBoundary>} />
 
               {/* Facility surface — own layout, own auth */}
               <Route path="/facility/login" element={<FacilityLogin />} />
