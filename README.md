@@ -179,10 +179,11 @@ Nurses, facilities and admins all use the same pages:
   person to `/admin`, `/facility` or `/` accordingly.
 - `/signup` — the person chooses **Nurse** or **Facility** first. Admin is not
   an option here.
-- `/admin/settings` — an admin creates further admin accounts for approved
-  staff. The first admin is still created by hand (Firebase Console: make the
-  user, then add an `admins/{uid}` doc). Deploy `firestore.rules` so admins can
-  create/remove `admins` docs.
+- `/admin/settings` — owner only. The owner is the one admin created by hand
+  (Firebase Console: make the user, then add an `admins/{uid}` doc with no
+  `role` field). From Settings the owner creates **subadmins** (`role: "subadmin"`),
+  who can use the admin pages but not Settings. Deploy `firestore.rules` so
+  only the owner can create/remove `admins` docs.
 
 Old links `/admin/login`, `/facility/login` and `/facility/signup` redirect to
 the shared pages. In demo mode: password `admin-demo` signs in as admin, an

@@ -5,7 +5,7 @@ import { listAdmins, createAdminAccount, removeAdmin } from '../../lib/admin';
 
 const EMPTY = { name: '', email: '', password: '' };
 
-// Admin -> Settings: where approved staff get their admin accounts created.
+// Admin -> Settings (owner only): where the owner creates subadmin accounts.
 // Nurses and facilities sign themselves up at /signup; admins can't, by design.
 export default function AdminSettings() {
   const { admin } = useAdmin();
@@ -50,7 +50,7 @@ export default function AdminSettings() {
   }
 
   async function handleRemove(a) {
-    if (!window.confirm(`Remove admin access for ${a.name || a.email}?`)) return;
+    if (!window.confirm(`Remove subadmin access for ${a.name || a.email}?`)) return;
     setError('');
     setNotice('');
     try {
@@ -67,13 +67,14 @@ export default function AdminSettings() {
         <p className="eyebrow"><Link to="/admin" style={{ textDecoration: 'none' }}>← Dashboard</Link></p>
         <h1 className="page-title">Settings</h1>
         <p className="page-sub">
-          Create accounts for approved staff. Nurses and facilities sign up themselves at the shared
-          sign-up page by choosing their role; admin accounts can only be made here.
+          You are the owner. Create subadmin accounts for approved staff here — subadmins can use the
+          admin pages but can't open Settings or create other admins. Nurses and facilities sign up
+          themselves by choosing their role on the sign-up page.
         </p>
       </div>
 
       <form className="detail-card" onSubmit={handleCreate} style={{ marginBottom: 22 }}>
-        <h2 style={{ margin: '0 0 12px', fontSize: '1.125rem' }}>New admin account</h2>
+        <h2 style={{ margin: '0 0 12px', fontSize: '1.125rem' }}>New subadmin account</h2>
         <div className="form-row">
           <label htmlFor="admin-name">Full name</label>
           <input id="admin-name" value={form.name} onChange={(e) => update('name', e.target.value)} required />
@@ -92,16 +93,16 @@ export default function AdminSettings() {
         {notice && <p className="page-sub" style={{ margin: '0 0 12px' }}>{notice}</p>}
 
         <button className="claim-btn" type="submit" disabled={submitting}>
-          {submitting ? 'Creating account…' : 'Create admin account'}
+          {submitting ? 'Creating account…' : 'Create subadmin account'}
         </button>
       </form>
 
       <div className="detail-card">
-        <h2 style={{ margin: '0 0 12px', fontSize: '1.125rem' }}>Admin accounts</h2>
+        <h2 style={{ margin: '0 0 12px', fontSize: '1.125rem' }}>Admins</h2>
         {!admins ? (
           <p className="page-sub">Loading…</p>
         ) : admins.length === 0 ? (
-          <p className="page-sub">No admin accounts found.</p>
+          <p className="page-sub">No admins found.</p>
         ) : (
           <div style={{ display: 'grid', gap: 10 }}>
             {admins.map((a) => {
@@ -109,10 +110,10 @@ export default function AdminSettings() {
               return (
                 <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                   <div style={{ minWidth: 0 }}>
-                    <strong style={{ overflowWrap: 'anywhere' }}>{a.name || a.email}</strong>{isSelf && ' (you)'}
+                    <strong style={{ overflowWrap: 'anywhere' }}>{a.name || a.email}</strong>{isSelf && ' (you)'}{a.role === 'subadmin' ? ' · Subadmin' : ' · Owner'}
                     {a.name && <div className="page-sub" style={{ margin: 0, overflowWrap: 'anywhere' }}>{a.email}</div>}
                   </div>
-                  {!isSelf && (
+                  {!isSelf && a.role === 'subadmin' && (
                     <button type="button" className="clock-btn" onClick={() => handleRemove(a)}>Remove</button>
                   )}
                 </div>
