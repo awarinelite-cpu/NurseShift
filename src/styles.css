@@ -137,7 +137,7 @@
 
 .board-row {
   display: grid;
-  grid-template-columns: 100px 1.6fr 1fr 90px 110px 34px;
+  grid-template-columns: minmax(96px, 130px) minmax(0, 1.6fr) minmax(0, 1fr) 90px 110px 34px;
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
@@ -158,10 +158,17 @@
   to { opacity: 1; transform: translateY(0) scaleY(1); }
 }
 
+.board-row > * { min-width: 0; }
+
 .board-code {
   font-family: var(--font-mono);
   font-size: 12px;
+  line-height: 1.35;
   color: var(--slate);
+  /* long shift IDs wrap inside their own column instead of running under Facility / Unit */
+  overflow-wrap: anywhere;
+  word-break: break-all;
+  min-width: 0;
 }
 
 .board-main .facility {
@@ -1091,3 +1098,110 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
 }
+
+
+/* ======================================================================
+   Elite Registration Hub look: 3D buttons + capsule / raised cards
+   (kept at the end so it overrides the flat styles above)
+   ====================================================================== */
+
+/* ---------- 3D buttons ---------- */
+.claim-btn, .clock-btn, .filter-chip {
+  border-width: 1px;
+  border-bottom-width: 4px;
+  border-style: solid;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+}
+
+/* primary (btn-3d) */
+.claim-btn,
+.filter-chip.active,
+.clock-btn.active {
+  border-color: #134e4a;
+  border-bottom-color: #042f2e;
+  background: linear-gradient(180deg, #14b8a6 0%, #0f766e 100%);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 8px -1px rgba(15, 23, 42, 0.35);
+}
+.claim-btn { border-radius: 12px; font-weight: 800; }
+.claim-btn:hover:not(:disabled),
+.filter-chip.active:hover,
+.clock-btn.active:hover { background: linear-gradient(180deg, #19c4b1 0%, #0f766e 100%); }
+.claim-btn:disabled {
+  border-color: var(--line);
+  border-bottom-color: #b6c7c1;
+  background: linear-gradient(180deg, #f1f6f4 0%, #dbe6e2 100%);
+  color: var(--slate);
+  box-shadow: none;
+}
+
+/* ghost (btn-3d-ghost) */
+.clock-btn:not(.active),
+.filter-chip:not(.active) {
+  border-color: #cbd5e1;
+  border-bottom-color: #94a3b8;
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+  color: #334155;
+  box-shadow: inset 0 1px 0 #ffffff, 0 4px 8px -1px rgba(15, 23, 42, 0.25);
+}
+.clock-btn:not(.active):hover,
+.filter-chip:not(.active):hover { background: linear-gradient(180deg, #ffffff 0%, #d5dde8 100%); }
+.clock-btn { border-radius: 12px; font-weight: 700; }
+.filter-chip { border-radius: 12px; font-weight: 700; }
+.clock-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* pressed */
+.claim-btn:active:not(:disabled),
+.clock-btn:active:not(:disabled),
+.filter-chip:active {
+  transform: translateY(3px);
+  border-bottom-width: 1px;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.3);
+}
+
+/* ---------- Capsule cards (card-pill) ---------- */
+.claim-card,
+.admin-stat-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #c3ccd8;
+  border-radius: 2.5rem;
+  background: linear-gradient(to bottom, #ffffff 0%, #f6f8fb 28%, #e6ebf2 62%, #cdd6e2 100%);
+  box-shadow:
+    inset 0 3px 3px rgba(255, 255, 255, 0.95),
+    inset 0 -12px 16px rgba(71, 85, 105, 0.30),
+    inset 14px 0 18px -10px rgba(71, 85, 105, 0.22),
+    inset -14px 0 18px -10px rgba(71, 85, 105, 0.22),
+    0 14px 16px -9px rgba(15, 23, 42, 0.5);
+}
+.claim-card { padding: 1.25rem 1.6rem 1.4rem; }
+.admin-stat-card { padding: 1.1rem 1.4rem; text-align: center; }
+.claim-card::before,
+.admin-stat-card::before {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  top: 6%; left: 6%; right: 6%; height: 22%;
+  border-radius: 2rem;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.15));
+}
+.claim-card > *, .admin-stat-card > * { position: relative; z-index: 1; }
+.claim-card .facility { font-weight: 800; color: #0f172a; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9); overflow-wrap: anywhere; }
+.claim-card .meta { color: #334155; font-weight: 600; overflow-wrap: anywhere; }
+.claim-card > div { min-width: 0; }
+@media (hover: hover) {
+  .claim-card, .admin-stat-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .claim-card:hover, .admin-stat-card:hover { transform: translateY(-2px); border-color: #c3ccd8; }
+}
+
+/* ---------- Raised cards (card) ---------- */
+.detail-card,
+.profile-card,
+.duty-board {
+  border: 2px solid #94a3b8;
+  border-bottom: 6px solid #64748b;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 2px 0 rgba(15, 23, 42, 0.12), 0 10px 14px -8px rgba(15, 23, 42, 0.4);
+}
+.duty-board { overflow: hidden; }
