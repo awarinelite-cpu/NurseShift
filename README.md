@@ -169,3 +169,22 @@ Palette and type choices are in `src/index.css` (tokens) and `src/styles.css`
 (components). The duty board list is styled after a hospital shift roster /
 departures-board look — deep navy, a gold accent for pay, monospace for shift
 codes and timestamps — rather than a generic dashboard template.
+
+## One link for everyone
+
+Nurses, facilities and admins all use the same pages:
+
+- `/login` — one sign-in form. After signing in, the app looks up the account
+  (`admins/{uid}`, then `facilities/{uid}`, then `nurses/{uid}`) and sends the
+  person to `/admin`, `/facility` or `/` accordingly.
+- `/signup` — the person chooses **Nurse** or **Facility** first. Admin is not
+  an option here.
+- `/admin/settings` — an admin creates further admin accounts for approved
+  staff. The first admin is still created by hand (Firebase Console: make the
+  user, then add an `admins/{uid}` doc). Deploy `firestore.rules` so admins can
+  create/remove `admins` docs.
+
+Old links `/admin/login`, `/facility/login` and `/facility/signup` redirect to
+the shared pages. In demo mode: password `admin-demo` signs in as admin, an
+email containing `facility` signs in as the sample facility, anything else as
+the sample nurse.

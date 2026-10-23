@@ -1,25 +1,37 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Navigate, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useFacility } from '../context/FacilityContext';
+import { useAdmin } from '../context/AdminContext';
+import { useRole } from '../context/useRole';
+import { signInWithRole, ROLE_HOME } from '../lib/session';
 
+// The one sign-in page for nurses, facilities and admins.
 export default function Login() {
   const navigate = useNavigate();
-  const { signIn, isDemo } = useAuth();
+  const { adopt: adoptNurse, isDemo } = useAuth();
+  const { adopt: adoptFacility } = useFacility();
+  const { adopt: adoptAdmin } = useAdmin();
+  const { role: signedInAs, home, loading } = useRole();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  if (!loading && signedInAs && !submitting) return <Navigate to={home} replace />;
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
     setSubmitting(true);
     try {
-      await signIn(email, password);
-      navigate('/');
+      const { role, profile } = await signInWithRole(email, password);
+      if (role === 'admin') adoptAdmin(profile);
+      else if (role === 'facility') adoptFacility(profile);
+      else adoptNurse(profile);
+      navigate(ROLE_HOME[role], { replace: true });
     } catch (err) {
       setError(err?.message ?? 'Could not sign in. Check your details and try again.');
-    } finally {
       setSubmitting(false);
     }
   }
@@ -29,11 +41,13 @@ export default function Login() {
       <div className="page-header">
         <p className="eyebrow">Welcome back</p>
         <h1 className="page-title">Sign in</h1>
+        <p className="page-sub">Nurses, facilities and admins all sign in here.</p>
       </div>
 
       {isDemo && (
         <p className="page-sub" style={{ marginBottom: 14 }}>
-          Demo mode — any email and password signs you in as the sample nurse.
+          Demo mode — any email and password signs you in as the sample nurse. Use an email containing
+          {' '}<code>facility</code> for the sample facility, or the passcode <code>admin-demo</code> for admin.
         </p>
       )}
 

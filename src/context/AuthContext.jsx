@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { DEMO_MODE, auth } from '../lib/firebase';
-import { signUpNurse, signInNurse, signOutNurse, getNurseProfile, updateNursePhone } from '../lib/auth';
+import { signUpNurse, signOutNurse, getNurseProfile, updateNursePhone } from '../lib/auth';
 
 const AuthContext = createContext(null);
 
@@ -36,15 +36,9 @@ export function AuthProvider({ children }) {
     return profile;
   }
 
-  async function signIn(email, password) {
-    const profile = await signInNurse(email, password);
-    if (!profile) {
-      throw new Error(
-        'Signed in, but no profile was found for this account. It may not have finished creating — try signing up again, or contact support.'
-      );
-    }
+  // Called by the shared sign-in page once it knows the account is a nurse.
+  function adopt(profile) {
     setNurse(profile);
-    return profile;
   }
 
   async function signOut() {
@@ -59,7 +53,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ nurse, loading, isDemo: DEMO_MODE, signUp, signIn, signOut, updatePhone }}>
+    <AuthContext.Provider value={{ nurse, loading, isDemo: DEMO_MODE, signUp, adopt, signOut, updatePhone }}>
       {children}
     </AuthContext.Provider>
   );

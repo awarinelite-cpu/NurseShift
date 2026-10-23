@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useFacility } from '../../context/FacilityContext';
-import { getCurrentLocation } from '../../lib/geo';
+import { useFacility } from '../context/FacilityContext';
+import { getCurrentLocation } from '../lib/geo';
 
-export default function FacilitySignUp() {
+export default function FacilitySignUpForm() {
   const navigate = useNavigate();
   const { signUp } = useFacility();
   const [form, setForm] = useState({ name: '', city: '', email: '', password: '', phone: '', lat: null, lng: null });
@@ -46,7 +46,7 @@ export default function FacilitySignUp() {
   }
 
   return (
-    <div className="page" style={{ maxWidth: 460 }}>
+    <>
       <div className="page-header">
         <p className="eyebrow">Facility sign-up</p>
         <h1 className="page-title">Register your facility</h1>
@@ -101,9 +101,9 @@ export default function FacilitySignUp() {
         </button>
 
         <p className="form-footer">
-          Already registered? <Link to="/facility/login">Sign in</Link>
+          Already registered? <Link to="/login">Sign in</Link>
         </p>
       </form>
-    </div>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { DEMO_MODE, auth } from '../lib/firebase';
-import { signUpFacility, signInFacility, signOutFacility, getFacilityProfile, updateFacilityLocation, updateFacilityPhone } from '../lib/facilityAuth';
+import { signUpFacility, signOutFacility, getFacilityProfile, updateFacilityLocation, updateFacilityPhone } from '../lib/facilityAuth';
 
 const FacilityContext = createContext(null);
 
@@ -30,10 +30,9 @@ export function FacilityProvider({ children }) {
     return profile;
   }
 
-  async function signIn(email, password) {
-    const profile = await signInFacility(email, password);
+  // Called by the shared sign-in page once it knows the account is a facility.
+  function adopt(profile) {
     setFacility(profile);
-    return profile;
   }
 
   async function signOut() {
@@ -54,7 +53,7 @@ export function FacilityProvider({ children }) {
   }
 
   return (
-    <FacilityContext.Provider value={{ facility, loading, isDemo: DEMO_MODE, signUp, signIn, signOut, updateLocation, updatePhone }}>
+    <FacilityContext.Provider value={{ facility, loading, isDemo: DEMO_MODE, signUp, adopt, signOut, updateLocation, updatePhone }}>
       {children}
     </FacilityContext.Provider>
   );

@@ -74,11 +74,14 @@ service cloud.firestore {
     }
 
     // Presence of a doc here grants admin access in the app's client code.
-    // Only create these by hand (Console) or via a trusted backend —
-    // never allow client writes to this collection.
+    // The first admin is created by hand (Console). After that, an existing
+    // admin creates further admins from Admin -> Settings, so create/delete
+    // are admin-only; nobody can edit a doc, and an admin can't remove themselves.
     match /admins/{uid} {
-      allow read: if request.auth != null && request.auth.uid == uid;
-      allow write: if false;
+      allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
+      allow create: if isAdmin();
+      allow update: if false;
+      allow delete: if isAdmin() && request.auth.uid != uid;
     }
 
     // Lightweight "last seen" heartbeat, one doc per signed-in nurse/facility

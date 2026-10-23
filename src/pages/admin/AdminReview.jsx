@@ -32,7 +32,7 @@ export default function AdminReview() {
 
   async function handleSignOut() {
     await signOut();
-    navigate('/admin/login');
+    navigate('/login');
   }
 
   return (

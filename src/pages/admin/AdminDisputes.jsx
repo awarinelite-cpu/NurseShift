@@ -40,7 +40,7 @@ export default function AdminDisputes() {
 
   async function handleSignOut() {
     await signOut();
-    navigate('/admin/login');
+    navigate('/login');
   }
 
   async function handleResolve(dispute, status) {

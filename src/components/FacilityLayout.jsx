@@ -9,7 +9,7 @@ export default function FacilityLayout() {
 
   async function handleSignOut() {
     await signOut();
-    navigate('/facility/login');
+    navigate('/login');
   }
 
   return (

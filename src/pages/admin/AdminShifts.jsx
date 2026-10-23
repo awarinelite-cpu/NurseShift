@@ -53,7 +53,7 @@ export default function AdminShifts() {
 
   async function handleSignOut() {
     await signOut();
-    navigate('/admin/login');
+    navigate('/login');
   }
 
   return (

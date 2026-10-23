@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
 import CallModal from './components/CallModal';
 import AdminLayout from './components/AdminLayout';
@@ -21,7 +21,7 @@ import Login from './pages/Login';
 import Messages from './pages/Messages';
 import ChatThread from './pages/ChatThread';
 import NurseDirectory from './pages/NurseDirectory';
-import AdminLogin from './pages/admin/AdminLogin';
+import AdminSettings from './pages/admin/AdminSettings';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminNurses from './pages/admin/AdminNurses';
 import AdminShifts from './pages/admin/AdminShifts';
@@ -30,8 +30,6 @@ import AdminDisputes from './pages/admin/AdminDisputes';
 import AdminFacilities from './pages/admin/AdminFacilities';
 import AdminFacilityDetail from './pages/admin/AdminFacilityDetail';
 import AdminFacilityImport from './pages/admin/AdminFacilityImport';
-import FacilityLogin from './pages/facility/FacilityLogin';
-import FacilitySignUp from './pages/facility/FacilitySignUp';
 import PostShift from './pages/facility/PostShift';
 import FacilityDashboard from './pages/facility/FacilityDashboard';
 
@@ -45,9 +43,10 @@ export default function App() {
               <CallModal />
               <InstallPrompt />
               <Routes>
-                {/* Admin surface — separate login, not linked from nurse nav */}
+                {/* Admin surface — signs in through the shared /login page */}
                 <Route element={<AdminLayout />}>
-                  <Route path="/admin/login" element={<AdminLogin />} />
+                  <Route path="/admin/login" element={<Navigate to="/login" replace />} />
+                  <Route path="/admin/settings" element={<ErrorBoundary><RequireAdmin><AdminSettings /></RequireAdmin></ErrorBoundary>} />
                   <Route path="/admin" element={<ErrorBoundary><RequireAdmin><AdminDashboard /></RequireAdmin></ErrorBoundary>} />
                   <Route path="/admin/nurses" element={<ErrorBoundary><RequireAdmin><AdminNurses /></RequireAdmin></ErrorBoundary>} />
                   <Route path="/admin/shifts" element={<ErrorBoundary><RequireAdmin><AdminShifts /></RequireAdmin></ErrorBoundary>} />
@@ -58,10 +57,10 @@ export default function App() {
                   <Route path="/admin/facilities/:facilityId" element={<ErrorBoundary><RequireAdmin><AdminFacilityDetail /></RequireAdmin></ErrorBoundary>} />
                 </Route>
 
-                {/* Facility surface — own layout, own auth */}
+                {/* Facility surface — own layout, signs in through the shared /login page */}
                 <Route element={<AdminLayout label="for facilities" />}>
-                  <Route path="/facility/login" element={<FacilityLogin />} />
-                  <Route path="/facility/signup" element={<FacilitySignUp />} />
+                  <Route path="/facility/login" element={<Navigate to="/login" replace />} />
+                  <Route path="/facility/signup" element={<Navigate to="/signup?role=facility" replace />} />
                 </Route>
                 <Route element={<FacilityLayout />}>
                   <Route path="/facility" element={<RequireFacility><FacilityDashboard /></RequireFacility>} />

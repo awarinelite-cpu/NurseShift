@@ -45,7 +45,7 @@ export default function AdminNurses() {
 
   async function handleSignOut() {
     await signOut();
-    navigate('/admin/login');
+    navigate('/login');
   }
 
   return (

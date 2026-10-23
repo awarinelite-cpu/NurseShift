@@ -68,7 +68,7 @@ export default function AdminFacilities() {
 
   async function handleSignOut() {
     await signOut();
-    navigate('/admin/login');
+    navigate('/login');
   }
 
   async function handleFixCoordinates() {

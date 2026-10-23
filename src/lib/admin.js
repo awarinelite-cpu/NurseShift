@@ -492,3 +492,61 @@ export function subscribeAdminStats(callback) {
     if (recomputeInterval) clearInterval(recomputeInterval);
   };
 }
+
+
+// ---------- Admin accounts (Admin -> Settings) ----------
+// Admins can't sign themselves up. An existing admin creates the account here;
+// the new person then signs in on the normal /login page and lands in /admin.
+
+const demoAdmins = [{ id: 'admin-demo-01', name: 'Demo Admin', email: 'admin@nurseshift.demo', createdAt: null }];
+
+export async function listAdmins() {
+  if (DEMO_MODE) return Promise.resolve([...demoAdmins]);
+  const { collection, getDocs } = await import('firebase/firestore');
+  const snap = await getDocs(collection(db, 'admins'));
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+}
+
+export async function createAdminAccount({ name, email, password }) {
+  if (DEMO_MODE) {
+    const created = { id: `admin-demo-${demoAdmins.length + 1}`, name, email, createdAt: null };
+    demoAdmins.push(created);
+    return Promise.resolve(created);
+  }
+
+  const { app } = await import('./firebase');
+  const { initializeApp, deleteApp } = await import('firebase/app');
+  const { getAuth, createUserWithEmailAndPassword, updateProfile, signOut } = await import('firebase/auth');
+  const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
+
+  // Creating a user signs that user in, which would sign the current admin out.
+  // A throw-away second app instance keeps the admin's own session untouched.
+  const secondary = initializeApp(app.options, `admin-create-${Date.now()}`);
+  try {
+    const secondaryAuth = getAuth(secondary);
+    const cred = await createUserWithEmailAndPassword(secondaryAuth, email, password);
+    await updateProfile(cred.user, { displayName: name });
+    // Written with the current admin's session, so the Firestore rule (isAdmin) applies.
+    await setDoc(doc(db, 'admins', cred.user.uid), {
+      name,
+      email,
+      createdAt: serverTimestamp(),
+      createdBy: auth.currentUser?.uid ?? null,
+    });
+    await signOut(secondaryAuth);
+    return { id: cred.user.uid, name, email };
+  } finally {
+    await deleteApp(secondary);
+  }
+}
+
+// Removes admin access (the Firebase login itself stays, but it has no role any more).
+export async function removeAdmin(adminId) {
+  if (DEMO_MODE) {
+    const i = demoAdmins.findIndex((a) => a.id === adminId);
+    if (i >= 0) demoAdmins.splice(i, 1);
+    return Promise.resolve();
+  }
+  const { doc, deleteDoc } = await import('firebase/firestore');
+  await deleteDoc(doc(db, 'admins', adminId));
+}
