@@ -138,7 +138,7 @@ export default function MyShifts() {
                     Report an issue
                   </button>
                 )}
-                {alreadyReported && <span style={{ fontSize: 12.5, color: 'var(--slate)' }}>Reported — under review</span>}
+                {alreadyReported && <span style={{ fontSize: '0.7812rem', color: 'var(--slate)' }}>Reported — under review</span>}
               </div>
 
               {canRate && ratingFor === c.id && (

@@ -24,7 +24,7 @@
 .brand {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 20px;
+  font-size: 1.25rem;
   letter-spacing: -0.01em;
   display: flex;
   align-items: baseline;
@@ -44,7 +44,7 @@
   text-decoration: none;
   color: var(--on-brand);
   opacity: 0.72;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   padding: 8px 12px;
   border-radius: 6px;
@@ -78,7 +78,7 @@
 .eyebrow {
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 12px;
+  font-size: 0.75rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--slate);
@@ -88,14 +88,14 @@
 .page-title {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 32px;
+  font-size: 2rem;
   letter-spacing: -0.01em;
   margin: 0 0 4px;
 }
 
 .page-sub {
   color: var(--slate);
-  font-size: 15px;
+  font-size: 0.9375rem;
   margin: 0;
 }
 
@@ -110,7 +110,7 @@
 
 .filter-chip {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 0.75rem;
   padding: 7px 12px;
   border: 1px solid var(--line);
   background: var(--surface);
@@ -161,8 +161,8 @@
 .board-row > * { min-width: 0; }
 
 .board-code {
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-family: var(--font-code);
+  font-size: 0.75rem;
   line-height: 1.35;
   color: var(--slate);
   /* long shift IDs wrap inside their own column instead of running under Facility / Unit */
@@ -173,33 +173,33 @@
 
 .board-main .facility {
   font-weight: 600;
-  font-size: 14.5px;
+  font-size: 0.9062rem;
 }
 
 .board-main .meta {
-  font-size: 12.5px;
+  font-size: 0.7812rem;
   color: var(--slate);
   margin-top: 2px;
 }
 
 .board-time {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
-.board-time .date { color: var(--slate); font-size: 11.5px; }
+.board-time .date { color: var(--slate); font-size: 0.7188rem; }
 
 .board-rate {
   font-family: var(--font-mono);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 0.875rem;
   text-align: right;
 }
 
 .board-arrow {
   color: var(--slate);
   text-align: right;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 /* header row for the board */
@@ -207,7 +207,7 @@
   animation: none;
   background: var(--paper);
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 0.6562rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--slate);
@@ -222,7 +222,7 @@
   align-items: center;
   gap: 5px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 600;
   padding: 4px 9px;
   border-radius: 999px;
@@ -269,14 +269,14 @@
 .detail-facility {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 23px;
+  font-size: 1.4375rem;
   letter-spacing: -0.01em;
   margin: 0 0 4px;
 }
 
 .detail-city {
   color: var(--slate);
-  font-size: 13.5px;
+  font-size: 0.8438rem;
   margin: 0;
 }
 
@@ -292,7 +292,7 @@
 
 .detail-stat .label {
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 0.6562rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--slate);
@@ -302,7 +302,7 @@
 .detail-stat .value {
   font-family: var(--font-mono);
   font-weight: 600;
-  font-size: 16px;
+  font-size: 1rem;
   margin: 0;
 }
 
@@ -315,7 +315,7 @@
   color: var(--on-brand);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 15px;
+  font-size: 0.9375rem;
   cursor: pointer;
   transition: background 0.15s ease;
 }
@@ -326,7 +326,7 @@
 .back-link {
   display: inline-block;
   margin-bottom: 16px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--slate);
   text-decoration: none;
 }
@@ -347,8 +347,8 @@
   gap: 12px;
 }
 
-.claim-card .facility { font-weight: 600; font-size: 14.5px; }
-.claim-card .meta { font-size: 12.5px; color: var(--slate); margin-top: 2px; }
+.claim-card .facility { font-weight: 600; font-size: 0.9062rem; }
+.claim-card .meta { font-size: 0.7812rem; color: var(--slate); margin-top: 2px; }
 
 .clock-btn {
   padding: 9px 14px;
@@ -357,7 +357,7 @@
   background: transparent;
   color: var(--ink);
   font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: 0.7812rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -369,7 +369,7 @@
   text-align: center;
   padding: 50px 20px;
   color: var(--slate);
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 /* ---------- Profile ---------- */
@@ -384,13 +384,13 @@
 .profile-name {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 22px;
+  font-size: 1.375rem;
   margin: 0 0 2px;
 }
 
 .profile-role {
   color: var(--slate);
-  font-size: 13.5px;
+  font-size: 0.8438rem;
   margin: 0 0 16px;
 }
 
@@ -403,7 +403,7 @@
 
 .profile-grid .label {
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 0.6562rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--slate);
@@ -411,7 +411,7 @@
 }
 
 .profile-grid .value {
-  font-size: 14.5px;
+  font-size: 0.9062rem;
   font-weight: 500;
   margin: 0;
 }
@@ -420,7 +420,7 @@
   background: var(--amber-soft);
   color: var(--gold-deep);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 0.75rem;
   padding: 8px 20px;
   text-align: center;
 }
@@ -442,7 +442,7 @@
 
 .form-row label {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 0.6875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--slate);
@@ -454,7 +454,7 @@
   padding: 10px 12px;
   border: 1px solid var(--line);
   border-radius: 7px;
-  font-size: 14px;
+  font-size: 0.875rem;
   background: var(--surface);
   color: var(--ink);
   font-family: inherit;
@@ -468,24 +468,24 @@
 .form-row input[type="file"] {
   padding: 8px 0;
   border: none;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .file-picked {
-  font-size: 12.5px;
+  font-size: 0.7812rem;
   color: var(--green);
   margin: 4px 0 0;
 }
 
 .form-error {
-  font-size: 12.5px;
+  font-size: 0.7812rem;
   color: var(--red);
   margin: -6px 0 14px;
 }
 
 .form-footer {
   text-align: center;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--slate);
   margin: 14px 0 0;
 }
@@ -509,7 +509,7 @@
 
   .topbar nav a,
   .topbar nav a[role="button"] {
-    font-size: 12px;
+    font-size: 0.75rem;
     padding: 7px 9px;
   }
 
@@ -605,7 +605,7 @@
 .map-modal-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 15px;
+  font-size: 0.9375rem;
   color: var(--surface);
   margin: 0;
   overflow: hidden;
@@ -622,7 +622,7 @@
   width: 36px;
   height: 36px;
   flex-shrink: 0;
-  font-size: 15px;
+  font-size: 0.9375rem;
   color: var(--ink);
   cursor: pointer;
   box-shadow: 0 2px 10px rgba(20, 33, 61, 0.3);
@@ -662,7 +662,7 @@
   text-decoration: none;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 12.5px;
+  font-size: 0.7812rem;
   transition: transform 0.1s ease;
 }
 
@@ -691,7 +691,7 @@
   z-index: 3;
   background: var(--brand);
   color: var(--surface);
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   padding: 9px 18px;
   border-radius: 999px;
@@ -774,7 +774,7 @@
   justify-content: center;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 
 .conversation-info {
@@ -784,10 +784,10 @@
   min-width: 0;
 }
 
-.conversation-info strong { font-size: 14.5px; }
+.conversation-info strong { font-size: 0.9062rem; }
 
 .conversation-info span {
-  font-size: 12.5px;
+  font-size: 0.7812rem;
   color: var(--slate);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -814,10 +814,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
-.nurse-directory-row .meta { color: var(--slate); font-size: 12.5px; }
+.nurse-directory-row .meta { color: var(--slate); font-size: 0.7812rem; }
 
 /* ---------- Chat thread ---------- */
 
@@ -844,7 +844,7 @@
 
 .chat-header .conversation-info span {
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 0.7188rem;
 }
 
 .chat-header-actions { display: flex; gap: 8px; }
@@ -855,7 +855,7 @@
   border-radius: 50%;
   border: 1px solid var(--line);
   background: var(--paper);
-  font-size: 16px;
+  font-size: 1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -881,7 +881,7 @@
   border: 1px solid var(--line);
   border-radius: 12px 12px 12px 4px;
   padding: 9px 12px;
-  font-size: 13.5px;
+  font-size: 0.8438rem;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -889,7 +889,7 @@
 
 .chat-bubble time {
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 0.6562rem;
   color: var(--slate);
   align-self: flex-end;
 }
@@ -910,7 +910,7 @@
   border-color: var(--gold);
   color: var(--gold-deep);
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 0.7188rem;
   border-radius: 20px;
   padding: 6px 14px;
 }
@@ -928,7 +928,7 @@
   border: 1px solid var(--line);
   border-radius: 20px;
   padding: 10px 16px;
-  font-size: 13.5px;
+  font-size: 0.8438rem;
 }
 
 .chat-composer input:focus { outline: none; border-color: var(--ink); }
@@ -941,7 +941,7 @@
   color: var(--on-brand);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 13px;
+  font-size: 0.8125rem;
   cursor: pointer;
 }
 
@@ -982,13 +982,13 @@
   justify-content: center;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 30px;
+  font-size: 1.875rem;
   margin-bottom: 10px;
 }
 
-.call-card h3 { margin: 0; font-family: var(--font-display); font-size: 20px; }
+.call-card h3 { margin: 0; font-family: var(--font-display); font-size: 1.25rem; }
 
-.call-status-text { margin: 0; color: rgba(238, 241, 244, 0.72); font-size: 13.5px; }
+.call-status-text { margin: 0; color: rgba(238, 241, 244, 0.72); font-size: 0.8438rem; }
 
 .call-actions { display: flex; gap: 20px; margin-top: 10px; }
 
@@ -998,7 +998,7 @@
   border: none;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
 }
 
@@ -1018,7 +1018,7 @@
   background: transparent;
   color: var(--on-brand);
   font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: 0.7812rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -1039,7 +1039,7 @@
 .call-fallback-text {
   margin: 0;
   color: rgba(238, 241, 244, 0.72);
-  font-size: 13px;
+  font-size: 0.8125rem;
   text-align: center;
 }
 
@@ -1068,7 +1068,7 @@
 
 .admin-stat-label {
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 0.6562rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--slate);
@@ -1078,7 +1078,7 @@
 .admin-stat-value {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 30px;
+  font-size: 1.875rem;
   margin: 0;
   color: var(--ink);
 }
@@ -1327,7 +1327,7 @@ html.dark .form-row textarea::placeholder { color: var(--slate); }
   border-bottom-color: #94a3b8;
   background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
   box-shadow: 0 4px 10px -2px rgba(15, 23, 42, 0.35);
-  font-size: 19px;
+  font-size: 1.1875rem;
   line-height: 1;
   cursor: pointer;
 }
@@ -1362,7 +1362,7 @@ html.dark.forest .theme-toggle {
   width: 38px;
   height: 38px;
   flex: none;
-  font-size: 18px;
+  font-size: 1.125rem;
   border: 1px solid rgba(238, 241, 244, 0.4);
   border-bottom-width: 1px;
   background: rgba(238, 241, 244, 0.12);

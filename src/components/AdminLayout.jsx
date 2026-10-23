@@ -6,7 +6,7 @@ export default function AdminLayout({ label = 'admin' }) {
     <div className="app-shell">
       <header className="topbar">
         <div className="brand">
-          Nurse<span className="dot">Shift</span> <span style={{ opacity: 0.6, fontWeight: 500, fontSize: 13, marginLeft: 4 }}>{label}</span>
+          Nurse<span className="dot">Shift</span> <span style={{ opacity: 0.6, fontWeight: 500, fontSize: '0.8125rem', marginLeft: 4 }}>{label}</span>
         </div>
         <ThemeToggle inline />
       </header>

@@ -100,12 +100,12 @@ export default function AdminDisputes() {
               <Badge status={d.status === 'open' ? 'pending' : d.status}>{d.status}</Badge>
             </div>
 
-            <p style={{ fontSize: 13.5, color: 'var(--ink)', margin: '0 0 16px', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '0.8438rem', color: 'var(--ink)', margin: '0 0 16px', lineHeight: 1.5 }}>
               {d.description}
             </p>
 
             {d.status !== 'open' && d.resolutionNote && (
-              <p style={{ fontSize: 12.5, color: 'var(--slate)', margin: '0 0 12px' }}>
+              <p style={{ fontSize: '0.7812rem', color: 'var(--slate)', margin: '0 0 12px' }}>
                 Resolution note: {d.resolutionNote}
               </p>
             )}
