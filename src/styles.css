@@ -1410,3 +1410,63 @@ html.dark.forest .board-row:not(.header) {
 }
 html.dark .board-row:not(.header):hover,
 html.dark.forest .board-row:not(.header):hover { filter: brightness(1.12); background: inherit; }
+
+/* ---------- Glassy finish (same gloss recipe as Elite Registration Hub cards/buttons) ----------
+   Layers: top highlight band with a crisp lower edge, base gradient, inset top shine, inset bottom shade. */
+.board-row:not(.header),
+.detail-card,
+.profile-card {
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.25) 36%, rgba(255, 255, 255, 0) 38%),
+    linear-gradient(to bottom, #ffffff 0%, #eef2f7 45%, #d3dbe6 100%);
+  border: 1px solid #c3ccd8;
+  border-bottom: 5px solid #94a3b8;
+  box-shadow:
+    inset 0 2px 2px rgba(255, 255, 255, 0.95),
+    inset 0 -10px 14px rgba(71, 85, 105, 0.22),
+    0 12px 16px -9px rgba(15, 23, 42, 0.5);
+}
+.board-row:not(.header):hover { background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.3) 36%, rgba(255, 255, 255, 0) 38%),
+    linear-gradient(to bottom, #ffffff 0%, #f3f6fa 45%, #dbe2ec 100%); }
+
+html.dark .board-row:not(.header),
+html.dark .detail-card,
+html.dark .profile-card {
+  border-color: #3d6a62;
+  border-bottom-color: #020f0d;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.06) 36%, rgba(255, 255, 255, 0) 38%),
+    linear-gradient(to bottom, #2b5a52 0%, #1c403a 45%, #0f2924 100%);
+  box-shadow:
+    inset 0 2px 2px rgba(255, 255, 255, 0.28),
+    inset 0 -10px 14px rgba(0, 0, 0, 0.4),
+    0 12px 16px -9px rgba(0, 0, 0, 0.75);
+}
+html.dark .board-row:not(.header):hover { filter: brightness(1.12); }
+
+html.dark.forest .board-row:not(.header),
+html.dark.forest .detail-card,
+html.dark.forest .profile-card {
+  border-color: #d4bf78;
+  border-bottom-color: #8d8a52;
+  background:
+    linear-gradient(to bottom, rgba(247, 236, 192, 0.32) 0%, rgba(247, 236, 192, 0.08) 36%, rgba(247, 236, 192, 0) 38%),
+    linear-gradient(to bottom, #2a5a57 0%, #1f4846 45%, #143230 100%);
+  box-shadow:
+    inset 0 2px 2px rgba(247, 236, 192, 0.4),
+    inset 0 -10px 14px rgba(0, 0, 0, 0.4),
+    0 12px 16px -9px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(242, 184, 58, 0.3);
+}
+
+/* active top-bar tab: glossy pill */
+.topbar nav a.active {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.1) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 3px 6px -2px rgba(0, 0, 0, 0.45);
+}
+
+/* call buttons */
+.call-btn.accept { background: linear-gradient(180deg, #34d27b 0%, #16803f 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 4px 8px -1px rgba(0, 0, 0, 0.5); }
+.call-btn.decline { background: linear-gradient(180deg, #ee6a5f 0%, #b02f26 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 4px 8px -1px rgba(0, 0, 0, 0.5); }
