@@ -16,7 +16,7 @@ export default function FacilityLayout() {
     <div className="app-shell">
       <header className="topbar">
         <div className="brand">
-          Nurse<span className="dot">Shift</span> <span style={{ opacity: 0.6, fontWeight: 500, fontSize: '0.8125rem', marginLeft: 4 }}>for facilities</span>
+          Nurse<span className="dot">Shift</span> <span style={{ opacity: 0.6, fontWeight: 500, fontSize: '0.75rem', marginLeft: 4 }}>for facilities</span>
         </div>
         {facility && (
           <nav>

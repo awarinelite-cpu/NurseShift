@@ -65,7 +65,7 @@ export default function AdminFacilityDetail() {
           </div>
           <div className="detail-stat">
             <p className="label">Facility ID</p>
-            <p className="value" style={{ fontSize: '0.7812rem', wordBreak: 'break-all' }}>{facility.id}</p>
+            <p className="value" style={{ fontSize: '0.75rem', wordBreak: 'break-all' }}>{facility.id}</p>
           </div>
         </div>
       </div>

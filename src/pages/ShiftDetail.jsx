@@ -126,11 +126,11 @@ export default function ShiftDetail() {
         </div>
 
         {claimed ? (
-          <p style={{ color: 'var(--slate)', fontSize: '0.8438rem', margin: '0 0 12px' }}>
+          <p style={{ color: 'var(--slate)', fontSize: '0.875rem', margin: '0 0 12px' }}>
             Your claim is in. {shift.facility} will approve or decline it — check My Shifts for updates.
           </p>
         ) : !isVerified && shift.status === 'open' ? (
-          <p style={{ color: 'var(--slate)', fontSize: '0.8438rem', margin: '0 0 12px' }}>
+          <p style={{ color: 'var(--slate)', fontSize: '0.875rem', margin: '0 0 12px' }}>
             Your license is still under review — you can claim shifts once it's verified.
           </p>
         ) : null}
@@ -166,7 +166,7 @@ export default function ShiftDetail() {
 
         {claimed && (
           <div style={{ marginTop: 12, textAlign: 'center' }}>
-            <Link to="/my-shifts" style={{ fontSize: '0.8125rem', color: 'var(--ink)', fontWeight: 600 }}>
+            <Link to="/my-shifts" style={{ fontSize: '0.75rem', color: 'var(--ink)', fontWeight: 600 }}>
               View in My Shifts →
             </Link>
           </div>

@@ -47,7 +47,7 @@ export default function Profile() {
         </Badge>
 
         {nurse.verification === 'pending' && (
-          <p style={{ fontSize: '0.8125rem', color: 'var(--slate)', margin: '10px 0 0' }}>
+          <p style={{ fontSize: '0.75rem', color: 'var(--slate)', margin: '10px 0 0' }}>
             Your license is under review. You'll be able to claim shifts once an admin verifies it —
             usually within 48 hours.
           </p>

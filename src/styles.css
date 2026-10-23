@@ -44,7 +44,7 @@
   text-decoration: none;
   color: var(--on-brand);
   opacity: 0.72;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 600;
   padding: 8px 12px;
   border-radius: 6px;
@@ -88,14 +88,14 @@
 .page-title {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 2rem;
+  font-size: 1.875rem;
   letter-spacing: -0.01em;
   margin: 0 0 4px;
 }
 
 .page-sub {
   color: var(--slate);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   margin: 0;
 }
 
@@ -173,21 +173,21 @@
 
 .board-main .facility {
   font-weight: 600;
-  font-size: 0.9062rem;
+  font-size: 0.875rem;
 }
 
 .board-main .meta {
-  font-size: 0.7812rem;
+  font-size: 0.75rem;
   color: var(--slate);
   margin-top: 2px;
 }
 
 .board-time {
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
 }
 
-.board-time .date { color: var(--slate); font-size: 0.7188rem; }
+.board-time .date { color: var(--slate); font-size: 0.75rem; }
 
 .board-rate {
   font-family: var(--font-mono);
@@ -207,7 +207,7 @@
   animation: none;
   background: var(--paper);
   font-family: var(--font-mono);
-  font-size: 0.6562rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--slate);
@@ -222,7 +222,7 @@
   align-items: center;
   gap: 5px;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
   padding: 4px 9px;
   border-radius: 999px;
@@ -269,14 +269,14 @@
 .detail-facility {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 1.4375rem;
+  font-size: 1.5rem;
   letter-spacing: -0.01em;
   margin: 0 0 4px;
 }
 
 .detail-city {
   color: var(--slate);
-  font-size: 0.8438rem;
+  font-size: 0.875rem;
   margin: 0;
 }
 
@@ -292,7 +292,7 @@
 
 .detail-stat .label {
   font-family: var(--font-mono);
-  font-size: 0.6562rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--slate);
@@ -315,7 +315,7 @@
   color: var(--on-brand);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   cursor: pointer;
   transition: background 0.15s ease;
 }
@@ -326,7 +326,7 @@
 .back-link {
   display: inline-block;
   margin-bottom: 16px;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: var(--slate);
   text-decoration: none;
 }
@@ -347,8 +347,8 @@
   gap: 12px;
 }
 
-.claim-card .facility { font-weight: 600; font-size: 0.9062rem; }
-.claim-card .meta { font-size: 0.7812rem; color: var(--slate); margin-top: 2px; }
+.claim-card .facility { font-weight: 600; font-size: 0.875rem; }
+.claim-card .meta { font-size: 0.75rem; color: var(--slate); margin-top: 2px; }
 
 .clock-btn {
   padding: 9px 14px;
@@ -357,7 +357,7 @@
   background: transparent;
   color: var(--ink);
   font-family: var(--font-mono);
-  font-size: 0.7812rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -384,13 +384,13 @@
 .profile-name {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 1.375rem;
+  font-size: 1.25rem;
   margin: 0 0 2px;
 }
 
 .profile-role {
   color: var(--slate);
-  font-size: 0.8438rem;
+  font-size: 0.875rem;
   margin: 0 0 16px;
 }
 
@@ -403,7 +403,7 @@
 
 .profile-grid .label {
   font-family: var(--font-mono);
-  font-size: 0.6562rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--slate);
@@ -411,7 +411,7 @@
 }
 
 .profile-grid .value {
-  font-size: 0.9062rem;
+  font-size: 0.875rem;
   font-weight: 500;
   margin: 0;
 }
@@ -442,7 +442,7 @@
 
 .form-row label {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--slate);
@@ -468,24 +468,24 @@
 .form-row input[type="file"] {
   padding: 8px 0;
   border: none;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
 }
 
 .file-picked {
-  font-size: 0.7812rem;
+  font-size: 0.75rem;
   color: var(--green);
   margin: 4px 0 0;
 }
 
 .form-error {
-  font-size: 0.7812rem;
+  font-size: 0.75rem;
   color: var(--red);
   margin: -6px 0 14px;
 }
 
 .form-footer {
   text-align: center;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: var(--slate);
   margin: 14px 0 0;
 }
@@ -605,7 +605,7 @@
 .map-modal-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   color: var(--surface);
   margin: 0;
   overflow: hidden;
@@ -622,7 +622,7 @@
   width: 36px;
   height: 36px;
   flex-shrink: 0;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   color: var(--ink);
   cursor: pointer;
   box-shadow: 0 2px 10px rgba(20, 33, 61, 0.3);
@@ -662,7 +662,7 @@
   text-decoration: none;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.7812rem;
+  font-size: 0.75rem;
   transition: transform 0.1s ease;
 }
 
@@ -691,7 +691,7 @@
   z-index: 3;
   background: var(--brand);
   color: var(--surface);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 600;
   padding: 9px 18px;
   border-radius: 999px;
@@ -774,7 +774,7 @@
   justify-content: center;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
 }
 
 .conversation-info {
@@ -784,10 +784,10 @@
   min-width: 0;
 }
 
-.conversation-info strong { font-size: 0.9062rem; }
+.conversation-info strong { font-size: 0.875rem; }
 
 .conversation-info span {
-  font-size: 0.7812rem;
+  font-size: 0.75rem;
   color: var(--slate);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -817,7 +817,7 @@
   font-size: 0.875rem;
 }
 
-.nurse-directory-row .meta { color: var(--slate); font-size: 0.7812rem; }
+.nurse-directory-row .meta { color: var(--slate); font-size: 0.75rem; }
 
 /* ---------- Chat thread ---------- */
 
@@ -844,7 +844,7 @@
 
 .chat-header .conversation-info span {
   font-family: var(--font-mono);
-  font-size: 0.7188rem;
+  font-size: 0.75rem;
 }
 
 .chat-header-actions { display: flex; gap: 8px; }
@@ -881,7 +881,7 @@
   border: 1px solid var(--line);
   border-radius: 12px 12px 12px 4px;
   padding: 9px 12px;
-  font-size: 0.8438rem;
+  font-size: 0.875rem;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -889,7 +889,7 @@
 
 .chat-bubble time {
   font-family: var(--font-mono);
-  font-size: 0.6562rem;
+  font-size: 0.75rem;
   color: var(--slate);
   align-self: flex-end;
 }
@@ -910,7 +910,7 @@
   border-color: var(--gold);
   color: var(--gold-deep);
   font-family: var(--font-mono);
-  font-size: 0.7188rem;
+  font-size: 0.75rem;
   border-radius: 20px;
   padding: 6px 14px;
 }
@@ -928,7 +928,7 @@
   border: 1px solid var(--line);
   border-radius: 20px;
   padding: 10px 16px;
-  font-size: 0.8438rem;
+  font-size: 0.875rem;
 }
 
 .chat-composer input:focus { outline: none; border-color: var(--ink); }
@@ -941,7 +941,7 @@
   color: var(--on-brand);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   cursor: pointer;
 }
 
@@ -988,7 +988,7 @@
 
 .call-card h3 { margin: 0; font-family: var(--font-display); font-size: 1.25rem; }
 
-.call-status-text { margin: 0; color: rgba(238, 241, 244, 0.72); font-size: 0.8438rem; }
+.call-status-text { margin: 0; color: rgba(238, 241, 244, 0.72); font-size: 0.875rem; }
 
 .call-actions { display: flex; gap: 20px; margin-top: 10px; }
 
@@ -1018,7 +1018,7 @@
   background: transparent;
   color: var(--on-brand);
   font-family: var(--font-mono);
-  font-size: 0.7812rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -1039,7 +1039,7 @@
 .call-fallback-text {
   margin: 0;
   color: rgba(238, 241, 244, 0.72);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   text-align: center;
 }
 
@@ -1068,7 +1068,7 @@
 
 .admin-stat-label {
   font-family: var(--font-mono);
-  font-size: 0.6562rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--slate);
@@ -1327,7 +1327,7 @@ html.dark .form-row textarea::placeholder { color: var(--slate); }
   border-bottom-color: #94a3b8;
   background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
   box-shadow: 0 4px 10px -2px rgba(15, 23, 42, 0.35);
-  font-size: 1.1875rem;
+  font-size: 1.125rem;
   line-height: 1;
   cursor: pointer;
 }

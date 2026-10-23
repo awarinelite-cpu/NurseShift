@@ -223,7 +223,7 @@ export default function FacilityDashboard() {
                     </div>
                     <Badge status="pending">Pending</Badge>
                   </div>
-                  <p style={{ fontSize: '0.8438rem', color: 'var(--slate)', margin: '0 0 16px' }}>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--slate)', margin: '0 0 16px' }}>
                     Claiming {c.shift?.unit} · {c.shift?.date} · {c.shift?.start}–{c.shift?.end} · {formatNaira(c.shift?.rate)}
                   </p>
                   <div style={{ display: 'flex', gap: 10 }}>
@@ -263,7 +263,7 @@ export default function FacilityDashboard() {
                           Report an issue
                         </button>
                       )}
-                      {alreadyReported && <span style={{ fontSize: '0.7812rem', color: 'var(--slate)' }}>Reported — under review</span>}
+                      {alreadyReported && <span style={{ fontSize: '0.75rem', color: 'var(--slate)' }}>Reported — under review</span>}
                     </div>
                     {reportingFor === c.id && (
                       <ReportIssueForm onSubmit={(payload) => handleReport(c, payload)} onCancel={() => setReportingFor(null)} />
@@ -302,7 +302,7 @@ export default function FacilityDashboard() {
                           Report an issue
                         </button>
                       )}
-                      {alreadyReported && <span style={{ fontSize: '0.7812rem', color: 'var(--slate)' }}>Reported — under review</span>}
+                      {alreadyReported && <span style={{ fontSize: '0.75rem', color: 'var(--slate)' }}>Reported — under review</span>}
                     </div>
                     {reportingFor === c.id && (
                       <ReportIssueForm onSubmit={(payload) => handleReport(c, payload)} onCancel={() => setReportingFor(null)} />
