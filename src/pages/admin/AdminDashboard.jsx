@@ -14,7 +14,7 @@ const CARDS = [
 ];
 
 export default function AdminDashboard() {
-  const { signOut } = useAdmin();
+  const { admin, signOut } = useAdmin();
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
 
@@ -40,7 +40,9 @@ export default function AdminDashboard() {
           <Link to="/admin/review" className="clock-btn" style={{ textDecoration: 'none' }}>License review</Link>
           <Link to="/admin/facilities" className="clock-btn" style={{ textDecoration: 'none' }}>Facilities</Link>
           <Link to="/admin/disputes" className="clock-btn" style={{ textDecoration: 'none' }}>Disputes</Link>
-          <Link to="/admin/settings" className="clock-btn" style={{ textDecoration: 'none' }}>Settings</Link>
+          {admin?.role !== 'subadmin' && (
+            <Link to="/admin/settings" className="clock-btn" style={{ textDecoration: 'none' }}>Settings</Link>
+          )}
           <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
         </div>
       </div>

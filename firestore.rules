@@ -16,6 +16,14 @@ service cloud.firestore {
         exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
 
+    // The owner is the admin doc made by hand in the Console (no `role` field,
+    // or role == "owner"). Subadmins are created by the owner from Settings and
+    // carry role == "subadmin". Only the owner manages the admins collection.
+    function isOwner() {
+      return isAdmin() &&
+        get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.get('role', 'owner') != 'subadmin';
+    }
+
     // True if this update only touches the given fields — used to let a
     // counterparty (e.g. the facility on a nurse's shift claim) write a
     // narrow rating aggregate onto someone else's doc without granting
@@ -74,14 +82,15 @@ service cloud.firestore {
     }
 
     // Presence of a doc here grants admin access in the app's client code.
-    // The first admin is created by hand (Console). After that, an existing
-    // admin creates further admins from Admin -> Settings, so create/delete
-    // are admin-only; nobody can edit a doc, and an admin can't remove themselves.
+    // The owner's doc is created by hand (Console). The owner then creates
+    // subadmins from Admin -> Settings: only the owner can create or delete
+    // docs here, a created doc must be role "subadmin" (nobody can mint
+    // another owner), docs can't be edited, and the owner can't delete themselves.
     match /admins/{uid} {
       allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
-      allow create: if isAdmin();
+      allow create: if isOwner() && request.resource.data.role == 'subadmin';
       allow update: if false;
-      allow delete: if isAdmin() && request.auth.uid != uid;
+      allow delete: if isOwner() && request.auth.uid != uid;
     }
 
     // Lightweight "last seen" heartbeat, one doc per signed-in nurse/facility

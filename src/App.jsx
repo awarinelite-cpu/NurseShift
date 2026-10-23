@@ -9,6 +9,7 @@ import { FacilityProvider } from './context/FacilityContext';
 import { CallProvider } from './context/CallContext';
 import RequireAuth from './components/RequireAuth';
 import RequireAdmin from './components/RequireAdmin';
+import RequireOwner from './components/RequireOwner';
 import RequireFacility from './components/RequireFacility';
 import NurseLayout from './components/NurseLayout';
 import FacilityLayout from './components/FacilityLayout';
@@ -46,7 +47,7 @@ export default function App() {
                 {/* Admin surface — signs in through the shared /login page */}
                 <Route element={<AdminLayout />}>
                   <Route path="/admin/login" element={<Navigate to="/login" replace />} />
-                  <Route path="/admin/settings" element={<ErrorBoundary><RequireAdmin><AdminSettings /></RequireAdmin></ErrorBoundary>} />
+                  <Route path="/admin/settings" element={<ErrorBoundary><RequireAdmin><RequireOwner><AdminSettings /></RequireOwner></RequireAdmin></ErrorBoundary>} />
                   <Route path="/admin" element={<ErrorBoundary><RequireAdmin><AdminDashboard /></RequireAdmin></ErrorBoundary>} />
                   <Route path="/admin/nurses" element={<ErrorBoundary><RequireAdmin><AdminNurses /></RequireAdmin></ErrorBoundary>} />
                   <Route path="/admin/shifts" element={<ErrorBoundary><RequireAdmin><AdminShifts /></RequireAdmin></ErrorBoundary>} />

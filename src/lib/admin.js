@@ -23,7 +23,7 @@ export async function adminSignIn(email, password) {
     if (password !== DEMO_ADMIN_PASSCODE) {
       throw new Error(`Wrong passcode. Use "${DEMO_ADMIN_PASSCODE}" in demo mode.`);
     }
-    return { email, isAdmin: true };
+    return { email, isAdmin: true, role: 'owner' };
   }
 
   const { signInWithEmailAndPassword } = await import('firebase/auth');
@@ -495,10 +495,11 @@ export function subscribeAdminStats(callback) {
 
 
 // ---------- Admin accounts (Admin -> Settings) ----------
-// Admins can't sign themselves up. An existing admin creates the account here;
-// the new person then signs in on the normal /login page and lands in /admin.
+// Admins can't sign themselves up. The owner (the only admin made by hand)
+// creates subadmin accounts here; the new person then signs in on the normal
+// /login page and lands in /admin. Subadmins can't open Settings.
 
-const demoAdmins = [{ id: 'admin-demo-01', name: 'Demo Admin', email: 'admin@nurseshift.demo', createdAt: null }];
+const demoAdmins = [{ id: 'admin-demo-01', name: 'Demo Admin', email: 'admin@nurseshift.demo', role: 'owner', createdAt: null }];
 
 export async function listAdmins() {
   if (DEMO_MODE) return Promise.resolve([...demoAdmins]);
@@ -509,7 +510,7 @@ export async function listAdmins() {
 
 export async function createAdminAccount({ name, email, password }) {
   if (DEMO_MODE) {
-    const created = { id: `admin-demo-${demoAdmins.length + 1}`, name, email, createdAt: null };
+    const created = { id: `admin-demo-${demoAdmins.length + 1}`, name, email, role: 'subadmin', createdAt: null };
     demoAdmins.push(created);
     return Promise.resolve(created);
   }
@@ -530,6 +531,7 @@ export async function createAdminAccount({ name, email, password }) {
     await setDoc(doc(db, 'admins', cred.user.uid), {
       name,
       email,
+      role: 'subadmin',
       createdAt: serverTimestamp(),
       createdBy: auth.currentUser?.uid ?? null,
     });
@@ -540,7 +542,7 @@ export async function createAdminAccount({ name, email, password }) {
   }
 }
 
-// Removes admin access (the Firebase login itself stays, but it has no role any more).
+// Removes a subadmin's access (the Firebase login itself stays, but it has no role any more).
 export async function removeAdmin(adminId) {
   if (DEMO_MODE) {
     const i = demoAdmins.findIndex((a) => a.id === adminId);
