@@ -1341,3 +1341,17 @@ html.dark.forest .theme-toggle {
   background: linear-gradient(180deg, #f6edcf 0%, #dccf9f 100%);
 }
 @media print { .theme-toggle { display: none; } }
+
+/* ---------- install-app pill (PWA) ---------- */
+.install-pill {
+  position: fixed;
+  left: 64px;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  z-index: 900;
+  height: 42px;
+}
+@media (max-width: 420px) { .install-pill { width: auto; } }
+@media print, (display-mode: standalone) { .install-pill { display: none; } }
+@media (display-mode: standalone) {
+  .topbar { padding-top: calc(14px + env(safe-area-inset-top, 0px)); }
+}

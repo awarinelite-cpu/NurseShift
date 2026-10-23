@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
 import CallModal from './components/CallModal';
 import ThemeToggle from './components/ThemeToggle';
+import InstallPrompt from './components/InstallPrompt';
 import { AuthProvider } from './context/AuthContext';
 import { AdminProvider } from './context/AdminContext';
 import { FacilityProvider } from './context/FacilityContext';
@@ -43,6 +44,7 @@ export default function App() {
             <BrowserRouter>
               <CallModal />
               <ThemeToggle />
+              <InstallPrompt />
               <Routes>
                 {/* Admin surface — separate login, not linked from nurse nav */}
                 <Route path="/admin/login" element={<AdminLogin />} />

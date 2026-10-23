@@ -1,0 +1,23 @@
+{
+  "name": "NurseShift — Duty Board for Nigerian Nurses",
+  "short_name": "NurseShift",
+  "description": "Find, claim and track nursing shifts at hospitals and facilities across Nigeria.",
+  "id": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A1B18",
+  "theme_color": "#0E4B40",
+  "categories": ["medical", "business", "productivity"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Duty Board", "url": "/" },
+    { "name": "My Shifts", "url": "/my-shifts" },
+    { "name": "Messages", "url": "/messages" }
+  ]
+}

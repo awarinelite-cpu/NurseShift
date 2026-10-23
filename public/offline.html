@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NurseShift — offline</title>
+<style>
+  body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; text-align:center;
+         font-family: system-ui, sans-serif; background:#0A1B18; color:#E4F1EC; }
+  h1 { font-size:22px; margin:0 0 8px; } p { color:#9CB7AF; margin:0 0 20px; }
+  button { padding:12px 22px; border-radius:12px; border:1px solid #134e4a; border-bottom:4px solid #042f2e;
+           background:linear-gradient(180deg,#14b8a6,#0f766e); color:#fff; font-weight:800; font-size:15px; }
+</style>
+</head>
+<body>
+  <div>
+    <h1>You're offline</h1>
+    <p>NurseShift needs a connection to load shifts. Check your network and try again.</p>
+    <button onclick="location.reload()">Try again</button>
+  </div>
+</body>
+</html>
