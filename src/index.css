@@ -6,6 +6,12 @@
   --surface: #FFFFFF;
   --slate: #5C6B67;        /* muted secondary text, teal-leaning gray */
   --line: #D8E6E1;         /* mint-tinted hairline dividers */
+  --brand: #0E4B40;        /* deep teal surfaces (topbar, active chips) - stays dark in every theme */
+  --brand-soft: #146357;
+  --on-brand: #EDF5F2;
+  --card-title: #0f172a;
+  --card-title-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
+  --card-meta: #334155;
   --accent: #8FE6CC;       /* bright mint — brand mark on dark backgrounds */
   --gold: #E3B23C;         /* status accent — kept for "pending"/call-log chips */
   --gold-deep: #B8871F;
@@ -67,4 +73,47 @@ a {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* ---------- Dark theme (html.dark) ---------- */
+html.dark {
+  --ink: #E4F1EC;
+  --ink-soft: #B9D6CD;
+  --paper: #0A1B18;
+  --surface: #12302B;
+  --slate: #9CB7AF;
+  --line: #264A42;
+  --green: #5FD08F;
+  --green-soft: #173B2A;
+  --red: #F08A80;
+  --red-soft: #3A1C19;
+  --amber-soft: #3A2E12;
+  --brand: #0B3A32;
+  --brand-soft: #146357;
+  --card-title: #f8fafc;
+  --card-title-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  --card-meta: #cbd5e1;
+  color-scheme: dark;
+}
+
+/* ---------- Forest & Gold theme (html.dark.forest = dark + these) ---------- */
+html.dark.forest {
+  --ink: #f1ebd0;
+  --ink-soft: #d9d2b0;
+  --paper: #0f2623;
+  --surface: #143533;
+  --slate: #b6c7b4;
+  --line: #3f6358;
+  --accent: #f2b83a;
+  --green: #b9c94f;
+  --green-soft: #2a4a2c;
+  --red: #ff9b86;
+  --red-soft: #4a2620;
+  --amber-soft: #4a3a14;
+  --brand: #0a1f1d;
+  --brand-soft: #1c4642;
+  --on-brand: #f1ebd0;
+  --card-title: #fbf7e8;
+  --card-title-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  --card-meta: #d9d2b0;
 }

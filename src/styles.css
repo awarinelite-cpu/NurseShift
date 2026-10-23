@@ -7,8 +7,8 @@
 }
 
 .topbar {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--brand);
+  color: var(--on-brand);
   padding: 14px 20px;
   display: flex;
   align-items: center;
@@ -42,7 +42,7 @@
 
 .topbar nav a {
   text-decoration: none;
-  color: var(--paper);
+  color: var(--on-brand);
   opacity: 0.72;
   font-size: 13px;
   font-weight: 600;
@@ -121,8 +121,8 @@
 }
 
 .filter-chip.active {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--brand);
+  color: var(--on-brand);
   border-color: var(--ink);
 }
 
@@ -311,8 +311,8 @@
   padding: 14px;
   border-radius: 999px;
   border: none;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--brand);
+  color: var(--on-brand);
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 15px;
@@ -320,7 +320,7 @@
   transition: background 0.15s ease;
 }
 
-.claim-btn:hover { background: var(--ink-soft); }
+.claim-btn:hover { background: var(--brand-soft); }
 .claim-btn:disabled { background: var(--line); color: var(--slate); cursor: not-allowed; }
 
 .back-link {
@@ -363,7 +363,7 @@
   white-space: nowrap;
 }
 
-.clock-btn.active { background: var(--ink); color: var(--paper); }
+.clock-btn.active { background: var(--brand); color: var(--on-brand); }
 
 .empty-state {
   text-align: center;
@@ -671,7 +671,7 @@
 .map-action-btn span { display: none; }
 
 .map-action-btn.primary {
-  background: var(--ink);
+  background: var(--brand);
   color: var(--surface);
 }
 
@@ -689,7 +689,7 @@
   bottom: max(28px, env(safe-area-inset-bottom));
   transform: translateX(-50%);
   z-index: 3;
-  background: var(--ink);
+  background: var(--brand);
   color: var(--surface);
   font-size: 13px;
   font-weight: 600;
@@ -767,8 +767,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--brand);
+  color: var(--on-brand);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -896,8 +896,8 @@
 
 .chat-bubble.mine {
   align-self: flex-end;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--brand);
+  color: var(--on-brand);
   border-color: var(--ink);
   border-radius: 12px 12px 4px 12px;
 }
@@ -937,8 +937,8 @@
   padding: 10px 18px;
   border-radius: 20px;
   border: none;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--brand);
+  color: var(--on-brand);
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 13px;
@@ -967,7 +967,7 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  color: var(--paper);
+  color: var(--on-brand);
   text-align: center;
 }
 
@@ -1002,8 +1002,8 @@
   cursor: pointer;
 }
 
-.call-btn.accept { background: var(--green); color: var(--paper); }
-.call-btn.decline { background: var(--red); color: var(--paper); }
+.call-btn.accept { background: var(--green); color: var(--on-brand); }
+.call-btn.decline { background: var(--red); color: var(--on-brand); }
 
 .call-controls {
   display: flex;
@@ -1016,7 +1016,7 @@
   border-radius: 22px;
   border: 1px solid rgba(238, 241, 244, 0.4);
   background: transparent;
-  color: var(--paper);
+  color: var(--on-brand);
   font-family: var(--font-mono);
   font-size: 12.5px;
   font-weight: 600;
@@ -1186,8 +1186,8 @@
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.15));
 }
 .claim-card > *, .admin-stat-card > * { position: relative; z-index: 1; }
-.claim-card .facility { font-weight: 800; color: #0f172a; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9); overflow-wrap: anywhere; }
-.claim-card .meta { color: #334155; font-weight: 600; overflow-wrap: anywhere; }
+.claim-card .facility { font-weight: 800; color: var(--card-title); text-shadow: var(--card-title-shadow); overflow-wrap: anywhere; }
+.claim-card .meta { color: var(--card-meta); font-weight: 600; overflow-wrap: anywhere; }
 .claim-card > div { min-width: 0; }
 @media (hover: hover) {
   .claim-card, .admin-stat-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
@@ -1205,3 +1205,139 @@
   box-shadow: 0 2px 0 rgba(15, 23, 42, 0.12), 0 10px 14px -8px rgba(15, 23, 42, 0.4);
 }
 .duty-board { overflow: hidden; }
+
+
+/* ======================================================================
+   Dark + Forest & Gold overrides for the 3D buttons and cards
+   ====================================================================== */
+
+/* ---------- dark ---------- */
+html.dark .clock-btn:not(.active),
+html.dark .filter-chip:not(.active) {
+  color: #e2e8f0;
+  border-color: #475569;
+  border-bottom-color: #020617;
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 4px 8px -1px rgba(0, 0, 0, 0.5);
+}
+html.dark .clock-btn:not(.active):hover,
+html.dark .filter-chip:not(.active):hover { background: linear-gradient(180deg, #3b4a60 0%, #243247 100%); }
+html.dark .claim-btn:disabled {
+  border-color: var(--line);
+  border-bottom-color: #020617;
+  background: linear-gradient(180deg, #24403a 0%, #182b27 100%);
+  color: var(--slate);
+}
+html.dark .claim-card,
+html.dark .admin-stat-card {
+  border-color: #475569;
+  background: linear-gradient(to bottom, #475569 0%, #334155 30%, #1e293b 65%, #0f172a 100%);
+  box-shadow:
+    inset 0 3px 3px rgba(255, 255, 255, 0.28),
+    inset 0 -12px 16px rgba(0, 0, 0, 0.45),
+    inset 14px 0 18px -10px rgba(0, 0, 0, 0.4),
+    inset -14px 0 18px -10px rgba(0, 0, 0, 0.4),
+    0 14px 16px -9px rgba(0, 0, 0, 0.75);
+}
+html.dark .claim-card::before,
+html.dark .admin-stat-card::before { background: linear-gradient(to bottom, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.03)); }
+html.dark .detail-card,
+html.dark .profile-card,
+html.dark .duty-board {
+  border-color: #475569;
+  border-bottom-color: #020617;
+  background: #12302B;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), 0 10px 14px -8px rgba(0, 0, 0, 0.7);
+}
+
+/* ---------- forest & gold ---------- */
+html.dark.forest .claim-btn,
+html.dark.forest .filter-chip.active,
+html.dark.forest .clock-btn.active {
+  color: #12292a;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+  border-color: #b5851a;
+  border-bottom-color: #6b4a08;
+  background: linear-gradient(180deg, #f7c852 0%, #dfa01c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 8px -1px rgba(0, 0, 0, 0.6);
+}
+html.dark.forest .claim-btn:hover:not(:disabled),
+html.dark.forest .filter-chip.active:hover,
+html.dark.forest .clock-btn.active:hover { background: linear-gradient(180deg, #fbd36d 0%, #e5a921 100%); }
+html.dark.forest .claim-btn:disabled {
+  color: #8fa89a;
+  border-color: #3f6358;
+  border-bottom-color: #0a1f1d;
+  background: linear-gradient(180deg, #1d4240 0%, #143230 100%);
+}
+html.dark.forest .clock-btn:not(.active),
+html.dark.forest .filter-chip:not(.active) {
+  color: #17382f;
+  text-shadow: none;
+  border-color: #d4bf78;
+  border-bottom-color: #9c8f55;
+  background: linear-gradient(180deg, #f6edcf 0%, #dccf9f 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 4px 8px -1px rgba(0, 0, 0, 0.55);
+}
+html.dark.forest .clock-btn:not(.active):hover,
+html.dark.forest .filter-chip:not(.active):hover { background: linear-gradient(180deg, #faf2d8 0%, #e4d7a8 100%); }
+html.dark.forest .claim-card,
+html.dark.forest .admin-stat-card {
+  border-color: #d4bf78;
+  background: linear-gradient(to bottom, #2a5a57 0%, #1f4846 35%, #143230 100%);
+  box-shadow:
+    inset 0 3px 3px rgba(247, 236, 192, 0.35),
+    inset 0 -12px 16px rgba(0, 0, 0, 0.4),
+    0 14px 16px -9px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(242, 184, 58, 0.35);
+}
+html.dark.forest .detail-card,
+html.dark.forest .profile-card,
+html.dark.forest .duty-board {
+  background: #143533;
+  border-color: #8d8a52;
+  border-bottom-color: #5c5a2a;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), 0 10px 14px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(242, 184, 58, 0.25);
+}
+html.dark.forest .form-row input,
+html.dark.forest .form-row select,
+html.dark.forest .form-row textarea { background: #0f2d2b; color: #f1ebd0; border-color: #8d8a52; }
+html.dark.forest .form-row input:focus,
+html.dark.forest .form-row select:focus,
+html.dark.forest .form-row textarea:focus { border-color: #f2b83a; outline-color: #f2b83a; }
+html.dark.forest :focus-visible { outline-color: #f2b83a; }
+html.dark.forest .topbar { border-bottom: 1px solid rgba(242, 184, 58, 0.45); }
+html.dark.forest .brand .dot { color: #f2b83a; }
+html.dark .form-row input::placeholder,
+html.dark .form-row textarea::placeholder { color: var(--slate); }
+
+/* ---------- theme switch button ---------- */
+.theme-toggle {
+  position: fixed;
+  left: 14px;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  z-index: 900;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  border-bottom-width: 3px;
+  border-bottom-color: #94a3b8;
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+  box-shadow: 0 4px 10px -2px rgba(15, 23, 42, 0.35);
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+}
+.theme-toggle:active { transform: translateY(2px); border-bottom-width: 1px; }
+html.dark .theme-toggle {
+  border-color: #475569; border-bottom-color: #020617;
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+}
+html.dark.forest .theme-toggle {
+  border-color: #d4bf78; border-bottom-color: #9c8f55;
+  background: linear-gradient(180deg, #f6edcf 0%, #dccf9f 100%);
+}
+@media print { .theme-toggle { display: none; } }

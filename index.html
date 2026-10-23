@@ -4,6 +4,18 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%230E4B40%22/><text x=%2216%22 y=%2222%22 font-family=%22sans-serif%22 font-weight=%22800%22 font-size=%2216%22 fill=%22%238FE6CC%22 text-anchor=%22middle%22>N</text></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0E4B40" />
+    <script>
+      try {
+        var t = localStorage.getItem('nurseshift_theme');
+        var c = document.documentElement.classList;
+        if (t ? t === 'dark' || t === 'forest' : matchMedia('(prefers-color-scheme: dark)').matches) c.add('dark');
+        if (t === 'forest') {
+          c.add('forest');
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0a1f1d');
+        }
+      } catch (e) {}
+    </script>
     <title>NurseShift — Duty Board for Nigerian Nurses</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
