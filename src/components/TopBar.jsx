@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from './ThemeToggle';
 
 export default function TopBar() {
   const { isDemo, nurse, signOut } = useAuth();
@@ -47,6 +48,7 @@ export default function TopBar() {
             </>
           )}
         </nav>
+        <ThemeToggle inline />
       </header>
       {isDemo && (
         <div className="demo-banner">

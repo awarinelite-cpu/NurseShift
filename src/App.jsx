@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
 import CallModal from './components/CallModal';
-import ThemeToggle from './components/ThemeToggle';
+import AdminLayout from './components/AdminLayout';
 import InstallPrompt from './components/InstallPrompt';
 import { AuthProvider } from './context/AuthContext';
 import { AdminProvider } from './context/AdminContext';
@@ -43,23 +43,26 @@ export default function App() {
           <CallProvider>
             <BrowserRouter>
               <CallModal />
-              <ThemeToggle />
               <InstallPrompt />
               <Routes>
                 {/* Admin surface — separate login, not linked from nurse nav */}
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin" element={<ErrorBoundary><RequireAdmin><AdminDashboard /></RequireAdmin></ErrorBoundary>} />
-                <Route path="/admin/nurses" element={<ErrorBoundary><RequireAdmin><AdminNurses /></RequireAdmin></ErrorBoundary>} />
-                <Route path="/admin/shifts" element={<ErrorBoundary><RequireAdmin><AdminShifts /></RequireAdmin></ErrorBoundary>} />
-                <Route path="/admin/review" element={<ErrorBoundary><RequireAdmin><AdminReview /></RequireAdmin></ErrorBoundary>} />
-                <Route path="/admin/disputes" element={<ErrorBoundary><RequireAdmin><AdminDisputes /></RequireAdmin></ErrorBoundary>} />
-                <Route path="/admin/facilities" element={<ErrorBoundary><RequireAdmin><AdminFacilities /></RequireAdmin></ErrorBoundary>} />
-                <Route path="/admin/facilities/import" element={<ErrorBoundary><RequireAdmin><AdminFacilityImport /></RequireAdmin></ErrorBoundary>} />
-                <Route path="/admin/facilities/:facilityId" element={<ErrorBoundary><RequireAdmin><AdminFacilityDetail /></RequireAdmin></ErrorBoundary>} />
+                <Route element={<AdminLayout />}>
+                  <Route path="/admin/login" element={<AdminLogin />} />
+                  <Route path="/admin" element={<ErrorBoundary><RequireAdmin><AdminDashboard /></RequireAdmin></ErrorBoundary>} />
+                  <Route path="/admin/nurses" element={<ErrorBoundary><RequireAdmin><AdminNurses /></RequireAdmin></ErrorBoundary>} />
+                  <Route path="/admin/shifts" element={<ErrorBoundary><RequireAdmin><AdminShifts /></RequireAdmin></ErrorBoundary>} />
+                  <Route path="/admin/review" element={<ErrorBoundary><RequireAdmin><AdminReview /></RequireAdmin></ErrorBoundary>} />
+                  <Route path="/admin/disputes" element={<ErrorBoundary><RequireAdmin><AdminDisputes /></RequireAdmin></ErrorBoundary>} />
+                  <Route path="/admin/facilities" element={<ErrorBoundary><RequireAdmin><AdminFacilities /></RequireAdmin></ErrorBoundary>} />
+                  <Route path="/admin/facilities/import" element={<ErrorBoundary><RequireAdmin><AdminFacilityImport /></RequireAdmin></ErrorBoundary>} />
+                  <Route path="/admin/facilities/:facilityId" element={<ErrorBoundary><RequireAdmin><AdminFacilityDetail /></RequireAdmin></ErrorBoundary>} />
+                </Route>
 
                 {/* Facility surface — own layout, own auth */}
-                <Route path="/facility/login" element={<FacilityLogin />} />
-                <Route path="/facility/signup" element={<FacilitySignUp />} />
+                <Route element={<AdminLayout label="for facilities" />}>
+                  <Route path="/facility/login" element={<FacilityLogin />} />
+                  <Route path="/facility/signup" element={<FacilitySignUp />} />
+                </Route>
                 <Route element={<FacilityLayout />}>
                   <Route path="/facility" element={<RequireFacility><FacilityDashboard /></RequireFacility>} />
                   <Route path="/facility/post" element={<RequireFacility><PostShift /></RequireFacility>} />

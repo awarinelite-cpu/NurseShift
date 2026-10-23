@@ -1355,3 +1355,21 @@ html.dark.forest .theme-toggle {
 @media (display-mode: standalone) {
   .topbar { padding-top: calc(14px + env(safe-area-inset-top, 0px)); }
 }
+
+/* ---------- theme toggle in the top bar ---------- */
+.theme-toggle.inline {
+  position: static;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  font-size: 18px;
+  border: 1px solid rgba(238, 241, 244, 0.4);
+  border-bottom-width: 1px;
+  background: rgba(238, 241, 244, 0.12);
+  box-shadow: none;
+}
+.theme-toggle.inline:active { transform: scale(0.94); }
+html.dark .theme-toggle.inline,
+html.dark.forest .theme-toggle.inline { border: 1px solid rgba(238, 241, 244, 0.4); background: rgba(238, 241, 244, 0.12); }
+html.dark.forest .theme-toggle.inline { border-color: rgba(242, 184, 58, 0.7); }
+.install-pill { left: 14px; }

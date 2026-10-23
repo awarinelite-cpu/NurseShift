@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useFacility } from '../context/FacilityContext';
 import ErrorBoundary from './ErrorBoundary';
+import ThemeToggle from './ThemeToggle';
 
 export default function FacilityLayout() {
   const { facility, isDemo, signOut } = useFacility();
@@ -31,6 +32,7 @@ export default function FacilityLayout() {
             <a onClick={handleSignOut} role="button">Sign out</a>
           </nav>
         )}
+        <ThemeToggle inline />
       </header>
       {isDemo && (
         <div className="demo-banner">

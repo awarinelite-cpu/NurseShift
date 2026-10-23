@@ -12,7 +12,7 @@ const current = () => {
   return c.contains('forest') ? 'forest' : c.contains('dark') ? 'dark' : 'light';
 };
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ inline = false }) {
   const [mode, setMode] = useState(current);
 
   function toggle() {
@@ -32,7 +32,7 @@ export default function ThemeToggle() {
   return (
     <button
       type="button"
-      className="theme-toggle"
+      className={`theme-toggle${inline ? ' inline' : ''}`}
       aria-label={`Switch to ${NAME[NEXT[mode]].toLowerCase()}`}
       title={NAME[NEXT[mode]]}
       onClick={toggle}
