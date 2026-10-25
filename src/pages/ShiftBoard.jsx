@@ -129,7 +129,7 @@ export default function ShiftBoard() {
             return (
               <li key={s.id}>
                 <Link to={`/shifts/${s.id}`} className={`ns-card ns-shift${open ? '' : ' muted'}`}>
-                  <FacilityThumb seed={s.facilityId ?? s.facility} />
+                  <FacilityThumb seed={s.facilityId ?? s.facility} facilityId={s.facilityId} />
                   <div className="ns-shift-main">
                     <h3>{titleFor(s)}</h3>
                     <p><Icon name="building" size={13} /> {s.facility}</p>

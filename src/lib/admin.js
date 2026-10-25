@@ -1,4 +1,5 @@
-import { DEMO_MODE, auth, db } from './firebase';
+import { DEMO_MODE, auth, db, storage } from './firebase';
+import { compressImage } from './image';
 import {
   demoListNurses,
   demoSetVerification,
@@ -8,6 +9,7 @@ import {
   demoListShifts,
   demoGetFacility,
   demoUpdateFacilityLocation,
+  demoUpdateFacilityPhotos,
   demoListShiftsByFacility,
   demoSetShiftLocation,
   demoListPresence,
@@ -551,4 +553,73 @@ export async function removeAdmin(adminId) {
   }
   const { doc, deleteDoc } = await import('firebase/firestore');
   await deleteDoc(doc(db, 'admins', adminId));
+}
+
+// ---------- Facility photos ----------
+// A facility's photos live in Storage under facility-photos/{facilityId}/ and
+// are listed on the facility doc as photos: [{ url, path }]. The first photo is
+// the cover: it becomes the hero on the shift page and the thumbnail in lists.
+export const MAX_FACILITY_PHOTOS = 8;
+
+async function saveFacilityPhotos(facilityId, photos) {
+  if (DEMO_MODE) {
+    demoUpdateFacilityPhotos(facilityId, photos);
+    return photos;
+  }
+  const { doc, updateDoc } = await import('firebase/firestore');
+  await updateDoc(doc(db, 'facilities', facilityId), { photos, photoUrl: photos[0]?.url ?? null });
+  return photos;
+}
+
+export async function addFacilityPhotos(facilityId, files) {
+  const facility = await getFacilityById(facilityId);
+  if (!facility) throw new Error('Facility not found.');
+  const existing = facility.photos ?? [];
+  if (existing.length + files.length > MAX_FACILITY_PHOTOS) {
+    throw new Error(`A facility can have up to ${MAX_FACILITY_PHOTOS} photos. Remove one first.`);
+  }
+
+  // Process everything first so one bad file fails before anything uploads.
+  const blobs = [];
+  for (const file of files) blobs.push(await compressImage(file));
+
+  const added = [];
+  if (DEMO_MODE) {
+    for (const blob of blobs) added.push({ url: URL.createObjectURL(blob), path: null });
+  } else {
+    const { ref, uploadBytes, getDownloadURL } = await import('firebase/storage');
+    const stamp = Date.now();
+    for (let i = 0; i < blobs.length; i++) {
+      const path = `facility-photos/${facilityId}/${stamp}-${i}.jpg`;
+      const fileRef = ref(storage, path);
+      await uploadBytes(fileRef, blobs[i], { contentType: 'image/jpeg' });
+      added.push({ url: await getDownloadURL(fileRef), path });
+    }
+  }
+  return saveFacilityPhotos(facilityId, [...existing, ...added]);
+}
+
+export async function removeFacilityPhoto(facilityId, url) {
+  const facility = await getFacilityById(facilityId);
+  const existing = facility?.photos ?? [];
+  const target = existing.find((p) => p.url === url);
+  if (!target) return existing;
+  const photos = await saveFacilityPhotos(facilityId, existing.filter((p) => p.url !== url));
+  if (!DEMO_MODE && target.path) {
+    try {
+      const { ref, deleteObject } = await import('firebase/storage');
+      await deleteObject(ref(storage, target.path));
+    } catch {
+      // The listing is already updated; a leftover file in Storage is harmless.
+    }
+  }
+  return photos;
+}
+
+export async function setFacilityCoverPhoto(facilityId, url) {
+  const facility = await getFacilityById(facilityId);
+  const existing = facility?.photos ?? [];
+  const target = existing.find((p) => p.url === url);
+  if (!target) return existing;
+  return saveFacilityPhotos(facilityId, [target, ...existing.filter((p) => p.url !== url)]);
 }

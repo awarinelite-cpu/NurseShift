@@ -1470,3 +1470,14 @@ html.dark.forest .profile-card {
 /* call buttons */
 .call-btn.accept { background: linear-gradient(180deg, #34d27b 0%, #16803f 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 4px 8px -1px rgba(0, 0, 0, 0.5); }
 .call-btn.decline { background: linear-gradient(180deg, #ee6a5f 0%, #b02f26 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 4px 8px -1px rgba(0, 0, 0, 0.5); }
+
+/* ---------- Admin: facility photos ---------- */
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 12px; }
+.photo-tile { position: relative; aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; background: var(--line); }
+.photo-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-tile .photo-badge { position: absolute; left: 8px; top: 8px; font-size: 0.6875rem; font-weight: 800; padding: 3px 9px; border-radius: 99px; background: rgba(255, 255, 255, 0.92); color: #0e4b40; }
+.photo-tile .photo-actions { position: absolute; left: 6px; right: 6px; bottom: 6px; display: flex; gap: 6px; }
+.photo-tile .photo-actions button { flex: 1; font-size: 0.6875rem; font-weight: 700; padding: 6px 4px; border: 0; border-radius: 99px; cursor: pointer; background: rgba(255, 255, 255, 0.92); color: #0f172a; }
+.photo-tile .photo-actions button.danger { color: #c1443a; }
+.photo-tile .photo-actions button:disabled { opacity: 0.5; cursor: not-allowed; }
+.photo-empty { margin-top: 12px; padding: 22px 12px; text-align: center; border: 2px dashed var(--line); border-radius: 16px; color: var(--slate); font-size: 0.875rem; }

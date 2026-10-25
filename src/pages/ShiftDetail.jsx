@@ -21,6 +21,7 @@ export default function ShiftDetail() {
   const [saved, setSaved] = useState(false);
   const [messaging, setMessaging] = useState(false);
   const [error, setError] = useState(null);
+  const [coverFailed, setCoverFailed] = useState(false);
 
   useEffect(() => {
     getShift(shiftId).then((data) => {
@@ -73,6 +74,7 @@ export default function ShiftDetail() {
   const isVerified = nurse?.verification === 'verified';
   const isOpen = shift.status === 'open' && !claimed && isVerified;
   const hr = perHour(shift.rate, shift.hours);
+  const cover = coverFailed ? null : facility?.photos?.[0]?.url ?? facility?.photoUrl ?? null;
   const facilityVerified = facility?.verification === 'verified' || facility?.status === 'verified';
   const rating =
     facility?.rating != null
@@ -92,7 +94,8 @@ export default function ShiftDetail() {
 
   return (
     <div className="ns-detail">
-      <div className="ns-detail-hero">
+      <div className={`ns-detail-hero${cover ? ' has-photo' : ''}`}>
+        {cover && <img className="ns-detail-photo" src={cover} alt={`${shift.facility}`} onError={() => setCoverFailed(true)} />}
         <div className="ns-detail-bar">
           <button type="button" className="ns-icon-btn glass" onClick={() => navigate(-1)} aria-label="Back">
             <Icon name="back" size={22} />
@@ -107,7 +110,7 @@ export default function ShiftDetail() {
             <Icon name="heart" size={20} fill={saved ? 'currentColor' : 'none'} />
           </button>
         </div>
-        <Icon name="building" size={120} strokeWidth={1} className="ns-detail-art" />
+        {!cover && <Icon name="building" size={120} strokeWidth={1} className="ns-detail-art" />}
         {facilityVerified && (
           <span className="ns-verified-chip"><Icon name="shieldCheck" size={14} /> Verified Facility</span>
         )}
@@ -115,7 +118,7 @@ export default function ShiftDetail() {
 
       <div className="ns-detail-sheet">
         <div className="ns-detail-title">
-          <FacilityThumb seed={shift.facilityId ?? shift.facility} size={44} radius={10} />
+          <FacilityThumb seed={shift.facilityId ?? shift.facility} photo={cover} size={44} radius={10} />
           <div>
             <h1>{titleFor(shift)}</h1>
             <p><Icon name="building" size={13} /> {shift.facility}</p>
@@ -184,7 +187,7 @@ export default function ShiftDetail() {
           <h1 id="claimed-title">Shift Claimed!</h1>
           <p>Your shift has been successfully claimed. You'll receive updates from the facility soon.</p>
           <div className="ns-card ns-success-card">
-            <FacilityThumb seed={shift.facilityId ?? shift.facility} size={60} radius={10} />
+            <FacilityThumb seed={shift.facilityId ?? shift.facility} photo={cover} size={60} radius={10} />
             <div>
               <strong>{titleFor(shift)}</strong>
               <p><Icon name="pin" size={13} /> {shift.facility}</p>

@@ -67,7 +67,7 @@ export default function Earnings() {
         <ul className="ns-tx">
           {rows.map((c) => (
             <li key={c.id}>
-              <FacilityThumb seed={c.shift.facilityId ?? c.shift.facility} size={44} radius={10} />
+              <FacilityThumb seed={c.shift.facilityId ?? c.shift.facility} facilityId={c.shift.facilityId} size={44} radius={10} />
               <span>
                 <strong>{titleFor(c.shift)}</strong>
                 <small>{fmtDay(c.shift.date, { day: 'numeric', month: 'short', year: 'numeric' })}</small>

@@ -72,6 +72,11 @@ export function demoUpdateFacilityLocation(id, lat, lng) {
   return demoGetFacility(id);
 }
 
+export function demoUpdateFacilityPhotos(id, photos) {
+  _facilities = _facilities.map((f) => (f.id === id ? { ...f, photos, photoUrl: photos[0]?.url ?? null } : f));
+  return demoGetFacility(id);
+}
+
 export function demoUpdateFacilityPhone(id, phone) {
   _facilities = _facilities.map((f) => (f.id === id ? { ...f, phone } : f));
   return demoGetFacility(id);

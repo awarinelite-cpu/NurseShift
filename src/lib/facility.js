@@ -129,3 +129,16 @@ export async function rateNurseForClaim(claimId, nurseId, rating, comment = '') 
   });
   return true;
 }
+
+// Cover photo lookup for list rows. One read per facility, shared across rows.
+const coverCache = new Map();
+export function getFacilityCover(facilityId) {
+  if (!facilityId) return Promise.resolve(null);
+  if (!coverCache.has(facilityId)) {
+    coverCache.set(
+      facilityId,
+      getFacility(facilityId).then((f) => f?.photos?.[0]?.url ?? f?.photoUrl ?? null).catch(() => null)
+    );
+  }
+  return coverCache.get(facilityId);
+}
