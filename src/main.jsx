@@ -4,6 +4,7 @@ import App from './App.jsx';
 import './index.css';
 import './styles.css';
 import './styles/nurse-ui.css';
+import './styles/glass.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
