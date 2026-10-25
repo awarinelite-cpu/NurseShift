@@ -41,7 +41,10 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
-    const unsub = subscribeAdminStats(setStats);
+    // The stream re-emits every couple of seconds; only re-render when a number changed.
+    const unsub = subscribeAdminStats((next) =>
+      setStats((prev) => (prev && Object.keys(next).every((k) => prev[k] === next[k]) ? prev : next))
+    );
     return () => unsub();
   }, []);
 

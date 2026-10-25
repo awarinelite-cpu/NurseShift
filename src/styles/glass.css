@@ -41,8 +41,6 @@
 .ns-mini,
 .ns-stat {
   position: relative;
-  -webkit-backdrop-filter: blur(14px) saturate(150%);
-  backdrop-filter: blur(14px) saturate(150%);
 }
 .detail-card,
 .profile-card,
@@ -129,8 +127,6 @@ html.dark .duty-board::before {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  -webkit-backdrop-filter: blur(10px) saturate(160%);
-  backdrop-filter: blur(10px) saturate(160%);
 }
 
 /* soft see-through gloss on the top half */
@@ -296,12 +292,3 @@ html.dark.forest .filter-chip:not(.active) {
   transform: scale(0.97);
 }
 
-@media (prefers-reduced-transparency: reduce) {
-  .claim-card, .admin-stat-card, .detail-card, .profile-card, .duty-board,
-  .ns-card, .ns-menu, .ns-action, .ns-mini, .ns-stat,
-  .claim-btn, .clock-btn, .filter-chip, .ns-btn, .ns-claim-actions button,
-  .ns-pill-select, .ns-icon-btn.outlined {
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
-}
