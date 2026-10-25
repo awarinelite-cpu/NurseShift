@@ -107,7 +107,7 @@
 .ns-thumb { display: inline-flex; align-items: center; justify-content: center; color: rgba(255, 255, 255, 0.92); flex: none; }
 
 /* ---------- Landing ---------- */
-.ns-landing { flex: 1; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; color: #fff; text-align: center; padding: calc(36px + env(safe-area-inset-top)) 26px calc(26px + env(safe-area-inset-bottom)); background: radial-gradient(120% 70% at 50% 38%, #12665c 0%, #0b3f3a 55%, #072b28 100%); }
+.ns-landing { flex: 1; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; color: #fff; text-align: center; padding: calc(36px + env(safe-area-inset-top)) 26px calc(26px + env(safe-area-inset-bottom)); background: radial-gradient(120% 75% at 50% 30%, #0a4156 0%, #083749 45%, #052232 100%); }
 .ns-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 2.125rem; font-weight: 800; letter-spacing: -0.02em; }
 .ns-logo b { color: var(--green); font-weight: 800; }
 .ns-logo-mark { color: var(--green); }
@@ -337,7 +337,7 @@
 .ns-hero-photo.short { flex: none; height: 250px; margin-top: 10px; }
 
 /* ---------- Dark login ---------- */
-.ns-auth.ns-auth-dark { min-height: 100dvh; padding: calc(30px + env(safe-area-inset-top)) 24px calc(30px + env(safe-area-inset-bottom)); align-items: stretch; color: #fff; background: radial-gradient(120% 60% at 50% 30%, #12665c 0%, #0b3f3a 55%, #072b28 100%); }
+.ns-auth.ns-auth-dark { min-height: 100dvh; padding: calc(30px + env(safe-area-inset-top)) 24px calc(30px + env(safe-area-inset-bottom)); align-items: stretch; color: #fff; background: radial-gradient(120% 70% at 50% 30%, #0a4156 0%, #083749 45%, #052232 100%); }
 .ns-auth-top { text-align: center; }
 .ns-auth-form { margin-top: -34px; position: relative; }
 .ns-auth-form h1 { font-size: 1.625rem; font-weight: 800; }
@@ -346,7 +346,7 @@
 .ns-stage .ns-auth-dark .form-row label { color: #fff; }
 .ns-stage .ns-auth-dark .form-row input { background: rgba(255, 255, 255, 0.09); border: 1.5px solid rgba(255, 255, 255, 0.22); color: #fff; }
 .ns-stage .ns-auth-dark .form-row input:focus { background: rgba(255, 255, 255, 0.14); border-color: var(--green); }
-.ns-stage .ns-auth-dark .form-row input:-webkit-autofill { -webkit-text-fill-color: #fff; box-shadow: 0 0 0 40px #0f4a43 inset; }
+.ns-stage .ns-auth-dark .form-row input:-webkit-autofill { -webkit-text-fill-color: #fff; box-shadow: 0 0 0 40px #0a4156 inset; }
 .ns-stage .ns-auth-dark .claim-btn { margin-top: 8px; }
 .ns-stage .ns-auth-dark .form-footer { margin-top: 18px; color: rgba(255, 255, 255, 0.85); font-size: 0.875rem; }
 .ns-stage .ns-auth-dark .form-footer a { color: var(--green); font-weight: 800; margin-left: 4px; }
