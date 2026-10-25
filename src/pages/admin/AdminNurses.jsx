@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { listAllNursesForAdmin } from '../../lib/admin';
-import { useAdmin } from '../../context/AdminContext';
 import Badge from '../../components/Badge';
 
 const FILTERS = [
@@ -11,8 +10,6 @@ const FILTERS = [
 ];
 
 export default function AdminNurses() {
-  const { signOut } = useAdmin();
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const filter = FILTERS.some((f) => f.key === searchParams.get('filter')) ? searchParams.get('filter') : 'all';
   const [nurses, setNurses] = useState([]);
@@ -43,10 +40,6 @@ export default function AdminNurses() {
     return nurses;
   }, [nurses, filter]);
 
-  async function handleSignOut() {
-    await signOut();
-    navigate('/login');
-  }
 
   return (
     <div className="page">
@@ -56,19 +49,13 @@ export default function AdminNurses() {
           <h1 className="page-title">Nurses</h1>
           <p className="page-sub">Every nurse account on the platform.</p>
         </div>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-          <Link to="/admin" className="clock-btn" style={{ textDecoration: 'none' }}>Dashboard</Link>
-          <Link to="/admin/disputes" className="clock-btn" style={{ textDecoration: 'none' }}>Disputes</Link>
-          <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
-        </div>
       </div>
 
       <div style={{ display: 'flex', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
         {FILTERS.map((f) => (
           <button
             key={f.key}
-            className="clock-btn"
-            style={f.key === filter ? { background: 'var(--ink-soft)', color: '#fff' } : undefined}
+            className={`clock-btn${f.key === filter ? ' active' : ''}`}
             onClick={() => setSearchParams(f.key === 'all' ? {} : { filter: f.key })}
           >
             {f.label}

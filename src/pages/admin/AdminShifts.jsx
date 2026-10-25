@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { listAllShiftsForAdmin } from '../../lib/admin';
-import { useAdmin } from '../../context/AdminContext';
 import Badge from '../../components/Badge';
 
 const FILTERS = [
@@ -19,8 +18,6 @@ function formatNaira(amount) {
 }
 
 export default function AdminShifts() {
-  const { signOut } = useAdmin();
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const filter = FILTERS.some((f) => f.key === searchParams.get('filter')) ? searchParams.get('filter') : 'all';
   const [shifts, setShifts] = useState([]);
@@ -51,10 +48,6 @@ export default function AdminShifts() {
     return shifts;
   }, [shifts, filter]);
 
-  async function handleSignOut() {
-    await signOut();
-    navigate('/login');
-  }
 
   return (
     <div className="page">
@@ -64,19 +57,13 @@ export default function AdminShifts() {
           <h1 className="page-title">Shifts</h1>
           <p className="page-sub">Every shift posted across all facilities.</p>
         </div>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-          <Link to="/admin" className="clock-btn" style={{ textDecoration: 'none' }}>Dashboard</Link>
-          <Link to="/admin/disputes" className="clock-btn" style={{ textDecoration: 'none' }}>Disputes</Link>
-          <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
-        </div>
       </div>
 
       <div style={{ display: 'flex', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
         {FILTERS.map((f) => (
           <button
             key={f.key}
-            className="clock-btn"
-            style={f.key === filter ? { background: 'var(--ink-soft)', color: '#fff' } : undefined}
+            className={`clock-btn${f.key === filter ? ' active' : ''}`}
             onClick={() => setSearchParams(f.key === 'all' ? {} : { filter: f.key })}
           >
             {f.label}

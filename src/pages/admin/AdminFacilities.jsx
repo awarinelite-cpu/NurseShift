@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   listFacilitiesForAdmin,
   createFacility,
@@ -8,7 +8,6 @@ import {
   MAX_FACILITY_PHOTOS,
 } from '../../lib/admin';
 import FacilityThumb from '../../components/ns/FacilityThumb';
-import { useAdmin } from '../../context/AdminContext';
 
 const EMPTY_FORM = {
   name: '',
@@ -26,8 +25,6 @@ const EMPTY_FORM = {
 };
 
 export default function AdminFacilities() {
-  const { signOut } = useAdmin();
-  const navigate = useNavigate();
   const [facilities, setFacilities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -94,10 +91,6 @@ export default function AdminFacilities() {
     }
   }
 
-  async function handleSignOut() {
-    await signOut();
-    navigate('/login');
-  }
 
   async function handleFixCoordinates() {
     setFixingCoords(true);
@@ -122,16 +115,7 @@ export default function AdminFacilities() {
           <h1 className="page-title">Facilities</h1>
           <p className="page-sub">Review registered facilities, add one, or bulk-import a list.</p>
         </div>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-          <Link to="/admin" className="clock-btn" style={{ textDecoration: 'none' }}>Dashboard</Link>
-          <Link to="/admin/disputes" className="clock-btn" style={{ textDecoration: 'none' }}>Disputes</Link>
-          <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
-        </div>
       </div>
-
-      <p style={{ marginBottom: 16 }}>
-        <Link to="/admin/review">← Back to license review</Link>
-      </p>
 
       <div style={{ display: 'flex', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
         <button className="claim-btn" onClick={() => setShowForm((s) => !s)}>

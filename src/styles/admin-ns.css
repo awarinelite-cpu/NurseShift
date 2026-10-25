@@ -1,0 +1,103 @@
+/* ======================================================================
+   Admin screens in the nurse app look.
+   Pages that still use the older class names (page, claim-card, detail-card,
+   clock-btn, claim-btn, form-row ...) are mapped onto the nurse styling
+   inside .ns-admin, so every admin screen matches the nurse screens.
+   ====================================================================== */
+
+.ns-admin .page { max-width: none; width: auto; margin: 0; padding: 0; flex: none; }
+.ns-admin .page-header { margin: 4px 0 16px; display: block; }
+.ns-admin .eyebrow { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--muted); margin: 0 0 2px; }
+.ns-admin .page-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.01em; margin: 0; color: var(--text); }
+.ns-admin .page-sub { font-size: 0.8125rem; color: var(--muted); line-height: 1.45; margin: 4px 0 0; }
+.ns-admin .empty-state { text-align: center; color: var(--muted); font-size: 0.875rem; padding: 36px 12px; }
+.ns-admin .page a:not([class]) { color: var(--green-dk); font-weight: 700; font-size: 0.8125rem; }
+.ns-admin code { font-size: 0.75rem; background: var(--mint); color: var(--deep-2); padding: 1px 5px; border-radius: 6px; }
+
+/* ---------- Cards ---------- */
+.ns-admin .claim-card,
+.ns-admin .detail-card,
+.ns-admin .profile-card,
+.ns-admin .duty-board {
+  display: block;
+  margin: 0 0 12px;
+  padding: 16px 18px;
+  border-radius: 1.5rem;
+  color: var(--text);
+  text-shadow: none;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.82));
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 2px 4px rgba(11, 59, 55, 0.07), 0 12px 26px rgba(11, 59, 55, 0.12);
+  overflow: hidden;
+}
+.ns-admin .claim-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ns-admin .claim-card::before,
+.ns-admin .detail-card::before,
+.ns-admin .profile-card::before { display: none; }
+.ns-admin .claim-card .facility { font-size: 0.9375rem; font-weight: 800; color: var(--text); text-shadow: none; overflow-wrap: anywhere; }
+.ns-admin .claim-card .meta { font-size: 0.75rem; font-weight: 500; color: var(--muted); margin-top: 3px; overflow-wrap: anywhere; }
+.ns-admin .detail-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.ns-admin .detail-facility { font-size: 1.0625rem; font-weight: 800; margin: 0; color: var(--text); overflow-wrap: anywhere; }
+.ns-admin .detail-city { font-size: 0.8125rem; color: var(--muted); margin: 3px 0 0; line-height: 1.45; }
+.ns-admin .detail-grid { display: grid; gap: 12px; padding: 14px 0; margin: 14px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.ns-admin .detail-stat .label,
+.ns-admin .label { font-family: inherit; font-size: 0.75rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--muted); margin: 0 0 3px; }
+.ns-admin .detail-stat .value,
+.ns-admin .value { font-family: inherit; font-size: 0.9375rem; font-weight: 700; color: var(--text); margin: 0; overflow-wrap: anywhere; }
+
+/* ---------- Buttons ---------- */
+.ns-admin .clock-btn,
+.ns-admin .filter-chip {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px; border-radius: 999px;
+  font-size: 0.8125rem; font-weight: 700; text-decoration: none;
+  color: var(--deep); background: #eef5f3; text-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 0 #fff inset, 0 3px 0 #d9e6e2;
+  cursor: pointer;
+}
+.ns-admin .clock-btn.active,
+.ns-admin .filter-chip.active {
+  color: #fff; background: var(--green); text-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 3px 0 var(--green-dk);
+}
+.ns-admin .claim-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 20px; border-radius: 999px;
+  font-size: 0.9375rem; font-weight: 700; color: #fff; text-shadow: none;
+  background: var(--green);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 4px 0 var(--green-dk), 0 12px 20px rgba(20, 184, 140, 0.32);
+  cursor: pointer;
+}
+.ns-admin .claim-btn:hover:not(:disabled),
+.ns-admin .clock-btn.active:hover { background: var(--green); filter: brightness(1.05); }
+.ns-admin .claim-btn:disabled { background: #b8c9c5; color: #fff; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 4px 0 #9fb2ae; filter: none; opacity: 1; }
+.ns-admin .clock-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.ns-admin .claim-btn:active:not(:disabled),
+.ns-admin .clock-btn:active:not(:disabled) { transform: translateY(2px); }
+.ns-admin .claim-btn::after,
+.ns-admin .clock-btn::after { display: none; }
+
+/* ---------- Forms ---------- */
+.ns-admin .form-row { display: flex; flex-direction: column; gap: 6px; margin: 0 0 14px; }
+.ns-admin .form-row label { font-family: inherit; font-size: 0.75rem; font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--muted); }
+.ns-admin .form-row input,
+.ns-admin .form-row select,
+.ns-admin .form-row textarea {
+  padding: 12px 14px; border-radius: 14px; font-size: 0.875rem; font-family: inherit;
+  color: var(--text); background: #eef5f3; border: 1px solid var(--line);
+  box-shadow: inset 0 2px 4px rgba(11, 59, 55, 0.06);
+}
+.ns-admin .form-row input:focus,
+.ns-admin .form-row select:focus,
+.ns-admin .form-row textarea:focus { outline: 2px solid var(--green); outline-offset: 1px; background: #fff; }
+.ns-admin .form-row input[type='file'] { padding: 10px 0; background: none; border: 0; box-shadow: none; font-size: 0.75rem; }
+.ns-admin .form-error { color: var(--red); font-size: 0.8125rem; margin: 0 0 12px; }
+.ns-admin .file-picked { color: var(--green-dk); font-size: 0.75rem; }
+.ns-admin .page > div[style*='flex-wrap'] { gap: 8px !important; }
+
+/* photo tiles inherit the same corners */
+.ns-admin .photo-tile { border-radius: 18px; }
+.ns-admin .photo-empty { border-radius: 18px; border-color: var(--line); color: var(--muted); }

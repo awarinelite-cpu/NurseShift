@@ -1,12 +1,9 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { parseFacilityCsv } from '../../lib/csv';
 import { bulkImportFacilities } from '../../lib/admin';
-import { useAdmin } from '../../context/AdminContext';
 
 export default function AdminFacilityImport() {
-  const { signOut } = useAdmin();
-  const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [fileName, setFileName] = useState('');
   const [parseError, setParseError] = useState('');
@@ -54,10 +51,6 @@ export default function AdminFacilityImport() {
     }
   }
 
-  async function handleSignOut() {
-    await signOut();
-    navigate('/login');
-  }
 
   return (
     <div className="page">
@@ -67,7 +60,6 @@ export default function AdminFacilityImport() {
           <h1 className="page-title">Import Facilities</h1>
           <p className="page-sub">Upload a CSV to bulk-create facilities and their shifts.</p>
         </div>
-        <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
       </div>
 
       <p style={{ marginBottom: 16 }}>

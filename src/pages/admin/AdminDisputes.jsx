@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
 import { listAllDisputes, resolveDispute } from '../../lib/disputes';
-import { useAdmin } from '../../context/AdminContext';
 import Badge from '../../components/Badge';
 
 const TABS = [
@@ -19,8 +17,6 @@ function formatDate(value) {
 }
 
 export default function AdminDisputes() {
-  const { signOut } = useAdmin();
-  const navigate = useNavigate();
   const [disputes, setDisputes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('open');
@@ -38,10 +34,6 @@ export default function AdminDisputes() {
     refresh();
   }, []);
 
-  async function handleSignOut() {
-    await signOut();
-    navigate('/login');
-  }
 
   async function handleResolve(dispute, status) {
     setActingOn(dispute.id);
@@ -62,18 +54,13 @@ export default function AdminDisputes() {
           <h1 className="page-title">Disputes</h1>
           <p className="page-sub">Reports filed by nurses or facilities about a shift claim.</p>
         </div>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-          <Link to="/admin" className="clock-btn" style={{ textDecoration: 'none' }}>Dashboard</Link>
-          <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
-        </div>
       </div>
 
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
         {TABS.map((t) => (
           <button
             key={t.key}
-            className="clock-btn"
-            style={tab === t.key ? { background: 'var(--ink)', color: 'var(--surface)' } : undefined}
+            className={`clock-btn${tab === t.key ? ' active' : ''}`}
             onClick={() => setTab(t.key)}
           >
             {t.label}

@@ -417,3 +417,7 @@
 }
 .ns-detail-hero.has-photo .ns-detail-bar,
 .ns-detail-hero.has-photo .ns-verified-chip { z-index: 2; }
+
+/* ---------- Admin: live dot on the active-now card ---------- */
+.ns-live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 4px; animation: ns-live-pulse 1.8s ease-in-out infinite; }
+@keyframes ns-live-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }

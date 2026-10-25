@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
 import CallModal from './components/CallModal';
 import AdminLayout from './components/AdminLayout';
+import AdminShell from './components/AdminShell';
 import InstallPrompt from './components/InstallPrompt';
 import { AuthProvider } from './context/AuthContext';
 import { AdminProvider } from './context/AdminContext';
@@ -47,7 +48,7 @@ export default function App() {
               <InstallPrompt />
               <Routes>
                 {/* Admin surface — signs in through the shared /login page */}
-                <Route element={<AdminLayout />}>
+                <Route element={<AdminShell />}>
                   <Route path="/admin/login" element={<Navigate to="/login" replace />} />
                   <Route path="/admin/settings" element={<ErrorBoundary><RequireAdmin><RequireOwner><AdminSettings /></RequireOwner></RequireAdmin></ErrorBoundary>} />
                   <Route path="/admin" element={<ErrorBoundary><RequireAdmin><AdminDashboard /></RequireAdmin></ErrorBoundary>} />

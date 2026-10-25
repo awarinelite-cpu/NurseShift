@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
 import { listNursesByStatus, setNurseVerification } from '../../lib/admin';
-import { useAdmin } from '../../context/AdminContext';
 import Badge from '../../components/Badge';
 
 export default function AdminReview() {
-  const { signOut } = useAdmin();
-  const navigate = useNavigate();
   const [pending, setPending] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actingOn, setActingOn] = useState(null);
@@ -30,10 +26,6 @@ export default function AdminReview() {
     setActingOn(null);
   }
 
-  async function handleSignOut() {
-    await signOut();
-    navigate('/login');
-  }
 
   return (
     <div className="page">
@@ -42,12 +34,6 @@ export default function AdminReview() {
           <p className="eyebrow">{pending.length} awaiting review</p>
           <h1 className="page-title">License Review</h1>
           <p className="page-sub">Check the license document against the number and name before approving.</p>
-        </div>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-          <Link to="/admin" className="clock-btn" style={{ textDecoration: 'none' }}>Dashboard</Link>
-          <Link to="/admin/facilities" className="clock-btn" style={{ textDecoration: 'none' }}>Facilities</Link>
-          <Link to="/admin/disputes" className="clock-btn" style={{ textDecoration: 'none' }}>Disputes</Link>
-          <button className="clock-btn" onClick={handleSignOut}>Sign out</button>
         </div>
       </div>
 
