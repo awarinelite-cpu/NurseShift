@@ -1,55 +1,58 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { listMyClaims, clockIn, clockOut } from '../lib/shifts';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { clockIn, clockOut } from '../lib/shifts';
 import { rateFacilityForClaim } from '../lib/ratings';
 import { fileDispute } from '../lib/disputes';
 import { useAuth } from '../context/AuthContext';
+import { useClaims } from '../lib/useClaims';
 import { getOrCreateConversation } from '../lib/chat';
-import Badge from '../components/Badge';
+import { formatNaira, fmtRange, titleFor, toDate } from '../lib/earnings';
 import ReportIssueForm from '../components/ReportIssueForm';
+import Icon from '../components/ns/Icon';
 
-function formatNaira(amount) {
-  return `₦${(amount ?? 0).toLocaleString('en-NG')}`;
+const TABS = [
+  { key: 'upcoming', label: 'Upcoming', match: (c) => c.status === 'pending' || c.status === 'approved' },
+  { key: 'completed', label: 'Completed', match: (c) => c.status === 'completed' },
+  { key: 'cancelled', label: 'Cancelled', match: (c) => c.status === 'rejected' },
+];
+
+function statusPill(c) {
+  if (c.status === 'completed') return { text: 'Completed', tone: 'grey' };
+  if (c.status === 'rejected') return { text: 'Declined', tone: 'red' };
+  if (c.status === 'pending') return { text: 'Pending', tone: 'blue' };
+  if (c.clockIn && !c.clockOut) return { text: 'In progress', tone: 'amber' };
+  return { text: 'Confirmed', tone: 'green' };
 }
 
 export default function MyShifts() {
   const { nurse } = useAuth();
   const navigate = useNavigate();
-  const [claims, setClaims] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { claims, loading, refresh } = useClaims(nurse.id);
+  const [tab, setTab] = useState('upcoming');
   const [messaging, setMessaging] = useState(null);
-  const [messageError, setMessageError] = useState(null);
+  const [error, setError] = useState(null);
   const [ratingFor, setRatingFor] = useState(null);
   const [reportingFor, setReportingFor] = useState(null);
   const [reportSent, setReportSent] = useState(null);
 
-  async function refresh() {
-    const data = await listMyClaims(nurse.id);
-    setClaims(data);
-    setLoading(false);
-  }
+  const counts = Object.fromEntries(TABS.map((t) => [t.key, claims.filter(t.match).length]));
+  const list = claims
+    .filter(TABS.find((t) => t.key === tab).match)
+    .sort((a, b) => (a.shift?.date ?? '').localeCompare(b.shift?.date ?? '') * (tab === 'upcoming' ? 1 : -1));
 
-  useEffect(() => {
-    refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  async function handleClockIn(claimId) {
-    await clockIn(claimId);
+  async function handleClockIn(id) {
+    await clockIn(id);
     refresh();
   }
-
-  async function handleClockOut(claimId) {
-    await clockOut(claimId);
+  async function handleClockOut(id) {
+    await clockOut(id);
     refresh();
   }
-
   async function handleRate(claim, rating) {
     await rateFacilityForClaim(claim.id, claim.shift?.facilityId, rating);
     setRatingFor(null);
     refresh();
   }
-
   async function handleReport(claim, { reason, description }) {
     await fileDispute({
       claimId: claim.id,
@@ -68,10 +71,9 @@ export default function MyShifts() {
     setReportSent(claim.id);
     refresh();
   }
-
   async function handleMessage(c) {
     setMessaging(c.id);
-    setMessageError(null);
+    setError(null);
     try {
       const conv = await getOrCreateConversation(
         { id: nurse.id, type: 'nurse', name: nurse.name },
@@ -80,86 +82,102 @@ export default function MyShifts() {
       );
       navigate(`/messages/${conv.id}`);
     } catch (err) {
-      setMessageError(err.message);
+      setError(err.message);
     } finally {
       setMessaging(null);
     }
   }
 
   return (
-    <div className="page">
-      <div className="page-header">
-        <p className="eyebrow">{claims.length} claimed</p>
-        <h1 className="page-title">My Shifts</h1>
-        <p className="page-sub">Track approvals, clock in when your shift starts, and clock out when it ends.</p>
+    <div className="ns-screen">
+      <header className="ns-topbar">
+        <button type="button" className="ns-icon-btn" onClick={() => navigate('/')} aria-label="Back to home">
+          <Icon name="back" size={22} />
+        </button>
+        <h1>My Shifts</h1>
+        <span className="ns-topbar-spacer" />
+      </header>
+
+      <div className="ns-tabs" role="tablist">
+        {TABS.map((t) => (
+          <button
+            key={t.key}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.key}
+            className={tab === t.key ? 'on' : ''}
+            onClick={() => setTab(t.key)}
+          >
+            {t.label} <span>{counts[t.key]}</span>
+          </button>
+        ))}
       </div>
 
-      {messageError && <p className="form-error" style={{ marginBottom: 16 }}>{messageError}</p>}
+      {error && <p className="ns-error">{error}</p>}
 
       {loading ? (
-        <div className="empty-state">Loading…</div>
-      ) : claims.length === 0 ? (
-        <div className="empty-state">
-          You haven't claimed any shifts yet. Head to the Duty Board to find one.
+        <div className="ns-empty">Loading...</div>
+      ) : list.length === 0 ? (
+        <div className="ns-empty">
+          {tab === 'upcoming' ? (
+            <>No upcoming shifts yet. <Link to="/shifts">Find a shift</Link></>
+          ) : (
+            `Nothing in ${TABS.find((t) => t.key === tab).label.toLowerCase()} yet.`
+          )}
         </div>
       ) : (
-        claims.map((c) => {
-          const canRate = c.status === 'completed' && !c.facilityRated;
-          const alreadyReported = c.disputeFiled || reportSent === c.id;
-          return (
-            <div className="claim-card" key={c.id} style={{ flexWrap: 'wrap' }}>
-              <div>
-                <div className="facility">{c.shift?.facility ?? 'Unknown facility'}</div>
-                <div className="meta">
-                  {c.shift?.unit} · {c.shift?.date} · {c.shift?.start}–{c.shift?.end} · {formatNaira(c.shift?.rate ?? 0)}
+        <ul className="ns-list">
+          {list.map((c) => {
+            const d = toDate(c.shift?.date);
+            const pill = statusPill(c);
+            const canRate = c.status === 'completed' && !c.facilityRated;
+            const reported = c.disputeFiled || reportSent === c.id;
+            return (
+              <li key={c.id} className="ns-card ns-claim">
+                <div className="ns-claim-row">
+                  <div className="ns-date">
+                    <strong>{d ? d.getDate() : '-'}</strong>
+                    <small>{d ? d.toLocaleDateString('en-GB', { month: 'short' }) : ''}</small>
+                  </div>
+                  <div className="ns-claim-main">
+                    <h3>{titleFor(c.shift)}</h3>
+                    <p><Icon name="pin" size={13} /> {c.shift?.facility ?? 'Unknown facility'}</p>
+                    <p><Icon name="clock" size={13} /> {fmtRange(c.shift)}</p>
+                    <span className={`ns-tag ${pill.tone}`}>{pill.text}</span>
+                  </div>
+                  <strong className="ns-claim-pay">{formatNaira(c.shift?.rate)}</strong>
                 </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                <Badge status={c.status}>{c.status}</Badge>
-                <button className="clock-btn" disabled={messaging === c.id} onClick={() => handleMessage(c)}>
-                  {messaging === c.id ? 'Opening…' : 'Message'}
-                </button>
-                {c.status === 'approved' && !c.clockIn && (
-                  <button className="clock-btn" onClick={() => handleClockIn(c.id)}>Clock in</button>
-                )}
-                {c.clockIn && !c.clockOut && (
-                  <button className="clock-btn active" onClick={() => handleClockOut(c.id)}>Clock out</button>
-                )}
-                {c.clockOut && <Badge status="completed">Completed</Badge>}
-                {canRate && ratingFor !== c.id && (
-                  <button className="clock-btn" onClick={() => setRatingFor(c.id)}>Rate this facility</button>
-                )}
-                {!alreadyReported && reportingFor !== c.id && (
-                  <button
-                    className="clock-btn"
-                    style={{ color: 'var(--red)' }}
-                    onClick={() => setReportingFor(c.id)}
-                  >
-                    Report an issue
+
+                <div className="ns-claim-actions">
+                  <button type="button" disabled={messaging === c.id} onClick={() => handleMessage(c)}>
+                    {messaging === c.id ? 'Opening...' : 'Message'}
                   </button>
-                )}
-                {alreadyReported && <span style={{ fontSize: '0.75rem', color: 'var(--slate)' }}>Reported — under review</span>}
-              </div>
-
-              {canRate && ratingFor === c.id && (
-                <div style={{ display: 'flex', gap: 4, width: '100%', marginTop: 12 }}>
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <button key={n} className="clock-btn" onClick={() => handleRate(c, n)}>
-                      {n} ★
-                    </button>
-                  ))}
+                  {c.status === 'approved' && !c.clockIn && <button type="button" className="primary" onClick={() => handleClockIn(c.id)}>Clock in</button>}
+                  {c.clockIn && !c.clockOut && <button type="button" className="primary" onClick={() => handleClockOut(c.id)}>Clock out</button>}
+                  {canRate && ratingFor !== c.id && <button type="button" onClick={() => setRatingFor(c.id)}>Rate facility</button>}
+                  {!reported && reportingFor !== c.id && c.status !== 'rejected' && (
+                    <button type="button" className="danger" onClick={() => setReportingFor(c.id)}>Report issue</button>
+                  )}
+                  {reported && <span className="ns-muted">Reported, under review</span>}
                 </div>
-              )}
 
-              {reportingFor === c.id && (
-                <ReportIssueForm
-                  onSubmit={(payload) => handleReport(c, payload)}
-                  onCancel={() => setReportingFor(null)}
-                />
-              )}
-            </div>
-          );
-        })
+                {canRate && ratingFor === c.id && (
+                  <div className="ns-rate">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <button key={n} type="button" onClick={() => handleRate(c, n)} aria-label={`${n} star${n > 1 ? 's' : ''}`}>
+                        {n}<Icon name="star" size={14} fill="currentColor" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {reportingFor === c.id && (
+                  <ReportIssueForm onSubmit={(payload) => handleReport(c, payload)} onCancel={() => setReportingFor(null)} />
+                )}
+              </li>
+            );
+          })}
+        </ul>
       )}
     </div>
   );

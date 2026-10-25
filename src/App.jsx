@@ -13,6 +13,8 @@ import RequireOwner from './components/RequireOwner';
 import RequireFacility from './components/RequireFacility';
 import NurseLayout from './components/NurseLayout';
 import FacilityLayout from './components/FacilityLayout';
+import Home from './pages/Home';
+import Earnings from './pages/Earnings';
 import ShiftBoard from './pages/ShiftBoard';
 import ShiftDetail from './pages/ShiftDetail';
 import MyShifts from './pages/MyShifts';
@@ -74,7 +76,9 @@ export default function App() {
                 <Route element={<NurseLayout />}>
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/login" element={<Login />} />
-                  <Route path="/" element={<RequireAuth><ShiftBoard /></RequireAuth>} />
+                  <Route path="/" element={<Home />} />
+                  <Route path="/shifts" element={<RequireAuth><ShiftBoard /></RequireAuth>} />
+                  <Route path="/earnings" element={<RequireAuth><Earnings /></RequireAuth>} />
                   <Route path="/shifts/:shiftId" element={<RequireAuth><ShiftDetail /></RequireAuth>} />
                   <Route path="/my-shifts" element={<RequireAuth><MyShifts /></RequireAuth>} />
                   <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />

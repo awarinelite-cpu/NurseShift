@@ -5,6 +5,7 @@ import { useFacility } from '../context/FacilityContext';
 import { useAdmin } from '../context/AdminContext';
 import { useRole } from '../context/useRole';
 import { signInWithRole, ROLE_HOME } from '../lib/session';
+import Icon from '../components/ns/Icon';
 
 // The one sign-in page for nurses, facilities and admins.
 export default function Login() {
@@ -37,40 +38,44 @@ export default function Login() {
   }
 
   return (
-    <div className="page" style={{ maxWidth: 420 }}>
-      <div className="page-header">
-        <p className="eyebrow">Welcome back</p>
-        <h1 className="page-title">Sign in</h1>
-        <p className="page-sub">Nurses, facilities and admins all sign in here.</p>
+    <main className="ns-auth">
+      <div className="ns-auth-head">
+        <Link to="/" className="ns-logo sm">
+          <Icon name="logo" size={34} strokeWidth={2.2} className="ns-logo-mark" />
+          <span>Nurse<b>Shift</b></span>
+        </Link>
+        <h1>Welcome back</h1>
+        <p>Nurses, facilities and admins all sign in here.</p>
       </div>
 
-      {isDemo && (
-        <p className="page-sub" style={{ marginBottom: 14 }}>
-          Demo mode — any email and password signs you in as the sample nurse. Use an email containing
-          {' '}<code>facility</code> for the sample facility, or the passcode <code>admin-demo</code> for admin.
-        </p>
-      )}
+      <div className="ns-auth-body">
+        {isDemo && (
+          <p className="ns-note">
+            Demo mode: any email and password signs you in as the sample nurse. Use an email containing <code>facility</code> for the sample facility, or the passcode <code>admin-demo</code> for admin.
+          </p>
+        )}
 
-      <form className="detail-card" onSubmit={handleSubmit}>
-        <div className="form-row">
-          <label htmlFor="email">Email</label>
-          <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-        <div className="form-row">
-          <label htmlFor="password">Password</label>
-          <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-row">
+            <label htmlFor="email">Email</label>
+            <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+          </div>
+          <div className="form-row">
+            <label htmlFor="password">Password</label>
+            <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
+          </div>
 
-        {error && <p className="form-error">{error}</p>}
+          {error && <p className="form-error">{error}</p>}
 
-        <button className="claim-btn" type="submit" disabled={submitting}>
-          {submitting ? 'Signing in…' : 'Sign in'}
-        </button>
+          <button className="claim-btn" type="submit" disabled={submitting}>
+            {submitting ? 'Signing in...' : 'Log In'}
+          </button>
 
-        <p className="form-footer">
-          New here? <Link to="/signup">Create an account</Link>
-        </p>
-      </form>
-    </div>
+          <p className="form-footer">
+            New here? <Link to="/signup">Create an account</Link>
+          </p>
+        </form>
+      </div>
+    </main>
   );
 }

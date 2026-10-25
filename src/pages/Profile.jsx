@@ -1,20 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import Badge from '../components/Badge';
+import { useClaims } from '../lib/useClaims';
+import { initials } from '../lib/earnings';
+import { listOpenShifts } from '../lib/shifts';
+import Icon from '../components/ns/Icon';
+import Sheet from '../components/ns/Sheet';
+
+const MENU = [
+  { key: 'license', label: 'My License & Documents', icon: 'file' },
+  { key: 'personal', label: 'Personal Information', icon: 'user' },
+  { key: 'payment', label: 'Payment Methods', icon: 'card' },
+  { key: 'notifications', label: 'Notifications', icon: 'bell' },
+  { key: 'help', label: 'Help & Support', icon: 'help' },
+  { key: 'settings', label: 'Settings', icon: 'settings' },
+];
+
+const VERIFY_LABEL = { verified: 'Fully Verified', pending: 'Under Review', rejected: 'Not Verified' };
+
+function Row({ label, value }) {
+  return (
+    <div className="ns-kv">
+      <small>{label}</small>
+      <span>{value || 'Not provided'}</span>
+    </div>
+  );
+}
 
 export default function Profile() {
-  const { nurse, updatePhone } = useAuth();
+  const { nurse, updatePhone, signOut } = useAuth();
+  const navigate = useNavigate();
+  const { claims } = useClaims(nurse?.id);
+  const [openCount, setOpenCount] = useState(null);
+  const [sheet, setSheet] = useState(null);
   const [editing, setEditing] = useState(false);
   const [phoneInput, setPhoneInput] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  if (!nurse) return <div className="page"><div className="empty-state">Not signed in.</div></div>;
+  useEffect(() => {
+    listOpenShifts().then((list) => setOpenCount(list.filter((s) => s.status === 'open').length));
+  }, []);
 
-  function startEditing() {
-    setPhoneInput(nurse.phone || '');
+  if (!nurse) return <div className="ns-screen"><div className="ns-empty">Not signed in.</div></div>;
+
+  const completed = claims.filter((c) => c.status === 'completed').length;
+
+  function closeSheet() {
+    setSheet(null);
+    setEditing(false);
     setError('');
-    setEditing(true);
   }
 
   async function handleSavePhone(e) {
@@ -31,90 +66,125 @@ export default function Profile() {
     }
   }
 
+  async function handleSignOut() {
+    await signOut();
+    navigate('/');
+  }
+
   return (
-    <div className="page">
-      <div className="page-header">
-        <p className="eyebrow">Profile</p>
-        <h1 className="page-title">{nurse.name}</h1>
+    <div className="ns-screen">
+      <header className="ns-topbar end">
+        <button type="button" className="ns-icon-btn" onClick={() => setSheet('settings')} aria-label="Settings">
+          <Icon name="settings" size={22} />
+        </button>
+      </header>
+
+      <section className="ns-profile-head">
+        <span className="ns-avatar lg">{initials(nurse.name)}</span>
+        <div>
+          <h1>{nurse.name}</h1>
+          <p>Registered Nurse</p>
+          <span className={`ns-verified ${nurse.verification}`}>
+            <Icon name="shieldCheck" size={14} /> {VERIFY_LABEL[nurse.verification] ?? 'Under Review'}
+          </span>
+        </div>
+      </section>
+
+      <div className="ns-card ns-profile-stats">
+        <div><strong>{completed}</strong><small>Completed Shifts</small></div>
+        <div><strong>{nurse.rating ? Number(nurse.rating).toFixed(1) : '-'}</strong><small>Rating</small></div>
+        <div><strong>{openCount ?? '-'}</strong><small>Available Shifts</small></div>
       </div>
 
-      <div className="profile-card">
-        <p className="profile-name">{nurse.name}</p>
-        <p className="profile-role">{nurse.cadre} · {nurse.specialty || 'General practice'}</p>
+      <ul className="ns-menu">
+        {MENU.map((m) => (
+          <li key={m.key}>
+            <button type="button" onClick={() => setSheet(m.key)}>
+              <span className="ns-menu-icon"><Icon name={m.icon} size={18} /></span>
+              <span className="ns-menu-label">{m.label}</span>
+              <Icon name="chevR" size={18} />
+            </button>
+          </li>
+        ))}
+      </ul>
 
-        <Badge status={nurse.verification}>
-          {nurse.verification === 'verified' ? 'License verified' : `License ${nurse.verification}`}
-        </Badge>
+      <button type="button" className="ns-btn ns-btn-danger ns-btn-block" onClick={handleSignOut}>Log Out</button>
 
-        {nurse.verification === 'pending' && (
-          <p style={{ fontSize: '0.75rem', color: 'var(--slate)', margin: '10px 0 0' }}>
-            Your license is under review. You'll be able to claim shifts once an admin verifies it —
-            usually within 48 hours.
-          </p>
-        )}
+      {sheet === 'license' && (
+        <Sheet title="My License & Documents" onClose={closeSheet}>
+          <Row label="NMCN license number" value={nurse.licenseNumber} />
+          <Row label="Verification" value={VERIFY_LABEL[nurse.verification]} />
+          <Row label="Cadre" value={nurse.cadre} />
+          <div className="ns-kv">
+            <small>License document</small>
+            <span>
+              {nurse.licenseFileUrl ? (
+                <a href={nurse.licenseFileUrl} target="_blank" rel="noreferrer">{nurse.licenseFileName}</a>
+              ) : (
+                nurse.licenseFileName || 'Not uploaded'
+              )}
+            </span>
+          </div>
+          {nurse.verification === 'pending' && (
+            <p className="ns-note">Your license is under review. You can claim shifts once an admin verifies it, usually within 48 hours.</p>
+          )}
+        </Sheet>
+      )}
 
-        <div className="profile-grid">
-          <div>
-            <p className="label">License number</p>
-            <p className="value">{nurse.licenseNumber}</p>
-          </div>
-          <div>
-            <p className="label">Experience</p>
-            <p className="value">{nurse.yearsExperience} years</p>
-          </div>
-          <div>
-            <p className="label">Rating</p>
-            <p className="value">{nurse.rating ? `★ ${nurse.rating}` : 'No shifts yet'}</p>
-          </div>
-          <div>
-            <p className="label">Phone</p>
+      {sheet === 'personal' && (
+        <Sheet title="Personal Information" onClose={closeSheet}>
+          <Row label="Full name" value={nurse.name} />
+          <Row label="Specialty" value={nurse.specialty || 'General practice'} />
+          <Row label="Experience" value={nurse.yearsExperience != null ? `${nurse.yearsExperience} years` : ''} />
+          <div className="ns-kv">
+            <small>Phone</small>
             {editing ? (
-              <form onSubmit={handleSavePhone} style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 4 }}>
-                <input
-                  type="tel"
-                  value={phoneInput}
-                  onChange={(e) => setPhoneInput(e.target.value)}
-                  placeholder="e.g. 0803 123 4567"
-                  autoFocus
-                />
-                {error && <p className="form-error" style={{ margin: 0 }}>{error}</p>}
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <button type="submit" className="claim-btn" disabled={saving}>
-                    {saving ? 'Saving…' : 'Save'}
-                  </button>
-                  <button type="button" className="clock-btn" onClick={() => setEditing(false)} disabled={saving}>
-                    Cancel
-                  </button>
+              <form onSubmit={handleSavePhone} className="ns-inline-form">
+                <input type="tel" value={phoneInput} onChange={(e) => setPhoneInput(e.target.value)} placeholder="e.g. 0803 123 4567" autoFocus />
+                {error && <p className="ns-error">{error}</p>}
+                <div>
+                  <button type="submit" className="ns-btn ns-btn-green ns-btn-sm" disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
+                  <button type="button" className="ns-btn ns-btn-outline ns-btn-sm" onClick={() => setEditing(false)} disabled={saving}>Cancel</button>
                 </div>
               </form>
             ) : (
-              <p className="value">
+              <span>
                 {nurse.phone || 'Not provided'}{' '}
-                <button type="button" className="clock-btn" style={{ marginLeft: 8 }} onClick={startEditing}>
+                <button type="button" className="ns-link" onClick={() => { setPhoneInput(nurse.phone || ''); setError(''); setEditing(true); }}>
                   {nurse.phone ? 'Edit' : 'Add phone'}
                 </button>
-              </p>
+              </span>
             )}
           </div>
-          <div>
-            <p className="label">Shifts completed</p>
-            <p className="value">{nurse.shiftsCompleted}</p>
-          </div>
-          {(nurse.licenseFileName || nurse.licenseFileUrl) && (
-            <div>
-              <p className="label">License document</p>
-              <p className="value">
-                {nurse.licenseFileUrl ? (
-                  <a href={nurse.licenseFileUrl} target="_blank" rel="noreferrer">{nurse.licenseFileName}</a>
-                ) : (
-                  nurse.licenseFileName
-                )}
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
+        </Sheet>
+      )}
+
+      {sheet === 'payment' && (
+        <Sheet title="Payment Methods" onClose={closeSheet}>
+          <p className="ns-note">Payout accounts can't be managed in the app yet. Your earnings and pending payments are tracked on the Earnings tab.</p>
+        </Sheet>
+      )}
+
+      {sheet === 'notifications' && (
+        <Sheet title="Notifications" onClose={closeSheet}>
+          <p className="ns-note">Shift approvals and facility replies arrive in your Messages inbox.</p>
+          <Link to="/messages" className="ns-btn ns-btn-green ns-btn-block">Open Messages</Link>
+        </Sheet>
+      )}
+
+      {sheet === 'help' && (
+        <Sheet title="Help & Support" onClose={closeSheet}>
+          <p className="ns-note">Had a problem with a shift? Open My Shifts and choose Report issue on that shift. An admin will review it.</p>
+          <Link to="/my-shifts" className="ns-btn ns-btn-outline ns-btn-block">Go to My Shifts</Link>
+        </Sheet>
+      )}
+
+      {sheet === 'settings' && (
+        <Sheet title="Settings" onClose={closeSheet}>
+          <Link to="/messages" className="ns-sheet-link"><Icon name="message" size={18} /> Messages <Icon name="chevR" size={16} /></Link>
+          <Link to="/nurses" className="ns-sheet-link"><Icon name="users" size={18} /> Nurse Directory <Icon name="chevR" size={16} /></Link>
+        </Sheet>
+      )}
     </div>
   );
 }
-
