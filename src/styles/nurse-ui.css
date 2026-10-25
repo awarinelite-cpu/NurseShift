@@ -178,7 +178,7 @@
 .ns-sort-note { font-size: 0.6875rem; color: var(--muted); margin: 10px 2px 12px; }
 .ns-list { display: flex; flex-direction: column; gap: 14px; }
 
-.ns-shift { display: grid; grid-template-columns: 56px 1fr auto; gap: 4px 12px; padding: 14px; align-items: start; }
+.ns-shift { display: grid; grid-template-columns: 76px 1fr auto; gap: 4px 12px; padding: 14px; align-items: start; }
 .ns-shift.muted { opacity: 0.65; }
 .ns-shift-main { min-width: 0; }
 .ns-shift-main h3, .ns-claim-main h3 { font-size: 0.9375rem; font-weight: 800; }

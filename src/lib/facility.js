@@ -135,10 +135,12 @@ const coverCache = new Map();
 export function getFacilityCover(facilityId) {
   if (!facilityId) return Promise.resolve(null);
   if (!coverCache.has(facilityId)) {
-    coverCache.set(
-      facilityId,
-      getFacility(facilityId).then((f) => f?.photos?.[0]?.url ?? f?.photoUrl ?? null).catch(() => null)
-    );
+    const lookup = getFacility(facilityId)
+      .then((f) => f?.photos?.[0]?.url ?? f?.photoUrl ?? null)
+      .catch(() => null);
+    coverCache.set(facilityId, lookup);
+    // Don't remember "no photo": an admin may add one a moment later.
+    lookup.then((url) => { if (!url) coverCache.delete(facilityId); });
   }
   return coverCache.get(facilityId);
 }
