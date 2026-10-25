@@ -8,6 +8,8 @@ import {
   MAX_FACILITY_PHOTOS,
 } from '../../lib/admin';
 import FacilityThumb from '../../components/ns/FacilityThumb';
+import PageHero from '../../components/ns/PageHero';
+import Icon from '../../components/ns/Icon';
 
 const EMPTY_FORM = {
   name: '',
@@ -109,15 +111,17 @@ export default function AdminFacilities() {
 
   return (
     <div className="page">
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div>
-          <p className="eyebrow">{facilities.length} facilities</p>
-          <h1 className="page-title">Facilities</h1>
-          <p className="page-sub">Review registered facilities, add one, or bulk-import a list.</p>
-        </div>
-      </div>
+      <PageHero
+        title="Facilities"
+        subtitle={`${facilities.length} facilities · Review registered facilities, add one, or bulk-import a list.`}
+        tiles={loading ? [] : [
+          { label: 'Facilities', value: facilities.length, tone: 'purple', icon: 'building' },
+          { label: 'Shifts', value: facilities.reduce((sum, f) => sum + (f.shiftCount || 0), 0), tone: 'orange', icon: 'calendar' },
+          { label: 'With location', value: facilities.filter((f) => f.lat != null && f.lng != null).length, tone: 'green', icon: 'pin' },
+        ]}
+      />
 
-      <div style={{ display: 'flex', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
+      <div className="nsd-toolbar">
         <button className="claim-btn" onClick={() => setShowForm((s) => !s)}>
           {showForm ? 'Cancel' : '+ Add facility'}
         </button>
@@ -254,7 +258,7 @@ export default function AdminFacilities() {
         <div className="empty-state">No facilities yet. Add one or bulk-import a CSV.</div>
       ) : (
         facilities.map((f) => (
-          <Link to={`/admin/facilities/${f.id}`} className="claim-card" key={f.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link to={`/admin/facilities/${f.id}`} className="claim-card nsd-row" key={f.id} style={{ textDecoration: 'none', color: 'inherit' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
               <FacilityThumb seed={f.id} photo={f.photos?.[0]?.url ?? f.photoUrl} size={48} radius={16} />
               <div style={{ minWidth: 0 }}>
@@ -265,6 +269,7 @@ export default function AdminFacilities() {
                 </div>
               </div>
             </div>
+            <Icon name="chevR" size={18} className="nsd-row-chev" />
           </Link>
         ))
       )}

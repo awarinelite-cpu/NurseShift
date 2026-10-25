@@ -2,12 +2,19 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { listAllNursesForAdmin } from '../../lib/admin';
 import Badge from '../../components/Badge';
+import PageHero from '../../components/ns/PageHero';
 
 const FILTERS = [
   { key: 'all', label: 'All nurses' },
   { key: 'verified', label: 'Verified' },
   { key: 'active', label: 'Active right now' },
 ];
+
+function initials(name = '') {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'N';
+  return (parts[0][0] + (parts[1]?.[0] ?? '')).toUpperCase();
+}
 
 export default function AdminNurses() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -43,15 +50,17 @@ export default function AdminNurses() {
 
   return (
     <div className="page">
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div>
-          <p className="eyebrow">{filtered.length} nurse{filtered.length === 1 ? '' : 's'}</p>
-          <h1 className="page-title">Nurses</h1>
-          <p className="page-sub">Every nurse account on the platform.</p>
-        </div>
-      </div>
+      <PageHero
+        title="Nurses"
+        subtitle={`${filtered.length} nurse${filtered.length === 1 ? '' : 's'} · Every nurse account on the platform.`}
+        tiles={loading || error ? [] : [
+          { label: 'Total', value: nurses.length, tone: 'teal', icon: 'users' },
+          { label: 'Verified', value: nurses.filter((n) => n.verification === 'verified').length, tone: 'blue', icon: 'shieldCheck' },
+          { label: 'Active now', value: nurses.filter((n) => n.active).length, tone: 'green', icon: 'check' },
+        ]}
+      />
 
-      <div style={{ display: 'flex', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
+      <div className="nsd-filters">
         {FILTERS.map((f) => (
           <button
             key={f.key}
@@ -71,8 +80,9 @@ export default function AdminNurses() {
         <div className="empty-state">No nurses match this filter.</div>
       ) : (
         filtered.map((n) => (
-          <div className="claim-card" key={n.id}>
-            <div>
+          <div className="claim-card nsd-row" key={n.id}>
+            <span className="nsd-row-avatar" aria-hidden="true">{initials(n.name)}</span>
+            <div className="nsd-row-main">
               <div className="facility">{n.name || 'Unnamed nurse'}</div>
               <div className="meta">
                 {n.cadre || 'RN'}
@@ -81,7 +91,7 @@ export default function AdminNurses() {
                 {n.phone ? ` · ${n.phone}` : ''}
               </div>
             </div>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <div className="nsd-row-badges">
               {n.active && <Badge status="approved">Active now</Badge>}
               <Badge status={n.verification === 'verified' ? 'approved' : n.verification === 'rejected' ? 'rejected' : 'pending'}>
                 {n.verification || 'pending'}

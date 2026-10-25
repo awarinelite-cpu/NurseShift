@@ -1,5 +1,5 @@
 /* Admin dashboard redesign: dark teal hero, gradient stat tiles, quick actions. */
-.ns-admin .ns-screen:has(.nsd-hero) { padding-top: 0; }
+.ns-admin .ns-screen:has(.nsd-hero), .ns-admin .ns-screen:has(.nsd-hero-compact) { padding-top: 0; }
 
 .nsd-hero {
   margin: 0 -18px; padding: 18px 18px 22px;
@@ -65,3 +65,40 @@
 .nsd-action-icon.orange { background: #f29a1c; }
 .nsd-action-icon.purple { background: #7a4bd0; }
 .nsd-tagline { grid-column: span 1; align-self: center; font-family: 'Brush Script MT', 'Segoe Script', cursive; font-style: italic; font-weight: 700; font-size: 0.9375rem; line-height: 1.1; color: var(--deep-2); transform: rotate(-6deg); text-align: center; }
+
+/* ---------- list screens (Nurses, Facilities) ---------- */
+.nsd-hero-compact { padding-bottom: 18px; }
+.nsd-hero-compact .nsd-brand { gap: 8px; }
+.nsd-hero-compact .nsd-brand strong { font-size: 1.125rem; }
+.nsd-page-title { margin-top: 16px; }
+.nsd-page-title h1 { font-size: 1.875rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; color: #fff; margin: 0; }
+.nsd-page-title small { display: block; margin-top: 4px; font-size: 0.75rem; color: rgba(255, 255, 255, 0.82); line-height: 1.4; }
+.nsd-mini-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+.nsd-mini { display: flex; flex-direction: column; gap: 2px; padding: 10px; border-radius: 16px; color: #fff; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18); }
+.nsd-mini.teal { background: linear-gradient(145deg, #138a7c, #0a5a52); }
+.nsd-mini.blue { background: linear-gradient(145deg, #2272d8, #0d4aa3); }
+.nsd-mini.purple { background: linear-gradient(145deg, #6a45b8, #43308a); }
+.nsd-mini.orange { background: linear-gradient(145deg, #f29a1c, #d9760a); }
+.nsd-mini.green { background: linear-gradient(145deg, #0f9a66, #08704a); }
+.nsd-mini-icon { width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.88); margin-bottom: 4px; }
+.nsd-mini.teal .nsd-mini-icon { color: #0f8a78; }
+.nsd-mini.blue .nsd-mini-icon { color: #1b64c4; }
+.nsd-mini.purple .nsd-mini-icon { color: #5a3aa8; }
+.nsd-mini.orange .nsd-mini-icon { color: #d9760a; }
+.nsd-mini.green .nsd-mini-icon { color: #0b7c54; }
+.nsd-mini strong { font-size: 1.375rem; font-weight: 800; line-height: 1.1; }
+.nsd-mini small { font-size: 0.6875rem; font-weight: 600; color: rgba(255, 255, 255, 0.9); }
+
+.nsd-filters, .nsd-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 14px; }
+
+.ns-admin .claim-card.nsd-row { padding: 12px 14px; gap: 12px; border-radius: 20px; background: #eef8f5; border: 1px solid #e0efea; box-shadow: 0 4px 10px rgba(11, 59, 55, 0.06); justify-content: flex-start; }
+.ns-admin .claim-card.nsd-row > div { min-width: 0; }
+.nsd-row-avatar { width: 44px; height: 44px; border-radius: 50%; flex: none; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(145deg, #7a4bd0, #4b4fc9); color: #fff; font-weight: 800; font-size: 0.9375rem; }
+.nsd-row-main { flex: 1; }
+.nsd-row-badges { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex: none; }
+.nsd-row .badge { font-size: 0.625rem; font-weight: 800; padding: 3px 9px; border-radius: 99px; text-transform: capitalize; }
+.nsd-row .badge.approved { background: #d7f3e6; color: #0b7c54; }
+.nsd-row .badge.pending { background: #fff3de; color: #b36b00; }
+.nsd-row .badge.rejected { background: #fdecec; color: #c4274b; }
+.nsd-row-chev { margin-left: auto; color: var(--deep-2); flex: none; }
+.ns-admin a.claim-card.nsd-row > div:first-child { flex: 1; }
