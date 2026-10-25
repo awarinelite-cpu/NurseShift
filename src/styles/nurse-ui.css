@@ -328,13 +328,16 @@
 .ns-app .page { padding: 18px 18px calc(96px + env(safe-area-inset-bottom)); }
 
 /* ---------- Hero photo (landing + login) ---------- */
-.ns-hero-photo { position: relative; width: 100%; max-width: 360px; margin: 14px auto 0; flex: 1; min-height: 0; max-height: 400px; display: flex; justify-content: center; overflow: hidden;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 58%, transparent 100%), linear-gradient(90deg, transparent 0, #000 22%, #000 78%, transparent 100%);
+/* Full-bleed so the photo's own edges sit outside the screen; the mask dissolves it into the page on every side. */
+.ns-landing { --bleed: 26px; }
+.ns-auth.ns-auth-dark { --bleed: 24px; }
+.ns-hero-photo { position: relative; width: calc(100% + var(--bleed) * 2); margin: 14px calc(var(--bleed) * -1) 0; flex: 1; min-height: 260px; max-height: 420px; overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 55%, transparent 100%), linear-gradient(90deg, transparent 0, #000 30%, #000 70%, transparent 100%);
   -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 58%, transparent 100%), linear-gradient(90deg, transparent 0, #000 22%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 55%, transparent 100%), linear-gradient(90deg, transparent 0, #000 30%, #000 70%, transparent 100%);
   mask-composite: intersect; }
-.ns-hero-photo img { height: 100%; width: auto; max-width: 100%; object-fit: cover; object-position: top center; display: block; }
-.ns-hero-photo.short { flex: none; height: 250px; margin-top: 10px; }
+.ns-hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; display: block; }
+.ns-hero-photo.short { flex: none; height: 270px; min-height: 0; margin-top: 10px; }
 
 /* ---------- Dark login ---------- */
 .ns-auth.ns-auth-dark { min-height: 100dvh; padding: calc(30px + env(safe-area-inset-top)) 24px calc(30px + env(safe-area-inset-bottom)); align-items: stretch; color: #fff; background: radial-gradient(120% 70% at 50% 30%, #0a4156 0%, #083749 45%, #052232 100%); }
