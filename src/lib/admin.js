@@ -607,6 +607,30 @@ async function saveFacilityPhotos(facilityId, photos) {
   return photos;
 }
 
+const CLOUDINARY_CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
+async function uploadToCloudinary(blob, folder) {
+  if (!CLOUDINARY_CLOUD || !CLOUDINARY_PRESET) {
+    throw new Error('Photo hosting is not set up. Add VITE_CLOUDINARY_CLOUD_NAME and VITE_CLOUDINARY_UPLOAD_PRESET, then redeploy.');
+  }
+  const body = new FormData();
+  body.append('file', blob);
+  body.append('upload_preset', CLOUDINARY_PRESET);
+  body.append('folder', folder);
+  let res;
+  try {
+    res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, { method: 'POST', body });
+  } catch {
+    throw new Error('Could not reach Cloudinary. Check your connection and try again.');
+  }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.secure_url) {
+    throw new Error(data?.error?.message ? `Cloudinary: ${data.error.message}` : 'Photo upload failed. Try again.');
+  }
+  return data.secure_url;
+}
+
 export async function addFacilityPhotos(facilityId, files) {
   const facility = await getFacilityById(facilityId);
   if (!facility) throw new Error('Facility not found.');
@@ -623,13 +647,10 @@ export async function addFacilityPhotos(facilityId, files) {
   if (DEMO_MODE) {
     for (const blob of blobs) added.push({ url: URL.createObjectURL(blob), path: null, blob });
   } else {
-    const { ref, uploadBytes, getDownloadURL } = await import('firebase/storage');
-    const stamp = Date.now();
+    // Photos are hosted on Cloudinary with an unsigned upload preset, so no
+    // secret ever ships to the browser. The listing keeps { url, path: null }.
     for (let i = 0; i < blobs.length; i++) {
-      const path = `facility-photos/${facilityId}/${stamp}-${i}.jpg`;
-      const fileRef = ref(storage, path);
-      await uploadBytes(fileRef, blobs[i], { contentType: 'image/jpeg' });
-      added.push({ url: await getDownloadURL(fileRef), path });
+      added.push({ url: await uploadToCloudinary(blobs[i], `facility-photos/${facilityId}`), path: null });
     }
   }
   return saveFacilityPhotos(facilityId, [...existing, ...added]);
