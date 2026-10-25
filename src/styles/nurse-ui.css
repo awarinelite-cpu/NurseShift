@@ -328,7 +328,11 @@
 .ns-app .page { padding: 18px 18px calc(96px + env(safe-area-inset-bottom)); }
 
 /* ---------- Hero photo (landing + login) ---------- */
-.ns-hero-photo { position: relative; width: 100%; max-width: 330px; margin: 14px auto 0; flex: 1; min-height: 0; max-height: 400px; display: flex; justify-content: center; overflow: hidden; -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 100%); mask-image: linear-gradient(180deg, #000 62%, transparent 100%); }
+.ns-hero-photo { position: relative; width: 100%; max-width: 360px; margin: 14px auto 0; flex: 1; min-height: 0; max-height: 400px; display: flex; justify-content: center; overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 58%, transparent 100%), linear-gradient(90deg, transparent 0, #000 22%, #000 78%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 58%, transparent 100%), linear-gradient(90deg, transparent 0, #000 22%, #000 78%, transparent 100%);
+  mask-composite: intersect; }
 .ns-hero-photo img { height: 100%; width: auto; max-width: 100%; object-fit: cover; object-position: top center; display: block; }
 .ns-hero-photo.short { flex: none; height: 250px; margin-top: 10px; }
 
