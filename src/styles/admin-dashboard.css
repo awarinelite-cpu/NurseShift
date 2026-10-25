@@ -140,3 +140,23 @@
 .nsd-earn-text em { font-style: normal; font-size: 0.75rem; opacity: 0.85; }
 .nsd-earn-chart { margin-left: auto; color: #2fe0a8; flex: none; }
 .nsd-actions-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* ---------- Available Shifts ---------- */
+.nsd-back { width: 38px; height: 38px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.14); color: #fff; flex: none; }
+.nsd-hero .nsd-top:has(.nsd-back) { gap: 12px; justify-content: flex-start; }
+.nsd-board .nsd-hero { padding-bottom: 20px; }
+.nsd-board .nsd-search { margin-top: 16px; background: #fff; border: 0; border-radius: 99px; padding: 0 16px; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18); }
+.nsd-board .nsd-search input { color: var(--text); }
+
+.nsd-board .ns-filters { margin-top: 16px; }
+.nsd-board .ns-pill-select { border-radius: 99px; background: #eef8f5; border: 1px solid #e0efea; box-shadow: none; color: var(--deep-2); }
+.nsd-board .ns-pill-select.active { background: linear-gradient(145deg, #14b88c, #0e9a74); border-color: transparent; color: #fff; box-shadow: 0 6px 12px rgba(14, 154, 116, 0.3); }
+.nsd-board .ns-filters .ns-icon-btn { width: 42px; height: 42px; border-radius: 50%; background: #eef8f5; border: 1px solid #e0efea; box-shadow: none; }
+.nsd-board .ns-filters .ns-icon-btn.on { background: var(--green); color: #fff; border-color: transparent; }
+
+.nsd-board .ns-card.ns-shift { border-radius: 22px; padding: 14px; background: #fff; border: 1px solid #e0efea; box-shadow: 0 8px 18px rgba(11, 59, 55, 0.1); }
+.nsd-board .ns-shift .ns-thumb { box-shadow: 0 6px 12px rgba(11, 59, 55, 0.2); }
+.nsd-board .ns-shift-price strong { font-size: 1.1875rem; }
+.nsd-board .ns-btn-green { border-radius: 99px; background: linear-gradient(145deg, #14b88c, #0e9a74); color: #fff; box-shadow: 0 6px 12px rgba(14, 154, 116, 0.3); border: 0; }
+.nsd-board .ns-tag { border-radius: 99px; padding: 4px 10px; }
+.nsd-board .ns-sort-note { font-weight: 600; color: var(--deep-2); }

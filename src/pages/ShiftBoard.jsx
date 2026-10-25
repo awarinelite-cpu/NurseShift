@@ -68,24 +68,31 @@ export default function ShiftBoard() {
   }, [shifts, userLoc, unitFilter, cityFilter, query, sortBy]);
 
   return (
-    <div className="ns-screen">
-      <header className="ns-topbar">
-        <button type="button" className="ns-icon-btn" onClick={() => navigate('/')} aria-label="Back to home">
-          <Icon name="back" size={22} />
-        </button>
-        <h1>Available Shifts</h1>
-        <span className="ns-topbar-spacer" />
+    <div className="ns-screen nsd-nurse nsd-board">
+      <header className="nsd-hero nsd-hero-compact">
+        <div className="nsd-top">
+          <button type="button" className="nsd-back" onClick={() => navigate('/')} aria-label="Back to home">
+            <Icon name="back" size={22} />
+          </button>
+          <div className="nsd-brand">
+            <Icon name="logo" size={30} strokeWidth={1.8} className="nsd-logo" />
+            <strong>Nurse<span>Shift</span></strong>
+          </div>
+        </div>
+        <div className="nsd-page-title">
+          <h1>Available Shifts</h1>
+          <small>{loading ? 'Finding shifts for you...' : `${visible.length} shift${visible.length === 1 ? '' : 's'} match your filters`}</small>
+        </div>
+        <label className="ns-search nsd-search">
+          <Icon name="search" size={18} />
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search shifts, hospital, location..."
+          />
+        </label>
       </header>
-
-      <label className="ns-search">
-        <Icon name="search" size={18} />
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search shifts, hospital, location..."
-        />
-      </label>
 
       <div className="ns-filters">
         <label className="ns-pill-select active">
