@@ -6,6 +6,7 @@ import { useAdmin } from '../context/AdminContext';
 import { useRole } from '../context/useRole';
 import { signInWithRole, ROLE_HOME } from '../lib/session';
 import Icon from '../components/ns/Icon';
+import nurseHero from '../assets/nurse-hero.jpg';
 
 // The one sign-in page for nurses, facilities and admins.
 export default function Login() {
@@ -38,19 +39,25 @@ export default function Login() {
   }
 
   return (
-    <main className="ns-auth">
-      <div className="ns-auth-head">
-        <Link to="/" className="ns-logo sm">
-          <Icon name="logo" size={34} strokeWidth={2.2} className="ns-logo-mark" />
+    <main className="ns-auth ns-auth-dark">
+      <div className="ns-auth-top">
+        <Link to="/" className="ns-logo">
+          <Icon name="logo" size={40} strokeWidth={2.2} className="ns-logo-mark" />
           <span>Nurse<b>Shift</b></span>
         </Link>
-        <h1>Welcome back</h1>
-        <p>Nurses, facilities and admins all sign in here.</p>
+        <p className="ns-landing-tag">Flexible Shifts. Healthier Communities.</p>
       </div>
 
-      <div className="ns-auth-body">
+      <div className="ns-hero-photo short">
+        <img src={nurseHero} alt="Smiling nurse in navy scrubs with a stethoscope" />
+      </div>
+
+      <div className="ns-auth-form">
+        <h1>Welcome back</h1>
+        <p className="ns-auth-sub">Nurses, facilities and admins all sign in here.</p>
+
         {isDemo && (
-          <p className="ns-note">
+          <p className="ns-note dark">
             Demo mode: any email and password signs you in as the sample nurse. Use an email containing <code>facility</code> for the sample facility, or the passcode <code>admin-demo</code> for admin.
           </p>
         )}
@@ -68,7 +75,7 @@ export default function Login() {
           {error && <p className="form-error">{error}</p>}
 
           <button className="claim-btn" type="submit" disabled={submitting}>
-            {submitting ? 'Signing in...' : 'Log In'}
+            {submitting ? 'Signing in...' : <>Log In <Icon name="arrowRight" size={18} /></>}
           </button>
 
           <p className="form-footer">

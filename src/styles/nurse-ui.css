@@ -315,14 +315,35 @@
 .ns-auth .page-title { font-size: 1.125rem; font-weight: 800; margin: 0 0 6px; }
 .ns-auth .page-sub { font-size: 0.8125rem; color: var(--muted); line-height: 1.5; }
 .ns-auth .detail-card { border: 0; box-shadow: none; padding: 0; background: none; }
-.ns-auth .form-row label { font-size: 0.75rem; font-weight: 700; text-transform: none; letter-spacing: 0; color: var(--text); font-family: inherit; }
-.ns-auth .form-row input, .ns-auth .form-row select, .ns-auth .form-row textarea { border: 1.5px solid var(--line); border-radius: 12px; padding: 13px 14px; font-size: 0.9375rem; background: #f8fbfa; color: var(--text); }
-.ns-auth .form-row input:focus, .ns-auth .form-row select:focus { outline: 0; border-color: var(--green); background: #fff; }
-.ns-auth .form-row input[type='file'] { border: 0; background: none; padding: 6px 0; }
-.ns-auth .claim-btn { width: 100%; padding: 15px 20px; border: 0; border-radius: 14px; background: var(--green); color: #fff; font-weight: 700; font-size: 0.9375rem; box-shadow: 0 8px 18px rgba(20, 184, 140, 0.28); }
-.ns-auth .claim-btn:disabled { background: #b8c9c5; box-shadow: none; }
-.ns-auth .form-footer a { color: var(--green-dk); }
-.ns-auth .form-error { color: var(--red); }
+.ns-stage .ns-auth .form-row label { font-size: 0.75rem; font-weight: 700; text-transform: none; letter-spacing: 0; color: var(--text); font-family: inherit; }
+.ns-stage .ns-auth .form-row input, .ns-stage .ns-auth .form-row select, .ns-stage .ns-auth .form-row textarea { border: 1.5px solid var(--line); border-radius: 12px; padding: 13px 14px; font-size: 0.9375rem; background: #f8fbfa; color: var(--text); }
+.ns-stage .ns-auth .form-row input:focus, .ns-stage .ns-auth .form-row select:focus { outline: 0; border-color: var(--green); background: #fff; }
+.ns-stage .ns-auth .form-row input[type='file'] { border: 0; background: none; padding: 6px 0; }
+.ns-stage .ns-auth .claim-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 15px 20px; border: 0; border-radius: 14px; background: var(--green); color: #fff; font-weight: 700; font-size: 0.9375rem; box-shadow: 0 8px 18px rgba(20, 184, 140, 0.28); }
+.ns-stage .ns-auth .claim-btn:disabled { background: #b8c9c5; box-shadow: none; }
+.ns-stage .ns-auth .form-footer a { color: var(--green-dk); }
+.ns-stage .ns-auth .form-error { color: var(--red); }
 
 /* Older pages that still render inside the new shell (messages, directory) */
 .ns-app .page { padding: 18px 18px calc(96px + env(safe-area-inset-bottom)); }
+
+/* ---------- Hero photo (landing + login) ---------- */
+.ns-hero-photo { position: relative; width: 100%; max-width: 330px; margin: 14px auto 0; flex: 1; min-height: 0; max-height: 400px; display: flex; justify-content: center; overflow: hidden; -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 100%); mask-image: linear-gradient(180deg, #000 62%, transparent 100%); }
+.ns-hero-photo img { height: 100%; width: auto; max-width: 100%; object-fit: cover; object-position: top center; display: block; }
+.ns-hero-photo.short { flex: none; height: 250px; margin-top: 10px; }
+
+/* ---------- Dark login ---------- */
+.ns-auth.ns-auth-dark { min-height: 100dvh; padding: calc(30px + env(safe-area-inset-top)) 24px calc(30px + env(safe-area-inset-bottom)); align-items: stretch; color: #fff; background: radial-gradient(120% 60% at 50% 30%, #12665c 0%, #0b3f3a 55%, #072b28 100%); }
+.ns-auth-top { text-align: center; }
+.ns-auth-form { margin-top: -34px; position: relative; }
+.ns-auth-form h1 { font-size: 1.625rem; font-weight: 800; }
+.ns-auth-sub { color: rgba(255, 255, 255, 0.78); font-size: 0.875rem; margin: 6px 0 18px; }
+.ns-note.dark { background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.9); }
+.ns-stage .ns-auth-dark .form-row label { color: #fff; }
+.ns-stage .ns-auth-dark .form-row input { background: rgba(255, 255, 255, 0.09); border: 1.5px solid rgba(255, 255, 255, 0.22); color: #fff; }
+.ns-stage .ns-auth-dark .form-row input:focus { background: rgba(255, 255, 255, 0.14); border-color: var(--green); }
+.ns-stage .ns-auth-dark .form-row input:-webkit-autofill { -webkit-text-fill-color: #fff; box-shadow: 0 0 0 40px #0f4a43 inset; }
+.ns-stage .ns-auth-dark .claim-btn { margin-top: 8px; }
+.ns-stage .ns-auth-dark .form-footer { margin-top: 18px; color: rgba(255, 255, 255, 0.85); font-size: 0.875rem; }
+.ns-stage .ns-auth-dark .form-footer a { color: var(--green); font-weight: 800; margin-left: 4px; }
+.ns-stage .ns-auth-dark .form-error { color: #ff9b94; }

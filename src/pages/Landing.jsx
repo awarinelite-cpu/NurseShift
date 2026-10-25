@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Icon from '../components/ns/Icon';
-import NurseIllustration from '../components/ns/NurseIllustration';
+import nurseHero from '../assets/nurse-hero.jpg';
 
 const SLIDES = [
   'Connecting qualified nurses with trusted healthcare facilities across Nigeria.',
@@ -28,7 +28,9 @@ export default function Landing() {
         <p className="ns-landing-tag">Flexible Shifts. Healthier Communities.</p>
       </div>
 
-      <NurseIllustration />
+      <div className="ns-hero-photo">
+        <img src={nurseHero} alt="Smiling nurse in navy scrubs with a stethoscope" />
+      </div>
 
       <div className="ns-landing-bottom">
         <p className="ns-landing-copy" aria-live="polite">{SLIDES[slide]}</p>
