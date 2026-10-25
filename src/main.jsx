@@ -6,6 +6,7 @@ import './styles.css';
 import './styles/nurse-ui.css';
 import './styles/glass.css';
 import './styles/admin-ns.css';
+import './styles/admin-dashboard.css';
 import { DEMO_MODE } from './lib/firebase';
 import { hydrateDemoPhotos } from './lib/demoStore';
 

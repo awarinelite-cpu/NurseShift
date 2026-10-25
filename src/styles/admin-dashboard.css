@@ -1,0 +1,67 @@
+/* Admin dashboard redesign: dark teal hero, gradient stat tiles, quick actions. */
+.ns-admin .ns-screen:has(.nsd-hero) { padding-top: 0; }
+
+.nsd-hero {
+  margin: 0 -18px; padding: 18px 18px 22px;
+  color: #fff; border-radius: 0 0 28px 28px;
+  background: radial-gradient(120% 90% at 85% 0%, #0f6a58 0%, transparent 60%), linear-gradient(160deg, #0b4a43, #06302c);
+  box-shadow: 0 10px 24px rgba(6, 48, 44, 0.3);
+}
+.nsd-top { display: flex; align-items: center; justify-content: space-between; }
+.nsd-brand { display: flex; align-items: center; gap: 10px; }
+.nsd-logo { color: #2fe0a8; fill: rgba(47, 224, 168, 0.18); }
+.nsd-brand strong { display: block; font-size: 1.375rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.1; }
+.nsd-brand strong span { color: #2fe0a8; }
+.nsd-brand small { display: block; font-size: 0.625rem; color: rgba(255, 255, 255, 0.8); }
+.nsd-top-right { display: flex; align-items: center; gap: 12px; }
+.nsd-bell { color: #fff; display: inline-flex; }
+.nsd-avatar { width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: #1fc79a; color: #fff; font-weight: 800; font-size: 1.0625rem; border: 2px solid rgba(255, 255, 255, 0.35); }
+
+.nsd-hero-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; margin-top: 22px; }
+.nsd-greet p { font-size: 1.0625rem; font-weight: 500; }
+.nsd-greet h1 { font-size: 2.125rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin: 2px 0 6px; }
+.nsd-greet small { display: block; font-size: 0.6875rem; color: rgba(255, 255, 255, 0.82); line-height: 1.35; max-width: 170px; }
+
+.nsd-status { flex: none; display: flex; align-items: center; gap: 8px; padding: 10px 10px 10px 12px; border-radius: 18px; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(47, 224, 168, 0.35); color: #fff; max-width: 190px; }
+.nsd-status-icon { color: #2fe0a8; fill: rgba(47, 224, 168, 0.2); flex: none; }
+.nsd-status span { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.nsd-status em { font-style: normal; font-size: 0.5625rem; display: flex; align-items: center; gap: 4px; color: rgba(255, 255, 255, 0.85); }
+.nsd-status em i { width: 6px; height: 6px; border-radius: 50%; background: #2fe0a8; }
+.nsd-status strong { font-size: 0.8125rem; font-weight: 800; line-height: 1.15; }
+.nsd-status small { font-size: 0.5625rem; color: rgba(255, 255, 255, 0.78); line-height: 1.25; }
+
+/* ---------- stat tiles ---------- */
+.nsd-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.nsd-stat { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 12px 10px 10px; border-radius: 18px; color: #fff; min-width: 0; box-shadow: 0 8px 16px rgba(11, 59, 55, 0.18); }
+.nsd-stat.teal { background: linear-gradient(145deg, #0f6a62, #07403c); }
+.nsd-stat.blue { background: linear-gradient(145deg, #2272d8, #0d4aa3); }
+.nsd-stat.purple { background: linear-gradient(145deg, #6a45b8, #43308a); }
+.nsd-stat.orange { background: linear-gradient(145deg, #f29a1c, #d9760a); }
+.nsd-stat.green { background: linear-gradient(145deg, #0f9a66, #08704a); }
+.nsd-stat.red { background: linear-gradient(145deg, #e23a5c, #b21f43); }
+.nsd-stat-icon { width: 34px; height: 34px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.88); margin-bottom: 8px; }
+.nsd-stat.teal .nsd-stat-icon { color: #0f8a78; }
+.nsd-stat.blue .nsd-stat-icon { color: #1b64c4; }
+.nsd-stat.purple .nsd-stat-icon { color: #5a3aa8; }
+.nsd-stat.orange .nsd-stat-icon { color: #d9760a; }
+.nsd-stat.green .nsd-stat-icon { color: #0b7c54; }
+.nsd-stat.red .nsd-stat-icon { color: #c4274b; }
+.nsd-stat small { font-size: 0.75rem; font-weight: 700; line-height: 1.2; min-height: 2.4em; }
+.nsd-stat strong { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+.nsd-stat-foot { display: flex; align-items: center; gap: 4px; margin-top: 4px; font-size: 0.5625rem; color: rgba(255, 255, 255, 0.9); }
+.nsd-stat-foot em { font-style: normal; flex: 1; line-height: 1.2; min-width: 0; }
+.nsd-ring { width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid rgba(255, 255, 255, 0.4); border-top-color: #fff; flex: none; }
+
+/* ---------- quick actions ---------- */
+.nsd-h2 { font-size: 1.25rem; font-weight: 800; margin: 20px 0 14px; position: relative; padding-bottom: 8px; }
+.nsd-h2::after { content: ''; position: absolute; left: 0; bottom: 0; width: 34px; height: 3px; border-radius: 3px; background: var(--green); }
+.nsd-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 18px; }
+.nsd-action { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 8px 10px; border-radius: 18px; background: #eef8f5; border: 1px solid #e0efea; min-width: 0; }
+.nsd-action b { font-size: 0.75rem; font-weight: 700; line-height: 1.15; }
+.nsd-action > svg { position: absolute; right: 6px; bottom: 10px; color: var(--deep-2); }
+.nsd-action-icon { width: 42px; height: 42px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #fff; }
+.nsd-action-icon.green { background: #0f9a74; }
+.nsd-action-icon.blue { background: #2272d8; }
+.nsd-action-icon.orange { background: #f29a1c; }
+.nsd-action-icon.purple { background: #7a4bd0; }
+.nsd-tagline { grid-column: span 1; align-self: center; font-family: 'Brush Script MT', 'Segoe Script', cursive; font-style: italic; font-weight: 700; font-size: 0.9375rem; line-height: 1.1; color: var(--deep-2); transform: rotate(-6deg); text-align: center; }

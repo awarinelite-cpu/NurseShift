@@ -5,22 +5,32 @@ import { useAdmin } from '../../context/AdminContext';
 import Icon from '../../components/ns/Icon';
 
 const STATS = [
-  { key: 'totalUsers', label: 'Nurses (total)', icon: 'users', tone: 'blue', to: '/admin/nurses' },
-  { key: 'verifiedNurses', label: 'Verified nurses', icon: 'shieldCheck', tone: 'green', to: '/admin/nurses?filter=verified' },
-  { key: 'totalFacilities', label: 'Facilities', icon: 'building', tone: 'amber', to: '/admin/facilities' },
-  { key: 'totalShifts', label: 'Shifts (total)', icon: 'calendar', tone: 'blue', to: '/admin/shifts' },
-  { key: 'shiftsTaken', label: 'Shifts taken', icon: 'checkCircle', tone: 'green', to: '/admin/shifts?filter=taken' },
-  { key: 'shiftsNotTaken', label: 'Shifts not taken', icon: 'briefcase', tone: 'amber', to: '/admin/shifts?filter=open' },
+  { key: 'totalUsers', label: 'Total Nurses', icon: 'users', tone: 'teal', to: '/admin/nurses',
+    sub: (st) => `${st.activeUsers} active now`, ring: false },
+  { key: 'verifiedNurses', label: 'Verified Nurses', icon: 'shieldCheck', tone: 'blue', to: '/admin/nurses?filter=verified',
+    sub: (st) => `${pct(st.verifiedNurses, st.totalUsers)}% verified`, ring: true },
+  { key: 'totalFacilities', label: 'Facilities', icon: 'building', tone: 'purple', to: '/admin/facilities',
+    sub: () => 'Partner sites', ring: false },
+  { key: 'totalShifts', label: 'Shifts (total)', icon: 'calendar', tone: 'orange', to: '/admin/shifts',
+    sub: () => 'All posted shifts', ring: false },
+  { key: 'shiftsTaken', label: 'Shifts taken', icon: 'check', tone: 'green', to: '/admin/shifts?filter=taken',
+    sub: (st) => `${pct(st.shiftsTaken, st.totalShifts)}% completion rate`, ring: true },
+  { key: 'shiftsNotTaken', label: 'Shifts not taken', icon: 'alert', tone: 'red', to: '/admin/shifts?filter=open',
+    sub: (st) => `${pct(st.shiftsNotTaken, st.totalShifts)}% of total`, ring: true },
 ];
 
 const ACTIONS = [
-  { to: '/admin/review', label: 'License review', icon: 'shieldCheck' },
-  { to: '/admin/facilities', label: 'Facilities', icon: 'building' },
-  { to: '/admin/disputes', label: 'Disputes', icon: 'alert' },
-  { to: '/admin/nurses', label: 'Nurses', icon: 'users' },
-  { to: '/admin/shifts', label: 'Shifts', icon: 'calendar' },
-  { to: '/admin/facilities/import', label: 'Import CSV', icon: 'file' },
+  { to: '/admin/review', label: 'License review', icon: 'shieldCheck', tone: 'green' },
+  { to: '/admin/facilities', label: 'Facilities', icon: 'building', tone: 'blue' },
+  { to: '/admin/disputes', label: 'Disputes', icon: 'alert', tone: 'orange' },
+  { to: '/admin/nurses', label: 'Nurses', icon: 'users', tone: 'purple' },
+  { to: '/admin/shifts', label: 'Shifts', icon: 'calendar', tone: 'green' },
+  { to: '/admin/facilities/import', label: 'Import CSV', icon: 'file', tone: 'purple' },
 ];
+
+function pct(part, total) {
+  return total ? Math.round((part / total) * 100) : 0;
+}
 
 function greeting() {
   const h = new Date().getHours();
@@ -59,51 +69,70 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <header className="ns-greet">
-        <div>
-          <p className="ns-greet-small">{greeting()}</p>
-          <h1>{displayName} <span aria-hidden="true">👋</span></h1>
-          <p className="ns-greet-role">{isSub ? 'Subadmin' : 'Owner'} · Live overview</p>
+      <header className="nsd-hero">
+        <div className="nsd-top">
+          <div className="nsd-brand">
+            <Icon name="logo" size={40} strokeWidth={1.8} className="nsd-logo" />
+            <div>
+              <strong>Nurse<span>Shift</span></strong>
+              <small>Flexible Shifts. Healthier Communities.</small>
+            </div>
+          </div>
+          <div className="nsd-top-right">
+            <Link to="/admin/review" className="nsd-bell" aria-label="License review">
+              <Icon name="bell" size={24} />
+            </Link>
+            <span className="nsd-avatar" aria-hidden="true">{initials(admin?.name || displayName)}</span>
+          </div>
         </div>
-        <div className="ns-greet-right">
-          <span className="ns-avatar" aria-hidden="true">{initials(admin?.name || displayName)}</span>
+
+        <div className="nsd-hero-row">
+          <div className="nsd-greet">
+            <p>{greeting()}</p>
+            <h1>{displayName} <span aria-hidden="true">👋</span></h1>
+            <small>Here&rsquo;s what&rsquo;s happening with your platform today.</small>
+          </div>
+          <Link to="/admin/settings" className="nsd-status">
+            <Icon name="shieldCheck" size={28} className="nsd-status-icon" />
+            <span>
+              <em><i aria-hidden="true" /> Platform Status</em>
+              <strong>All Systems Active</strong>
+              <small>Everything is running smoothly</small>
+            </span>
+            <Icon name="chevR" size={18} />
+          </Link>
         </div>
       </header>
 
       {!stats ? (
         <div className="ns-empty">Loading live stats...</div>
       ) : (
-        <>
-          <Link to="/admin/nurses?filter=active" className="ns-earn-card">
-            <span className="ns-earn-icon"><Icon name="users" size={26} /></span>
-            <span className="ns-earn-text">
-              <small>Active right now</small>
-              <strong>{stats.activeUsers}</strong>
-              <em><span className="ns-live-dot" aria-hidden="true" /> Updates automatically</em>
-            </span>
-            <Icon name="trendingUp" size={64} strokeWidth={1.6} className="ns-earn-chart" />
-          </Link>
-
-          <div className="ns-stats">
-            {STATS.map(({ key, label, icon, tone, to }) => (
-              <Link to={to} className={`ns-stat ${tone}`} key={key}>
-                <span className="ns-stat-icon"><Icon name={icon} size={22} /></span>
-                <small>{label}</small>
-                <strong>{stats[key]}</strong>
-              </Link>
-            ))}
-          </div>
-        </>
+        <div className="nsd-stats">
+          {STATS.map(({ key, label, icon, tone, to, sub, ring }) => (
+            <Link to={to} className={`nsd-stat ${tone}`} key={key}>
+              <span className="nsd-stat-icon"><Icon name={icon} size={22} strokeWidth={2.2} /></span>
+              <small>{label}</small>
+              <strong>{stats[key]}</strong>
+              <span className="nsd-stat-foot">
+                {ring && <i className="nsd-ring" aria-hidden="true" />}
+                <em>{sub(stats)}</em>
+                <Icon name="chevR" size={16} />
+              </span>
+            </Link>
+          ))}
+        </div>
       )}
 
-      <h2 className="ns-h2">Quick Actions</h2>
-      <div className="ns-actions">
+      <h2 className="nsd-h2">Quick Actions</h2>
+      <div className="nsd-actions">
         {actions.map((a) => (
-          <Link key={a.to} to={a.to} className="ns-action">
-            <span><Icon name={a.icon} size={22} /></span>
-            {a.label}
+          <Link key={a.to} to={a.to} className="nsd-action">
+            <span className={`nsd-action-icon ${a.tone}`}><Icon name={a.icon} size={22} /></span>
+            <b>{a.label}</b>
+            <Icon name="chevR" size={16} />
           </Link>
         ))}
+        <p className="nsd-tagline" aria-hidden="true">Better Healthcare Together</p>
       </div>
 
       <button type="button" className="ns-btn ns-btn-danger ns-btn-block" onClick={handleSignOut}>
