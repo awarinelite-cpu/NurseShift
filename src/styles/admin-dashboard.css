@@ -102,3 +102,12 @@
 .nsd-row .badge.rejected { background: #fdecec; color: #c4274b; }
 .nsd-row-chev { margin-left: auto; color: var(--deep-2); flex: none; }
 .ns-admin a.claim-card.nsd-row > div:first-child { flex: 1; }
+
+/* Fix: `.ns-stage a { color: inherit }` was beating the tile colour, so tile text came out dark. */
+.ns-stage .nsd-stat, .ns-stage .nsd-stat small, .ns-stage .nsd-stat strong, .ns-stage .nsd-stat em { color: #fff; }
+.ns-stage .nsd-stat-foot, .ns-stage .nsd-stat-foot em { color: rgba(255, 255, 255, 0.92); }
+.ns-stage .nsd-h2 { margin-top: 28px; }
+.nsd-page-title-lg h1 { font-size: 2.125rem; }
+.nsd-page-title-lg { margin-top: 20px; }
+.nsd-hero + .nsd-stats { margin-top: 14px; }
+.nsd-stats ~ .nsd-filters { margin-top: 18px; }

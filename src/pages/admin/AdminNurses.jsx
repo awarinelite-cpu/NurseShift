@@ -51,12 +51,14 @@ export default function AdminNurses() {
   return (
     <div className="page">
       <PageHero
+        full
         title="Nurses"
         subtitle={`${filtered.length} nurse${filtered.length === 1 ? '' : 's'} · Every nurse account on the platform.`}
         tiles={loading || error ? [] : [
-          { label: 'Total', value: nurses.length, tone: 'teal', icon: 'users' },
-          { label: 'Verified', value: nurses.filter((n) => n.verification === 'verified').length, tone: 'blue', icon: 'shieldCheck' },
-          { label: 'Active now', value: nurses.filter((n) => n.active).length, tone: 'green', icon: 'check' },
+          { label: 'Total Nurses', value: nurses.length, tone: 'teal', icon: 'users', foot: `${nurses.filter((n) => n.active).length} active now` },
+          { label: 'Verified Nurses', value: nurses.filter((n) => n.verification === 'verified').length, tone: 'blue', icon: 'shieldCheck', ring: true,
+            foot: `${nurses.length ? Math.round((nurses.filter((n) => n.verification === 'verified').length / nurses.length) * 100) : 0}% verified` },
+          { label: 'Active now', value: nurses.filter((n) => n.active).length, tone: 'green', icon: 'check', foot: 'Live right now' },
         ]}
       />
 
