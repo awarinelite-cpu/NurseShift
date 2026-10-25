@@ -160,3 +160,41 @@
 .nsd-board .ns-btn-green { border-radius: 99px; background: linear-gradient(145deg, #14b88c, #0e9a74); color: #fff; box-shadow: 0 6px 12px rgba(14, 154, 116, 0.3); border: 0; }
 .nsd-board .ns-tag { border-radius: 99px; padding: 4px 10px; }
 .nsd-board .ns-sort-note { font-weight: 600; color: var(--deep-2); }
+
+/* ---------- shared nurse screens (My Shifts, Earnings, Profile, Messages, Nurses) ---------- */
+.nsd-top-left { display: flex; align-items: center; gap: 12px; }
+.page.nsd-nurse { padding-top: 0; }
+.ns-app .page.nsd-nurse { padding-top: 0; }
+.nsd-board .nsd-hero + * { margin-top: 16px; }
+.nsd-board .nsd-hero .nsd-mini-row + * { margin-top: 0; }
+
+.nsd-board .ns-tabs button { border-radius: 99px; background: #eef8f5; border: 1px solid #e0efea; box-shadow: none; color: var(--deep-2); }
+.nsd-board .ns-tabs button.on { background: linear-gradient(145deg, #14b88c, #0e9a74); border-color: transparent; color: #fff; box-shadow: 0 6px 12px rgba(14, 154, 116, 0.3); }
+.nsd-board .ns-tabs.flat { border-radius: 99px; background: #eef8f5; border: 1px solid #e0efea; }
+.nsd-board .ns-tabs.flat button.on { background: #fff; color: var(--deep); box-shadow: 0 4px 10px rgba(11, 59, 55, 0.14); border-color: transparent; }
+
+.nsd-board .ns-card { border-radius: 22px; background: #fff; border: 1px solid #e0efea; box-shadow: 0 8px 18px rgba(11, 59, 55, 0.1); }
+.nsd-board .ns-claim-actions button { border-radius: 99px; background: #eef8f5; border-color: #e0efea; }
+.nsd-board .ns-claim-actions button.primary { background: linear-gradient(145deg, #14b88c, #0e9a74); color: #fff; border-color: transparent; box-shadow: 0 6px 12px rgba(14, 154, 116, 0.3); }
+.nsd-board .ns-date strong { color: var(--deep-2); }
+
+.ns-stage .nsd-board .ns-earn-hero { border-radius: 22px; background: linear-gradient(145deg, #0f6a62, #07403c); box-shadow: 0 10px 20px rgba(7, 64, 60, 0.3); margin-top: 16px; }
+.nsd-board .ns-earn-hero, .nsd-board .ns-earn-hero small, .nsd-board .ns-earn-hero strong, .nsd-board .ns-earn-hero em { color: #fff; }
+.nsd-board .ns-earn-hero .ns-earn-chart { color: #2fe0a8; }
+
+.nsd-board .ns-figure { background: #eef8f5; box-shadow: none; }
+.nsd-board .ns-figure strong { color: var(--deep-2); }
+
+.nsd-board .ns-profile-head { display: flex; align-items: center; gap: 16px; margin-top: 18px; color: #fff; }
+.nsd-board .ns-profile-head h1 { color: #fff; font-size: 1.5rem; font-weight: 800; margin: 0; }
+.nsd-board .ns-profile-head p { color: rgba(255, 255, 255, 0.85); margin: 2px 0 6px; font-size: 0.8125rem; }
+.nsd-board .ns-avatar.lg { background: #1fc79a; border: 3px solid rgba(255, 255, 255, 0.4); }
+.nsd-board .ns-profile-stats { margin-top: 16px; }
+.nsd-board .ns-profile-stats strong { color: var(--deep-2); }
+.nsd-board .ns-menu { border-radius: 22px; background: #fff; border: 1px solid #e0efea; box-shadow: 0 8px 18px rgba(11, 59, 55, 0.1); }
+.nsd-board .ns-menu-icon { border-radius: 50%; }
+
+/* Messages and Nurse Directory use the older card classes */
+.nsd-board .claim-card { border-radius: 22px; background: #eef8f5; border: 1px solid #e0efea; box-shadow: 0 4px 10px rgba(11, 59, 55, 0.06); }
+.nsd-board .page-header { display: none; }
+.ns-app:has(.nsd-board) > .ns-subbar { display: none; }

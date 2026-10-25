@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCurrentIdentity } from '../context/CallContext';
 import { subscribeToConversations } from '../lib/chat';
+import NurseHero from '../components/ns/NurseHero';
 
 export default function Messages() {
   const me = useCurrentIdentity();
@@ -33,12 +34,16 @@ export default function Messages() {
   const basePath = me.type === 'facility' ? '/facility/messages' : '/messages';
 
   return (
-    <div className="page">
-      <div className="page-header">
-        <p className="eyebrow">Chat</p>
-        <h1 className="page-title">Messages</h1>
-        <p className="page-sub">Text and voice calling with facilities and other nurses.</p>
-      </div>
+    <div className={me.type === 'facility' ? 'page' : 'page nsd-nurse nsd-board'}>
+      {me.type === 'facility' ? (
+        <div className="page-header">
+          <p className="eyebrow">Chat</p>
+          <h1 className="page-title">Messages</h1>
+          <p className="page-sub">Text and voice calling with facilities and other nurses.</p>
+        </div>
+      ) : (
+        <NurseHero title="Messages" subtitle="Text and voice calling with facilities and other nurses." />
+      )}
 
       {loading ? (
         <div className="empty-state">Loading…</div>

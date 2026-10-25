@@ -9,6 +9,7 @@ import { getOrCreateConversation } from '../lib/chat';
 import { formatNaira, fmtRange, titleFor, toDate } from '../lib/earnings';
 import ReportIssueForm from '../components/ReportIssueForm';
 import Icon from '../components/ns/Icon';
+import NurseHero from '../components/ns/NurseHero';
 
 const TABS = [
   { key: 'upcoming', label: 'Upcoming', match: (c) => c.status === 'pending' || c.status === 'approved' },
@@ -89,14 +90,17 @@ export default function MyShifts() {
   }
 
   return (
-    <div className="ns-screen">
-      <header className="ns-topbar">
-        <button type="button" className="ns-icon-btn" onClick={() => navigate('/')} aria-label="Back to home">
-          <Icon name="back" size={22} />
-        </button>
-        <h1>My Shifts</h1>
-        <span className="ns-topbar-spacer" />
-      </header>
+    <div className="ns-screen nsd-nurse nsd-board">
+      <NurseHero
+        title="My Shifts"
+        subtitle="Your upcoming, completed and cancelled shifts."
+        onBack={() => navigate('/')}
+        tiles={[
+          { label: 'Upcoming', value: counts.upcoming, tone: 'blue', icon: 'calendar' },
+          { label: 'Completed', value: counts.completed, tone: 'green', icon: 'checkCircle' },
+          { label: 'Cancelled', value: counts.cancelled, tone: 'red', icon: 'alert' },
+        ]}
+      />
 
       <div className="ns-tabs" role="tablist">
         {TABS.map((t) => (

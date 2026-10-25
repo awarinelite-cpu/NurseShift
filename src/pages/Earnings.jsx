@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useClaims } from '../lib/useClaims';
 import { formatNaira, fmtDay, summarize, titleFor } from '../lib/earnings';
 import Icon from '../components/ns/Icon';
+import NurseHero from '../components/ns/NurseHero';
 import FacilityThumb from '../components/ns/FacilityThumb';
 
 const RANGES = [
@@ -21,10 +22,8 @@ export default function Earnings() {
   const rows = showAll ? s.rows : s.rows.slice(0, 4);
 
   return (
-    <div className="ns-screen">
-      <header className="ns-topbar center">
-        <h1>Earnings</h1>
-      </header>
+    <div className="ns-screen nsd-nurse nsd-board">
+      <NurseHero back={false} title="Earnings" subtitle="Track what you've earned and what's on its way." />
 
       <section className="ns-earn-hero">
         <div>

@@ -5,6 +5,7 @@ import { useClaims } from '../lib/useClaims';
 import { initials } from '../lib/earnings';
 import { listOpenShifts } from '../lib/shifts';
 import Icon from '../components/ns/Icon';
+import NurseHero from '../components/ns/NurseHero';
 import Sheet from '../components/ns/Sheet';
 
 const MENU = [
@@ -72,23 +73,26 @@ export default function Profile() {
   }
 
   return (
-    <div className="ns-screen">
-      <header className="ns-topbar end">
-        <button type="button" className="ns-icon-btn" onClick={() => setSheet('settings')} aria-label="Settings">
-          <Icon name="settings" size={22} />
-        </button>
-      </header>
-
-      <section className="ns-profile-head">
-        <span className="ns-avatar lg">{initials(nurse.name)}</span>
-        <div>
-          <h1>{nurse.name}</h1>
-          <p>Registered Nurse</p>
-          <span className={`ns-verified ${nurse.verification}`}>
-            <Icon name="shieldCheck" size={14} /> {VERIFY_LABEL[nurse.verification] ?? 'Under Review'}
-          </span>
-        </div>
-      </section>
+    <div className="ns-screen nsd-nurse nsd-board">
+      <NurseHero
+        back={false}
+        right={
+          <button type="button" className="nsd-back" onClick={() => setSheet('settings')} aria-label="Settings">
+            <Icon name="settings" size={22} />
+          </button>
+        }
+      >
+        <section className="ns-profile-head">
+          <span className="ns-avatar lg">{initials(nurse.name)}</span>
+          <div>
+            <h1>{nurse.name}</h1>
+            <p>Registered Nurse</p>
+            <span className={`ns-verified ${nurse.verification}`}>
+              <Icon name="shieldCheck" size={14} /> {VERIFY_LABEL[nurse.verification] ?? 'Under Review'}
+            </span>
+          </div>
+        </section>
+      </NurseHero>
 
       <div className="ns-card ns-profile-stats">
         <div><strong>{completed}</strong><small>Completed Shifts</small></div>

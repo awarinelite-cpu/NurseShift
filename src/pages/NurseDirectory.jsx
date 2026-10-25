@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentIdentity } from '../context/CallContext';
 import { listNurseDirectory, getOrCreateConversation } from '../lib/chat';
+import NurseHero from '../components/ns/NurseHero';
 
 export default function NurseDirectory() {
   const me = useCurrentIdentity();
@@ -35,12 +36,8 @@ export default function NurseDirectory() {
   if (!me) return null;
 
   return (
-    <div className="page">
-      <div className="page-header">
-        <p className="eyebrow">{nurses.length} nurses</p>
-        <h1 className="page-title">Nurses</h1>
-        <p className="page-sub">Message or call another nurse on the platform.</p>
-      </div>
+    <div className="page nsd-nurse nsd-board">
+      <NurseHero title="Nurses" subtitle={`${nurses.length} nurses · Message or call another nurse on the platform.`} />
 
       {messageError && <p className="form-error" style={{ marginBottom: 16 }}>{messageError}</p>}
 
