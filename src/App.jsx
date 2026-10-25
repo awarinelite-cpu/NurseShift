@@ -36,6 +36,7 @@ import AdminFacilityDetail from './pages/admin/AdminFacilityDetail';
 import AdminFacilityImport from './pages/admin/AdminFacilityImport';
 import PostShift from './pages/facility/PostShift';
 import FacilityDashboard from './pages/facility/FacilityDashboard';
+import FacilityHome from './pages/facility/FacilityHome';
 
 export default function App() {
   return (
@@ -67,7 +68,8 @@ export default function App() {
                   <Route path="/facility/signup" element={<Navigate to="/signup?role=facility" replace />} />
                 </Route>
                 <Route element={<FacilityLayout />}>
-                  <Route path="/facility" element={<RequireFacility><FacilityDashboard /></RequireFacility>} />
+                  <Route path="/facility" element={<RequireFacility><FacilityHome /></RequireFacility>} />
+                  <Route path="/facility/claims" element={<RequireFacility><FacilityDashboard /></RequireFacility>} />
                   <Route path="/facility/post" element={<RequireFacility><PostShift /></RequireFacility>} />
                   <Route path="/facility/messages" element={<RequireFacility><Messages /></RequireFacility>} />
                   <Route path="/facility/messages/:conversationId" element={<RequireFacility><ChatThread /></RequireFacility>} />

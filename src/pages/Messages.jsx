@@ -34,16 +34,8 @@ export default function Messages() {
   const basePath = me.type === 'facility' ? '/facility/messages' : '/messages';
 
   return (
-    <div className={me.type === 'facility' ? 'page' : 'page nsd-nurse nsd-board'}>
-      {me.type === 'facility' ? (
-        <div className="page-header">
-          <p className="eyebrow">Chat</p>
-          <h1 className="page-title">Messages</h1>
-          <p className="page-sub">Text and voice calling with facilities and other nurses.</p>
-        </div>
-      ) : (
-        <NurseHero title="Messages" subtitle="Text and voice calling with facilities and other nurses." />
-      )}
+    <div className="page nsd-nurse nsd-board">
+      <NurseHero back={me.type !== 'facility'} title="Messages" subtitle="Text and voice calling with facilities and other nurses." />
 
       {loading ? (
         <div className="empty-state">Loading…</div>

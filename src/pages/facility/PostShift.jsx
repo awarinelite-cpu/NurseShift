@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFacility } from '../../context/FacilityContext';
 import { postShift } from '../../lib/facility';
+import NurseHero from '../../components/ns/NurseHero';
 
 const UNITS = ['ICU', 'Accident & Emergency', 'Labour Ward', 'Paediatrics', 'Theatre', 'General Medicine'];
 const CADRES = ['RN', 'RM', 'RPN'];
@@ -53,12 +54,8 @@ export default function PostShift() {
   }
 
   return (
-    <div className="page" style={{ maxWidth: 520 }}>
-      <div className="page-header">
-        <p className="eyebrow">{facility?.name}</p>
-        <h1 className="page-title">Post a Shift</h1>
-        <p className="page-sub">This goes straight onto the nurse duty board.</p>
-      </div>
+    <div className="page nsd-nurse nsd-board">
+      <NurseHero back={false} title="Post a Shift" subtitle={`${facility?.name ?? ''} · This goes straight onto the nurse duty board.`} />
 
       {posted && (
         <div className="claim-card" style={{ marginBottom: 16, borderColor: 'var(--green)' }}>
@@ -66,7 +63,7 @@ export default function PostShift() {
             <div className="facility">Posted: {posted.id}</div>
             <div className="meta">{posted.unit} · {posted.date} · {posted.start}–{posted.end}</div>
           </div>
-          <button className="clock-btn" onClick={() => navigate('/facility')}>View claims</button>
+          <button className="clock-btn" onClick={() => navigate('/facility/claims')}>View claims</button>
         </div>
       )}
 

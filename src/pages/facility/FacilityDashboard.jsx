@@ -7,6 +7,7 @@ import { getCurrentLocation } from '../../lib/geo';
 import { getOrCreateConversation } from '../../lib/chat';
 import Badge from '../../components/Badge';
 import ReportIssueForm from '../../components/ReportIssueForm';
+import NurseHero from '../../components/ns/NurseHero';
 
 function formatNaira(amount) {
   return `₦${(amount ?? 0).toLocaleString('en-NG')}`;
@@ -137,12 +138,17 @@ export default function FacilityDashboard() {
   const done = claims.filter((c) => c.status === 'completed' && c.rated || c.status === 'rejected');
 
   return (
-    <div className="page">
-      <div className="page-header">
-        <p className="eyebrow">{facility?.name}</p>
-        <h1 className="page-title">Claims</h1>
-        <p className="page-sub">Approve a claim to lock in the nurse and lock the shift; rejecting reopens it.</p>
-      </div>
+    <div className="page nsd-nurse nsd-board">
+      <NurseHero
+        back={false}
+        title="Claims"
+        subtitle={`${facility?.name ?? ''} · Approve a claim to lock in the nurse and lock the shift; rejecting reopens it.`}
+        tiles={[
+          { label: 'Pending', value: pending.length, tone: 'orange', icon: 'alert' },
+          { label: 'Upcoming', value: active.length, tone: 'blue', icon: 'clock' },
+          { label: 'To rate', value: toRate.length, tone: 'green', icon: 'star' },
+        ]}
+      />
 
       <div className="detail-card" style={{ marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
         <div>

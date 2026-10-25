@@ -198,3 +198,9 @@
 .nsd-board .claim-card { border-radius: 22px; background: #eef8f5; border: 1px solid #e0efea; box-shadow: 0 4px 10px rgba(11, 59, 55, 0.06); }
 .nsd-board .page-header { display: none; }
 .ns-app:has(.nsd-board) > .ns-subbar { display: none; }
+
+/* ---------- facility home ---------- */
+.ns-stage .nsd-notice { display: flex; align-items: center; gap: 12px; margin-top: 16px; padding: 14px 16px; border-radius: 20px; background: #fff3de; border: 1px solid #f6dfb4; color: #7a4a00; }
+.nsd-notice span { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.nsd-notice strong { font-size: 0.875rem; font-weight: 800; }
+.nsd-notice small { font-size: 0.75rem; }
