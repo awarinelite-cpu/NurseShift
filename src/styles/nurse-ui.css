@@ -354,3 +354,57 @@
 .ns-stage .ns-auth-dark .form-footer { margin-top: 18px; color: rgba(255, 255, 255, 0.85); font-size: 0.875rem; }
 .ns-stage .ns-auth-dark .form-footer a { color: var(--green); font-weight: 800; margin-left: 4px; }
 .ns-stage .ns-auth-dark .form-error { color: #ff9b94; }
+
+/* ---------- Solid finish: raised cards and chunky filled buttons (same palette) ---------- */
+.ns-card, .ns-menu, .ns-action, .ns-mini {
+  border: 0;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 2px 4px rgba(11, 59, 55, 0.07), 0 12px 26px rgba(11, 59, 55, 0.13);
+}
+.ns-mini { background: #f3f9f7; box-shadow: 0 1px 0 #fff inset, 0 6px 14px rgba(11, 59, 55, 0.1); }
+.ns-search { border: 0; background: #eef5f3; box-shadow: inset 0 2px 4px rgba(11, 59, 55, 0.08); }
+.ns-menu li + li { border-top: 1px solid #edf3f1; }
+.ns-action span, .ns-menu-icon, .ns-stat-icon { box-shadow: 0 4px 10px rgba(11, 59, 55, 0.12); }
+.ns-earn-card, .ns-earn-hero { box-shadow: 0 5px 0 #072b28, 0 16px 28px rgba(11, 59, 55, 0.32); }
+
+/* Primary buttons: a solid green slab with a darker lower edge that presses down */
+.ns-btn { border: 0; }
+.ns-btn-green, .ns-stage .ns-auth .claim-btn {
+  background: var(--green);
+  color: #fff;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 4px 0 var(--green-dk), 0 12px 20px rgba(20, 184, 140, 0.32);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+.ns-btn-green:hover:not(:disabled), .ns-stage .ns-auth .claim-btn:hover:not(:disabled) { background: var(--green); filter: brightness(1.05); }
+.ns-btn-green:active:not(:disabled), .ns-stage .ns-auth .claim-btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 1px 0 var(--green-dk), 0 5px 10px rgba(20, 184, 140, 0.3);
+}
+.ns-btn-green:disabled, .ns-stage .ns-auth .claim-btn:disabled { background: #b8c9c5; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 4px 0 #9fb2ae; }
+.ns-btn-sm.ns-btn-green { box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 3px 0 var(--green-dk), 0 8px 14px rgba(20, 184, 140, 0.28); }
+
+/* Secondary: filled deep teal instead of an outline */
+.ns-btn-outline { background: var(--deep-2); color: #fff; border: 0; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset, 0 4px 0 var(--deep), 0 12px 20px rgba(11, 59, 55, 0.25); }
+.ns-btn-outline:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset, 0 1px 0 var(--deep); }
+.ns-btn-outline:disabled { background: #7e9a96; box-shadow: 0 4px 0 #637d79; }
+.ns-btn-ghost { background: var(--deep-2); color: #fff; border: 0; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 4px 0 #062a27, 0 12px 20px rgba(0, 0, 0, 0.3); }
+.ns-btn-ghost:active { transform: translateY(3px); box-shadow: 0 1px 0 #062a27; }
+.ns-btn-danger { background: var(--red-soft); color: var(--red); box-shadow: 0 1px 0 #fff inset, 0 4px 0 #f1c7c7, 0 10px 18px rgba(214, 69, 69, 0.15); }
+.ns-btn-danger:active { transform: translateY(3px); box-shadow: 0 1px 0 #f1c7c7; }
+
+/* Small controls become solid chips and tiles, not outlines */
+.ns-icon-btn.outlined { border: 0; background: #eef5f3; box-shadow: 0 3px 0 #d9e6e2; }
+.ns-icon-btn.outlined.on { background: var(--mint); box-shadow: 0 3px 0 #bfe6d8; }
+.ns-pill-select { border: 0; background: #eef5f3; box-shadow: 0 3px 0 #d9e6e2; }
+.ns-pill-select.active { background: var(--green); box-shadow: 0 3px 0 var(--green-dk); }
+.ns-claim-actions button { border: 0; background: #eef5f3; box-shadow: 0 3px 0 #d9e6e2; }
+.ns-claim-actions button.primary { background: var(--green); color: #fff; box-shadow: 0 3px 0 var(--green-dk); }
+.ns-claim-actions button.danger { background: var(--red-soft); box-shadow: 0 3px 0 #f1c7c7; }
+.ns-claim-actions button:active { transform: translateY(2px); box-shadow: none; }
+.ns-tabs button { box-shadow: 0 3px 0 #dfe8e5; }
+.ns-tabs button.on { box-shadow: 0 3px 0 var(--green-dk); }
+.ns-tabs.flat button, .ns-tabs.flat button.on { box-shadow: none; }
+.ns-tabs.flat button.on { box-shadow: 0 2px 6px rgba(11, 59, 55, 0.15); }
+.ns-segment button.on { box-shadow: 0 2px 6px rgba(11, 59, 55, 0.15); }
+.ns-rate button { box-shadow: 0 3px 0 #f2d9a8; }
+.ns-tab.active svg { filter: drop-shadow(0 3px 4px rgba(14, 154, 116, 0.35)); }
