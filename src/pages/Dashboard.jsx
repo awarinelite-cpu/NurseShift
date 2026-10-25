@@ -41,24 +41,34 @@ export default function Dashboard() {
   const firstName = nurse.name?.split(' ')[0] ?? '';
 
   return (
-    <div className="ns-screen">
-      <header className="ns-greet">
-        <div>
-          <p className="ns-greet-small">{greeting()}</p>
-          <h1>{nurse.name} <span aria-hidden="true">👋</span></h1>
-          <p className="ns-greet-role">Registered Nurse</p>
+    <div className="ns-screen nsd-nurse">
+      <header className="nsd-hero">
+        <div className="nsd-top">
+          <div className="nsd-brand">
+            <Icon name="logo" size={40} strokeWidth={1.8} className="nsd-logo" />
+            <div>
+              <strong>Nurse<span>Shift</span></strong>
+              <small>Flexible Shifts. Healthier Communities.</small>
+            </div>
+          </div>
+          <div className="nsd-top-right">
+            <Link to="/messages" className="nsd-bell" aria-label="Messages">
+              <Icon name="bell" size={24} />
+            </Link>
+            <Link to="/profile" className="nsd-avatar" aria-label={`${firstName}'s profile`}>{initials(nurse.name)}</Link>
+          </div>
         </div>
-        <div className="ns-greet-right">
-          <Link to="/messages" className="ns-bell" aria-label="Messages">
-            <Icon name="bell" size={22} />
-          </Link>
-          <Link to="/profile" className="ns-avatar" aria-label={`${firstName}'s profile`}>{initials(nurse.name)}</Link>
+
+        <div className="nsd-greet nsd-greet-solo">
+          <p>{greeting()}</p>
+          <h1>{nurse.name} <span aria-hidden="true">👋</span></h1>
+          <small>Registered Nurse</small>
         </div>
       </header>
 
-      <Link to="/profile" className={`ns-card ns-verify ${v.tone}`}>
-        <span className="ns-verify-icon"><Icon name="shieldCheck" size={30} /></span>
-        <span className="ns-verify-text">
+      <Link to="/profile" className={`nsd-verify ${v.tone}`}>
+        <span className="nsd-verify-icon"><Icon name="shieldCheck" size={30} /></span>
+        <span className="nsd-verify-text">
           <small>Verification Status</small>
           <strong>{v.title}</strong>
           <em>{v.note}</em>
@@ -66,40 +76,44 @@ export default function Dashboard() {
         <Icon name="chevR" size={18} />
       </Link>
 
-      <Link to="/earnings" className="ns-earn-card">
-        <span className="ns-earn-icon"><Icon name="wallet" size={26} /></span>
-        <span className="ns-earn-text">
+      <Link to="/earnings" className="nsd-earn">
+        <span className="nsd-earn-icon"><Icon name="wallet" size={26} /></span>
+        <span className="nsd-earn-text">
           <small>Total Earnings</small>
           <strong>{formatNaira(month.total)}</strong>
           <em>This month</em>
         </span>
-        <Icon name="trendingUp" size={64} strokeWidth={1.6} className="ns-earn-chart" />
+        <Icon name="trendingUp" size={64} strokeWidth={1.6} className="nsd-earn-chart" />
       </Link>
 
-      <div className="ns-stats">
-        <Link to="/shifts" className="ns-stat blue">
-          <span className="ns-stat-icon"><Icon name="calendar" size={22} /></span>
+      <div className="nsd-stats">
+        <Link to="/shifts" className="nsd-stat blue">
+          <span className="nsd-stat-icon"><Icon name="calendar" size={22} strokeWidth={2.2} /></span>
           <small>Available Shifts</small>
           <strong>{openCount ?? '-'}</strong>
+          <span className="nsd-stat-foot"><em>Open now</em><Icon name="chevR" size={16} /></span>
         </Link>
-        <Link to="/my-shifts" className="ns-stat green">
-          <span className="ns-stat-icon"><Icon name="checkCircle" size={22} /></span>
+        <Link to="/my-shifts" className="nsd-stat green">
+          <span className="nsd-stat-icon"><Icon name="checkCircle" size={22} strokeWidth={2.2} /></span>
           <small>Completed Shifts</small>
           <strong>{completedAll}</strong>
+          <span className="nsd-stat-foot"><em>All time</em><Icon name="chevR" size={16} /></span>
         </Link>
-        <Link to="/profile" className="ns-stat amber">
-          <span className="ns-stat-icon"><Icon name="star" size={22} fill="currentColor" /></span>
+        <Link to="/profile" className="nsd-stat orange">
+          <span className="nsd-stat-icon"><Icon name="star" size={22} fill="currentColor" /></span>
           <small>Average Rating</small>
           <strong>{nurse.rating ? Number(nurse.rating).toFixed(1) : '-'}</strong>
+          <span className="nsd-stat-foot"><em>From facilities</em><Icon name="chevR" size={16} /></span>
         </Link>
       </div>
 
-      <h2 className="ns-h2">Quick Actions</h2>
-      <div className="ns-actions">
-        {ACTIONS.map((a) => (
-          <Link key={a.to} to={a.to} className="ns-action">
-            <span><Icon name={a.icon} size={22} /></span>
-            {a.label}
+      <h2 className="nsd-h2">Quick Actions</h2>
+      <div className="nsd-actions nsd-actions-4">
+        {ACTIONS.map((a, i) => (
+          <Link key={a.to} to={a.to} className="nsd-action">
+            <span className={`nsd-action-icon ${['green', 'blue', 'orange', 'purple'][i % 4]}`}><Icon name={a.icon} size={22} /></span>
+            <b>{a.label}</b>
+            <Icon name="chevR" size={16} />
           </Link>
         ))}
       </div>

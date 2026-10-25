@@ -111,3 +111,32 @@
 .nsd-page-title-lg { margin-top: 20px; }
 .nsd-hero + .nsd-stats { margin-top: 14px; }
 .nsd-stats ~ .nsd-filters { margin-top: 18px; }
+
+/* ---------- nurse Home ---------- */
+.ns-screen.nsd-nurse { padding-top: 0; }
+.nsd-greet-solo { margin-top: 22px; }
+.nsd-greet-solo p { font-size: 1.0625rem; font-weight: 500; margin: 0; color: #fff; }
+.nsd-greet-solo h1 { font-size: 2.125rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin: 2px 0 6px; color: #fff; }
+.nsd-greet-solo small { max-width: none; display: block; font-size: 0.75rem; color: rgba(255, 255, 255, 0.85); }
+.nsd-avatar { text-decoration: none; }
+
+.ns-stage .nsd-verify { display: flex; align-items: center; gap: 14px; margin-top: 16px; padding: 14px 16px; border-radius: 22px; background: #fff; border: 1px solid var(--line); box-shadow: 0 8px 18px rgba(11, 59, 55, 0.1); color: var(--text); }
+.nsd-verify-icon { width: 46px; height: 46px; display: inline-flex; align-items: center; justify-content: center; flex: none; color: var(--green-dk); }
+.nsd-verify.wait .nsd-verify-icon { color: var(--amber); }
+.nsd-verify.bad .nsd-verify-icon { color: var(--red); }
+.nsd-verify-text { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.nsd-verify-text small { font-size: 0.75rem; font-weight: 700; }
+.nsd-verify-text strong { font-size: 1.0625rem; font-weight: 800; color: var(--green-dk); }
+.nsd-verify.wait .nsd-verify-text strong { color: var(--amber); }
+.nsd-verify.bad .nsd-verify-text strong { color: var(--red); }
+.nsd-verify-text em { font-style: normal; font-size: 0.75rem; color: var(--muted); line-height: 1.4; }
+
+.ns-stage .nsd-earn { position: relative; display: flex; align-items: center; gap: 14px; margin: 14px 0; padding: 18px; border-radius: 22px; overflow: hidden; background: linear-gradient(145deg, #0f6a62, #07403c); box-shadow: 0 10px 20px rgba(7, 64, 60, 0.3); }
+.ns-stage .nsd-earn, .ns-stage .nsd-earn small, .ns-stage .nsd-earn strong, .ns-stage .nsd-earn em { color: #fff; }
+.nsd-earn-icon { width: 52px; height: 52px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex: none; background: rgba(255, 255, 255, 0.88); color: #0f8a78; }
+.nsd-earn-text { display: flex; flex-direction: column; gap: 2px; }
+.nsd-earn-text small { font-size: 0.8125rem; font-weight: 600; }
+.nsd-earn-text strong { font-size: 1.875rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+.nsd-earn-text em { font-style: normal; font-size: 0.75rem; opacity: 0.85; }
+.nsd-earn-chart { margin-left: auto; color: #2fe0a8; flex: none; }
+.nsd-actions-4 { grid-template-columns: repeat(4, 1fr); }
