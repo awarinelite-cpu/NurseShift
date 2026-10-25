@@ -343,7 +343,7 @@
 .ns-auth.ns-auth-dark { min-height: 100dvh; padding: calc(30px + env(safe-area-inset-top)) 24px calc(30px + env(safe-area-inset-bottom)); align-items: stretch; color: #fff; background: radial-gradient(120% 70% at 50% 30%, #0a4156 0%, #083749 45%, #052232 100%); }
 .ns-auth-top { text-align: center; }
 .ns-auth-form { margin-top: -34px; position: relative; }
-.ns-auth-form h1 { font-size: 1.625rem; font-weight: 800; }
+.ns-auth-form h1 { font-size: 1.625rem; font-weight: 800; margin-bottom: 18px; }
 .ns-auth-sub { color: rgba(255, 255, 255, 0.78); font-size: 0.875rem; margin: 6px 0 18px; }
 .ns-note.dark { background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.9); }
 .ns-stage .ns-auth-dark .form-row label { color: #fff; }

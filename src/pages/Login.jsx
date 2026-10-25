@@ -54,7 +54,6 @@ export default function Login() {
 
       <div className="ns-auth-form">
         <h1>Welcome back</h1>
-        <p className="ns-auth-sub">Nurses, facilities and admins all sign in here.</p>
 
         {isDemo && (
           <p className="ns-note dark">
