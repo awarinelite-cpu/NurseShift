@@ -79,9 +79,11 @@ export default function AdminFacilityImport() {
         <p className="detail-city" style={{ marginBottom: 10 }}>
           Required columns: <code>name</code>, <code>city</code>. Optional: <code>lat</code>, <code>lng</code>,{' '}
           <code>unit</code>, <code>cadre</code>, <code>date</code>, <code>start</code>, <code>end</code>,{' '}
-          <code>hours</code>, <code>rate</code>, <code>urgency</code>. Include <code>unit</code> and{' '}
+          <code>hours</code>, <code>rate</code>, <code>urgency</code>, <code>photo_url</code>. Include <code>unit</code> and{' '}
           <code>date</code> to also create one open shift per facility. A row whose name and city exactly
           match an existing facility updates that facility's coordinates instead of creating a duplicate.
+          {' '}<code>photo_url</code> takes one or more <code>https://</code> image links separated by <code>|</code>
+          (a CSV can't carry picture files). Links only fill in photos for a facility that has none yet.
         </p>
         <a href="/facilities-template.csv" download>Download a ready-made template (70 Lagos + Ogun facilities)</a>
       </div>

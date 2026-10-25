@@ -146,7 +146,23 @@ export async function bulkImportFacilities(rows) {
       skipped.push({ row, reason: 'lat/lng must be numbers' });
       continue;
     }
-    valid.push({ ...row, lat, lng });
+    // photo_url (or photo): one or more https image links, separated by "|".
+    // A CSV can't carry image files, so photos from a CSV are links.
+    const photoRaw = (row.photo_url || row.photo || '').trim();
+    const photoLinks = photoRaw ? photoRaw.split('|').map((u) => u.trim()).filter(Boolean) : [];
+    const badLink = photoLinks.find((u) => {
+      try { return new URL(u).protocol !== 'https:'; } catch { return true; }
+    });
+    if (badLink) {
+      skipped.push({ row, reason: 'photo_url must be https:// links separated by |' });
+      continue;
+    }
+    if (photoLinks.length > MAX_FACILITY_PHOTOS) {
+      skipped.push({ row, reason: `photo_url can hold up to ${MAX_FACILITY_PHOTOS} links` });
+      continue;
+    }
+    const photos = photoLinks.map((url) => ({ url, path: null }));
+    valid.push({ ...row, lat, lng, photos });
   }
 
   const matchKey = (name, city) => `${name.trim().toLowerCase()}|${city.trim().toLowerCase()}`;
@@ -161,6 +177,9 @@ export async function bulkImportFacilities(rows) {
 
       if (existing) {
         demoUpdateFacilityLocation(existing.id, row.lat, row.lng);
+        // A CSV only supplies photos for a facility that has none yet, so a
+        // re-import never wipes pictures an admin uploaded by hand.
+        if (row.photos.length > 0 && !(existing.photos?.length > 0)) demoUpdateFacilityPhotos(existing.id, row.photos);
         const facilityShifts = demoListShiftsByFacility(existing.id);
         if (facilityShifts.length > 0) {
           for (const shift of facilityShifts) {
@@ -188,7 +207,13 @@ export async function bulkImportFacilities(rows) {
         continue;
       }
 
-      const facility = demoAddFacility({ name: row.name, city: row.city, lat: row.lat, lng: row.lng });
+      const facility = demoAddFacility({
+        name: row.name,
+        city: row.city,
+        lat: row.lat,
+        lng: row.lng,
+        ...(row.photos.length > 0 && { photos: row.photos, photoUrl: row.photos[0].url }),
+      });
       if (row.unit && row.date) {
         demoAddShift({
           facility: facility.name,
@@ -231,14 +256,25 @@ export async function bulkImportFacilities(rows) {
       const existing = existingByKey.get(matchKey(row.name, row.city));
 
       if (existing) {
-        batch.update(doc(db, 'facilities', existing.id), { lat: row.lat, lng: row.lng });
+        const addPhotos = row.photos.length > 0 && !(existing.photos?.length > 0);
+        batch.update(doc(db, 'facilities', existing.id), {
+          lat: row.lat,
+          lng: row.lng,
+          ...(addPhotos && { photos: row.photos, photoUrl: row.photos[0].url }),
+        });
         updated.push({ ...existing, lat: row.lat, lng: row.lng });
         shiftlessMatches.push({ row, facilityId: existing.id });
         continue;
       }
 
       const facilityRef = doc(collection(db, 'facilities'));
-      const facility = { name: row.name, city: row.city, lat: row.lat, lng: row.lng };
+      const facility = {
+        name: row.name,
+        city: row.city,
+        lat: row.lat,
+        lng: row.lng,
+        ...(row.photos.length > 0 && { photos: row.photos, photoUrl: row.photos[0].url }),
+      };
       batch.set(facilityRef, facility);
 
       if (row.unit && row.date) {
@@ -585,7 +621,7 @@ export async function addFacilityPhotos(facilityId, files) {
 
   const added = [];
   if (DEMO_MODE) {
-    for (const blob of blobs) added.push({ url: URL.createObjectURL(blob), path: null });
+    for (const blob of blobs) added.push({ url: URL.createObjectURL(blob), path: null, blob });
   } else {
     const { ref, uploadBytes, getDownloadURL } = await import('firebase/storage');
     const stamp = Date.now();

@@ -5,12 +5,19 @@ import './index.css';
 import './styles.css';
 import './styles/nurse-ui.css';
 import './styles/glass.css';
+import { DEMO_MODE } from './lib/firebase';
+import { hydrateDemoPhotos } from './lib/demoStore';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+// In demo mode, put saved facility photos back before the first render.
+const ready = DEMO_MODE ? hydrateDemoPhotos() : Promise.resolve();
+
+ready.finally(() => {
+  createRoot(document.getElementById('root')).render(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  );
+});
 
 // Register the service worker (production builds only, so dev hot-reload is never cached).
 if ('serviceWorker' in navigator && import.meta.env.PROD) {

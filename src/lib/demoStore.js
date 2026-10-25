@@ -1,5 +1,6 @@
 import { mockNurse, mockShifts, mockClaims } from './mockData';
 import { seedFacilities, seedShifts } from './seedData';
+import { loadDemoPhotos, saveDemoPhotos, deleteDemoPhotos } from './demoPersist';
 
 // A tiny shared in-memory "database" for demo mode, so nurse sign-up, facility
 // actions, and admin review all see the same data without a real backend.
@@ -52,6 +53,26 @@ let _facilities = [
 ];
 let _nextFacilityId = 1;
 
+// Only the facilities that exist on every page load (the seeds) can have photos
+// that survive a refresh. Facilities added during a session are in memory only,
+// so their photos go with them.
+const _persistentFacilityIds = new Set(_facilities.map((f) => f.id));
+
+// Called once before the app renders in demo mode: puts saved photos back on the seeds.
+export async function hydrateDemoPhotos() {
+  try {
+    const saved = await loadDemoPhotos();
+    _facilities = _facilities.map((f) => {
+      const photos = saved[f.id];
+      return photos?.length ? { ...f, photos, photoUrl: photos[0].url } : f;
+    });
+    // Drop saved photos that no longer belong to any seed facility.
+    await Promise.all(Object.keys(saved).filter((id) => !_persistentFacilityIds.has(id)).map((id) => deleteDemoPhotos(id)));
+  } catch {
+    // Private browsing or blocked storage: photos just won't persist.
+  }
+}
+
 export function demoAddFacility(profile) {
   const id = `facility-demo-${_nextFacilityId++}`;
   const facility = { id, ...profile };
@@ -74,6 +95,7 @@ export function demoUpdateFacilityLocation(id, lat, lng) {
 
 export function demoUpdateFacilityPhotos(id, photos) {
   _facilities = _facilities.map((f) => (f.id === id ? { ...f, photos, photoUrl: photos[0]?.url ?? null } : f));
+  if (_persistentFacilityIds.has(id)) saveDemoPhotos(id, photos).catch(() => {});
   return demoGetFacility(id);
 }
 

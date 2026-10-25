@@ -1,6 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { listFacilitiesForAdmin, createFacility, fixSeedFacilityCoordinates } from '../../lib/admin';
+import {
+  listFacilitiesForAdmin,
+  createFacility,
+  fixSeedFacilityCoordinates,
+  addFacilityPhotos,
+  MAX_FACILITY_PHOTOS,
+} from '../../lib/admin';
+import FacilityThumb from '../../components/ns/FacilityThumb';
 import { useAdmin } from '../../context/AdminContext';
 
 const EMPTY_FORM = {
@@ -30,6 +37,17 @@ export default function AdminFacilities() {
   const [fixingCoords, setFixingCoords] = useState(false);
   const [fixResult, setFixResult] = useState(null);
   const [fixError, setFixError] = useState('');
+  const [photoFiles, setPhotoFiles] = useState([]);
+  const [notice, setNotice] = useState('');
+  const photoInput = useRef(null);
+  const previews = useMemo(() => photoFiles.map((file) => URL.createObjectURL(file)), [photoFiles]);
+  useEffect(() => () => previews.forEach((u) => URL.revokeObjectURL(u)), [previews]);
+
+  function pickPhotos(e) {
+    const picked = Array.from(e.target.files ?? []);
+    e.target.value = '';
+    setPhotoFiles((cur) => [...cur, ...picked].slice(0, MAX_FACILITY_PHOTOS));
+  }
 
   async function refresh() {
     setLoading(true);
@@ -55,8 +73,18 @@ export default function AdminFacilities() {
     }
     setSaving(true);
     try {
-      await createFacility(form);
+      const facility = await createFacility(form);
+      let photoProblem = '';
+      if (photoFiles.length > 0) {
+        try {
+          await addFacilityPhotos(facility.id, photoFiles);
+        } catch (err) {
+          photoProblem = `${facility.name} was created, but its photos were not saved: ${err.message} Add them from the facility page.`;
+        }
+      }
+      setNotice(photoProblem);
       setForm(EMPTY_FORM);
+      setPhotoFiles([]);
       setShowForm(false);
       await refresh();
     } catch (err) {
@@ -128,6 +156,8 @@ export default function AdminFacilities() {
         <p className="form-error" style={{ marginBottom: 20 }}>{fixError}</p>
       )}
 
+      {notice && <p className="form-error" role="alert" style={{ marginBottom: 20 }}>{notice}</p>}
+
       {showForm && (
         <form className="detail-card" style={{ marginBottom: 20, display: 'flex', flexDirection: 'column', gap: 12 }} onSubmit={handleSubmit}>
           <div className="form-row">
@@ -137,6 +167,33 @@ export default function AdminFacilities() {
           <div className="form-row">
             <label htmlFor="f-city">City / LGA, State</label>
             <input id="f-city" placeholder="e.g. Ikeja, Lagos" value={form.city} onChange={(e) => update('city', e.target.value)} required />
+          </div>
+          <div className="form-row">
+            <label htmlFor="f-photos">Photos (optional)</label>
+            <input id="f-photos" ref={photoInput} type="file" accept="image/*" multiple hidden onChange={pickPhotos} />
+            <button
+              type="button"
+              className="clock-btn"
+              disabled={photoFiles.length >= MAX_FACILITY_PHOTOS}
+              onClick={() => photoInput.current?.click()}
+            >
+              {photoFiles.length === 0 ? 'Choose photos' : `Add more (${photoFiles.length} of ${MAX_FACILITY_PHOTOS})`}
+            </button>
+            {photoFiles.length > 0 && (
+              <div className="photo-grid">
+                {previews.map((src, i) => (
+                  <div className="photo-tile" key={src}>
+                    <img src={src} alt={`Selected photo ${i + 1}`} />
+                    {i === 0 && <span className="photo-badge">Cover</span>}
+                    <div className="photo-actions">
+                      <button type="button" className="danger" onClick={() => setPhotoFiles((cur) => cur.filter((_, j) => j !== i))}>
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="detail-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
             <div className="form-row">
@@ -214,11 +271,14 @@ export default function AdminFacilities() {
       ) : (
         facilities.map((f) => (
           <Link to={`/admin/facilities/${f.id}`} className="claim-card" key={f.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <div>
-              <div className="facility">{f.name}</div>
-              <div className="meta">
-                {f.city} · {f.shiftCount} shift{f.shiftCount === 1 ? '' : 's'}
-                {f.lat != null && f.lng != null ? ` · ${f.lat}, ${f.lng}` : ' · no location set'}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+              <FacilityThumb seed={f.id} photo={f.photos?.[0]?.url ?? f.photoUrl} size={48} radius={16} />
+              <div style={{ minWidth: 0 }}>
+                <div className="facility">{f.name}</div>
+                <div className="meta">
+                  {f.city} · {f.shiftCount} shift{f.shiftCount === 1 ? '' : 's'}
+                  {f.lat != null && f.lng != null ? ` · ${f.lat}, ${f.lng}` : ' · no location set'}
+                </div>
               </div>
             </div>
           </Link>
