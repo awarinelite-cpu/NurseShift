@@ -8,11 +8,13 @@ import {
   demoUpdateClaim,
 } from './demoStore';
 
+// Only shifts still free to pick. Once a nurse picks one it is 'claimed' and
+// leaves the board; a rejected claim sets it back to 'open'.
 export async function listOpenShifts() {
-  if (DEMO_MODE) return Promise.resolve(demoListShifts().filter((s) => s.status !== 'filled'));
+  if (DEMO_MODE) return Promise.resolve(demoListShifts().filter((s) => s.status !== 'filled' && s.status !== 'claimed'));
 
   const { collection, getDocs, query, where } = await import('firebase/firestore');
-  const q = query(collection(db, 'shifts'), where('status', '!=', 'filled'));
+  const q = query(collection(db, 'shifts'), where('status', 'not-in', ['filled', 'claimed']));
   const snap = await getDocs(q);
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
