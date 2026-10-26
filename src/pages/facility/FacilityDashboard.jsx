@@ -6,6 +6,7 @@ import { fileDispute } from '../../lib/disputes';
 import { getCurrentLocation } from '../../lib/geo';
 import { getOrCreateConversation } from '../../lib/chat';
 import Badge from '../../components/Badge';
+import PhoneLink from '../../components/ns/PhoneLink';
 import ReportIssueForm from '../../components/ReportIssueForm';
 import NurseHero from '../../components/ns/NurseHero';
 
@@ -232,6 +233,9 @@ export default function FacilityDashboard() {
                   <p style={{ fontSize: '0.875rem', color: 'var(--slate)', margin: '0 0 16px' }}>
                     Claiming {c.shift?.unit} · {c.shift?.date} · {c.shift?.start}–{c.shift?.end} · {formatNaira(c.shift?.rate)}
                   </p>
+                  <p style={{ fontSize: '0.9rem', margin: '0 0 14px' }}>
+                    <PhoneLink phone={c.nurse?.phone} />
+                  </p>
                   <div style={{ display: 'flex', gap: 10 }}>
                     <button className="claim-btn" style={{ background: 'var(--green)' }} disabled={actingOn === c.id} onClick={() => handleApprove(c)}>
                       Approve
@@ -258,6 +262,7 @@ export default function FacilityDashboard() {
                     <div>
                       <div className="facility">{c.nurse?.name}</div>
                       <div className="meta">{c.shift?.unit} · {c.shift?.date} · {c.clockIn ? 'Clocked in' : 'Not clocked in yet'}</div>
+                      <div className="meta" style={{ marginTop: 4 }}><PhoneLink phone={c.nurse?.phone} size={14} /></div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                       <button className="clock-btn" disabled={messaging === c.id} onClick={() => handleMessage(c)}>
@@ -290,6 +295,7 @@ export default function FacilityDashboard() {
                     <div>
                       <div className="facility">{c.nurse?.name}</div>
                       <div className="meta">{c.shift?.unit} · {c.shift?.date}</div>
+                      <div className="meta" style={{ marginTop: 4 }}><PhoneLink phone={c.nurse?.phone} size={14} /></div>
                     </div>
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
                       {ratingFor === c.id ? (

@@ -8,6 +8,7 @@ import { formatNaira, perHour, fmtDay, fmtRange, shiftType, titleFor } from '../
 import MapModal from '../components/MapModal';
 import Icon from '../components/ns/Icon';
 import FacilityThumb from '../components/ns/FacilityThumb';
+import PhoneLink from '../components/ns/PhoneLink';
 
 export default function ShiftDetail() {
   const { shiftId } = useParams();
@@ -90,6 +91,7 @@ export default function ShiftDetail() {
     { icon: 'clock', label: 'Time', value: `${fmtRange(shift)}` },
     { icon: 'star', label: 'Facility Rating', value: rating },
     { icon: 'file', label: 'Shift Code', value: shift.id },
+    { icon: 'phone', label: 'Phone', value: <PhoneLink phone={facility?.phone} /> },
   ];
 
   return (
