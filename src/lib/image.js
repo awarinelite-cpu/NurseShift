@@ -27,3 +27,31 @@ export async function compressImage(file, maxDim = 1600, quality = 0.82) {
   if (!blob) throw new Error(`${file.name} could not be processed.`);
   return blob;
 }
+
+// Profile pictures: centre-crop to a square, 480px, JPEG. Small enough to load
+// instantly in lists and the sidebar.
+export async function compressAvatar(file, size = 480, quality = 0.85) {
+  if (!file.type.startsWith('image/')) throw new Error('Choose an image file (JPG, PNG or WebP).');
+  if (file.size > MAX_PHOTO_INPUT_BYTES) throw new Error('That photo is larger than 15 MB.');
+  let bitmap;
+  try {
+    bitmap = await createImageBitmap(file);
+  } catch {
+    throw new Error('That photo could not be read. Use a JPG, PNG or WebP image.');
+  }
+  const side = Math.min(bitmap.width, bitmap.height);
+  const sx = (bitmap.width - side) / 2;
+  const sy = (bitmap.height - side) / 2;
+  const out = Math.min(size, side);
+  const canvas = document.createElement('canvas');
+  canvas.width = out;
+  canvas.height = out;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, out, out);
+  ctx.drawImage(bitmap, sx, sy, side, side, 0, 0, out, out);
+  bitmap.close?.();
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', quality));
+  if (!blob) throw new Error('That photo could not be processed.');
+  return blob;
+}

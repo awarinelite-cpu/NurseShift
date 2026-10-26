@@ -421,3 +421,11 @@
 /* ---------- Admin: live dot on the active-now card ---------- */
 .ns-live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 4px; animation: ns-live-pulse 1.8s ease-in-out infinite; }
 @keyframes ns-live-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* ---------- Profile pictures ---------- */
+.ns-avatar, .ns-side-avatar, .nsd-avatar { overflow: hidden; }
+.ns-avatar-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ns-avatar-wrap { position: relative; flex: none; }
+.ns-avatar-edit { position: absolute; right: -2px; bottom: -2px; width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff; background: #0b3b37; color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; }
+.ns-avatar-edit:disabled { opacity: 0.6; cursor: default; }
+.ns-avatar-busy { position: absolute; inset: 0; border-radius: 50%; background: rgba(0, 0, 0, 0.45); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.25rem; }

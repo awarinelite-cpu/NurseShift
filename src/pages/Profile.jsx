@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useClaims } from '../lib/useClaims';
-import { initials } from '../lib/earnings';
 import { listOpenShifts } from '../lib/shifts';
 import Icon from '../components/ns/Icon';
 import NurseHero from '../components/ns/NurseHero';
 import Sheet from '../components/ns/Sheet';
+import Avatar from '../components/ns/Avatar';
 
 const MENU = [
   { key: 'license', label: 'My License & Documents', icon: 'file' },
@@ -29,7 +29,7 @@ function Row({ label, value }) {
 }
 
 export default function Profile() {
-  const { nurse, updatePhone, signOut } = useAuth();
+  const { nurse, updatePhone, updatePhoto, removePhoto, signOut } = useAuth();
   const navigate = useNavigate();
   const { claims } = useClaims(nurse?.id);
   const [openCount, setOpenCount] = useState(null);
@@ -38,6 +38,9 @@ export default function Profile() {
   const [phoneInput, setPhoneInput] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const [photoError, setPhotoError] = useState('');
+  const fileRef = useRef(null);
 
   useEffect(() => {
     listOpenShifts().then((list) => setOpenCount(list.filter((s) => s.status === 'open').length));
@@ -67,6 +70,33 @@ export default function Profile() {
     }
   }
 
+  async function handlePhotoPicked(e) {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setPhotoBusy(true);
+    setPhotoError('');
+    try {
+      await updatePhoto(file);
+    } catch (err) {
+      setPhotoError(err?.message ?? 'Could not upload photo. Try again.');
+    } finally {
+      setPhotoBusy(false);
+    }
+  }
+
+  async function handleRemovePhoto() {
+    setPhotoBusy(true);
+    setPhotoError('');
+    try {
+      await removePhoto();
+    } catch (err) {
+      setPhotoError(err?.message ?? 'Could not remove photo. Try again.');
+    } finally {
+      setPhotoBusy(false);
+    }
+  }
+
   async function handleSignOut() {
     await signOut();
     navigate('/');
@@ -83,7 +113,20 @@ export default function Profile() {
         }
       >
         <section className="ns-profile-head">
-          <span className="ns-avatar lg">{initials(nurse.name)}</span>
+          <div className="ns-avatar-wrap">
+            <Avatar name={nurse.name} photoUrl={nurse.photoUrl} className="ns-avatar lg" />
+            <button
+              type="button"
+              className="ns-avatar-edit"
+              onClick={() => fileRef.current?.click()}
+              disabled={photoBusy}
+              aria-label={nurse.photoUrl ? 'Change profile picture' : 'Add profile picture'}
+            >
+              <Icon name="camera" size={14} />
+            </button>
+            <input ref={fileRef} type="file" accept="image/*" hidden onChange={handlePhotoPicked} />
+            {photoBusy && <span className="ns-avatar-busy">…</span>}
+          </div>
           <div>
             <h1>{nurse.name}</h1>
             <p>Registered Nurse</p>
@@ -93,6 +136,8 @@ export default function Profile() {
           </div>
         </section>
       </NurseHero>
+
+      {photoError && <p className="ns-error" style={{ margin: '10px 4px 0' }}>{photoError}</p>}
 
       <div className="ns-card ns-profile-stats">
         <div><strong>{completed}</strong><small>Completed Shifts</small></div>
@@ -137,6 +182,17 @@ export default function Profile() {
 
       {sheet === 'personal' && (
         <Sheet title="Personal Information" onClose={closeSheet}>
+          <div className="ns-kv">
+            <small>Profile picture</small>
+            <span>
+              <button type="button" className="ns-link" onClick={() => fileRef.current?.click()} disabled={photoBusy}>
+                {nurse.photoUrl ? 'Change' : 'Upload'}
+              </button>
+              {nurse.photoUrl && (
+                <>{' · '}<button type="button" className="ns-link" onClick={handleRemovePhoto} disabled={photoBusy}>Remove</button></>
+              )}
+            </span>
+          </div>
           <Row label="Full name" value={nurse.name} />
           <Row label="Specialty" value={nurse.specialty || 'General practice'} />
           <Row label="Experience" value={nurse.yearsExperience != null ? `${nurse.yearsExperience} years` : ''} />

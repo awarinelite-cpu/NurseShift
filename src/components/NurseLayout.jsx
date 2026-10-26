@@ -27,6 +27,7 @@ export default function NurseLayout() {
           extra={[{ to: '/messages', label: 'Messages', icon: 'message' }, { to: '/nurses', label: 'Nurse Directory', icon: 'user' }]}
           label="Duty Board"
           user={nurse?.name}
+          userPhoto={nurse?.photoUrl}
           onSignOut={signOut}
         />
       )}

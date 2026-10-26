@@ -35,6 +35,11 @@ export function demoUpdateNursePhone(id, phone) {
   return demoGetNurse(id);
 }
 
+export function demoUpdateNursePhoto(id, photoUrl) {
+  _nurses = _nurses.map((n) => (n.id === id ? { ...n, photoUrl } : n));
+  return demoGetNurse(id);
+}
+
 export function demoRateNurse(id, rating) {
   _nurses = _nurses.map((n) => {
     if (n.id !== id) return n;

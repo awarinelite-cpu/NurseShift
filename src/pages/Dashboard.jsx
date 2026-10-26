@@ -55,7 +55,7 @@ export default function Dashboard() {
             <Link to="/messages" className="nsd-bell" aria-label="Messages">
               <Icon name="bell" size={24} />
             </Link>
-            <Link to="/profile" className="nsd-avatar" aria-label={`${firstName}'s profile`}>{initials(nurse.name)}</Link>
+            <Link to="/profile" className="nsd-avatar" aria-label={`${firstName}'s profile`}>{nurse.photoUrl ? <img src={nurse.photoUrl} alt="" className="ns-avatar-img" /> : initials(nurse.name)}</Link>
           </div>
         </div>
 

@@ -1,5 +1,7 @@
 import { DEMO_MODE, auth, db, storage } from './firebase';
-import { demoAddNurse, demoGetNurse, demoUpdateNursePhone } from './demoStore';
+import { demoAddNurse, demoGetNurse, demoUpdateNursePhone, demoUpdateNursePhoto } from './demoStore';
+import { compressAvatar } from './image';
+import { uploadToCloudinary } from './cloudinary';
 
 // --- Demo-mode: tracks which nurse (if any) is "signed in" this session ---
 let _demoSignedInId = null;
@@ -104,5 +106,24 @@ export async function updateNursePhone(nurseId, phone) {
 
   const { doc, updateDoc } = await import('firebase/firestore');
   await updateDoc(doc(db, 'nurses', nurseId), { phone: phone || null });
+  return getNurseProfile(nurseId);
+}
+
+// Profile picture: centre-cropped square, hosted on Cloudinary (same unsigned
+// preset as facility photos), URL saved on the nurse doc as photoUrl.
+export async function updateNursePhoto(nurseId, file) {
+  const blob = await compressAvatar(file);
+  if (DEMO_MODE) return demoUpdateNursePhoto(nurseId, URL.createObjectURL(blob));
+
+  const photoUrl = await uploadToCloudinary(blob, `nurse-photos/${nurseId}`);
+  const { doc, updateDoc } = await import('firebase/firestore');
+  await updateDoc(doc(db, 'nurses', nurseId), { photoUrl });
+  return getNurseProfile(nurseId);
+}
+
+export async function removeNursePhoto(nurseId) {
+  if (DEMO_MODE) return demoUpdateNursePhoto(nurseId, null);
+  const { doc, updateDoc } = await import('firebase/firestore');
+  await updateDoc(doc(db, 'nurses', nurseId), { photoUrl: null });
   return getNurseProfile(nurseId);
 }

@@ -4,7 +4,7 @@ import { initials } from '../lib/earnings';
 
 // Left sidebar shown only on desktop-width screens (>= 1024px, see styles/desktop.css).
 // On phones it is hidden and the bottom tab bar is used instead.
-export default function DesktopSidebar({ tabs, extra = [], label, user, onSignOut, signOutTo = '/login' }) {
+export default function DesktopSidebar({ tabs, extra = [], label, user, userPhoto, onSignOut, signOutTo = '/login' }) {
   const navigate = useNavigate();
   const link = (t) => (
     <NavLink key={t.to} to={t.to} end={t.end} className={({ isActive }) => `ns-side-link${isActive ? ' active' : ''}`}>
@@ -34,7 +34,7 @@ export default function DesktopSidebar({ tabs, extra = [], label, user, onSignOu
       </nav>
       {user && (
         <div className="ns-side-user">
-          <span className="ns-side-avatar">{initials(user)}</span>
+          <span className="ns-side-avatar">{userPhoto ? <img src={userPhoto} alt="" className="ns-avatar-img" /> : initials(user)}</span>
           <span className="ns-side-name">{user}</span>
           {onSignOut && (
             <button type="button" className="ns-side-out" onClick={handleSignOut} aria-label="Sign out" title="Sign out">
