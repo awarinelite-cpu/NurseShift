@@ -53,7 +53,6 @@
   .ns-stage.ns-has-side .ns-demo { position: sticky; top: 0; z-index: 20; }
 
   /* Pinned CTA / success overlays / sheets: center them in the content area, not the viewport */
-  .ns-stage.ns-has-side .ns-cta { left: calc(264px + (100% - 264px) / 2); max-width: 720px; }
   .ns-stage.ns-has-side .ns-success { left: calc(264px + (100% - 264px) / 2); max-width: none; width: calc(100% - 264px); }
   .ns-sheet-wrap { align-items: center; }
   .ns-sheet { max-width: 560px; border-radius: 24px; }
@@ -63,11 +62,11 @@
   .ns-stage.ns-has-side .nsd-stats { grid-template-columns: repeat(3, 1fr); gap: 18px; }
   .ns-stage.ns-has-side .nsd-stat { padding: 18px 18px 14px; }
   .ns-stage.ns-has-side .nsd-actions { grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .ns-stage.ns-has-side .nsd-nurse { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; align-content: start; }
-  .ns-stage.ns-has-side .nsd-nurse > .nsd-hero,
-  .ns-stage.ns-has-side .nsd-nurse > .nsd-stats,
-  .ns-stage.ns-has-side .nsd-nurse > .nsd-h2,
-  .ns-stage.ns-has-side .nsd-nurse > .nsd-actions { grid-column: 1 / -1; }
+  .ns-stage.ns-has-side .nsd-nurse:not(.nsd-board) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; align-content: start; }
+  .ns-stage.ns-has-side .nsd-nurse:not(.nsd-board) > .nsd-hero,
+  .ns-stage.ns-has-side .nsd-nurse:not(.nsd-board) > .nsd-stats,
+  .ns-stage.ns-has-side .nsd-nurse:not(.nsd-board) > .nsd-h2,
+  .ns-stage.ns-has-side .nsd-nurse:not(.nsd-board) > .nsd-actions { grid-column: 1 / -1; }
 
   /* Lists of cards become responsive grids */
   .ns-stage.ns-has-side .ns-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
@@ -77,13 +76,116 @@
   .ns-stage.ns-has-side .conversation-list { max-width: 760px; }
   .ns-stage.ns-has-side .ns-tx { max-width: 760px; }
 
-  /* Landing / login / sign-up (no sidebar): show as a centered card */
-  .ns-stage:not(.ns-has-side) { display: flex; align-items: center; justify-content: center; padding: 32px; }
-  .ns-stage:not(.ns-has-side) .ns-app { width: 100%; max-width: 520px; min-height: 0; border-radius: 28px; overflow: hidden; box-shadow: 0 30px 80px rgba(11, 59, 55, 0.22); }
-  .ns-stage:not(.ns-has-side) .ns-landing { min-height: 720px; }
+}
+
+@media (min-width: 1024px) {
+  /* Hero banners: align with the padded content area instead of bleeding out */
+  .ns-stage.ns-has-side .nsd-hero { margin: 0 0 22px; border-radius: 26px; }
+  .nsd-greet small { max-width: 460px; }
+  .ns-stage.ns-has-side .nsd-greet h1 { font-size: 2.5rem; }
+  .ns-stage.ns-has-side .nsd-verify, .ns-stage.ns-has-side .nsd-earn { margin: 0 0 20px; min-height: 120px; align-self: stretch; }
+  .ns-stage.ns-has-side .nsd-h2 { margin-top: 10px; }
+
+  /* ---------- Shift board / My shifts ---------- */
+  .ns-stage.ns-has-side .ns-list { align-items: start; }
+  .ns-stage.ns-has-side .nsd-board .ns-filters { max-width: 720px; }
+  .ns-stage.ns-has-side .nsd-board .ns-tabs { max-width: 720px; }
+  .ns-stage.ns-has-side .nsd-board .nsd-search { max-width: 560px; }
+  .ns-stage.ns-has-side .ns-sort-note { margin-bottom: 18px; }
+  .ns-stage.ns-has-side .ns-shift { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .ns-stage.ns-has-side a.ns-shift:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(11, 59, 55, 0.12); }
+
+  /* ---------- Shift detail: two columns, sticky claim panel ---------- */
+  .ns-stage.ns-has-side .ns-detail {
+    display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start;
+    width: 100%; max-width: 1180px; margin: 0 auto; padding: 28px 40px 48px; background: transparent;
+  }
+  .ns-stage.ns-has-side .ns-detail-hero { grid-column: 1 / -1; height: 280px; border-radius: 26px; }
+  .ns-stage.ns-has-side .ns-detail-bar { top: 18px; left: 18px; right: 18px; }
+  .ns-stage.ns-has-side .ns-detail-sheet { margin-top: 0; border-radius: 22px; padding: 28px; border: 1px solid var(--line); box-shadow: 0 6px 20px rgba(11, 59, 55, 0.06); }
+  .ns-stage.ns-has-side .ns-cta {
+    position: sticky; top: 24px; left: auto; bottom: auto; transform: none; max-width: none; width: auto;
+    padding: 22px; background: #fff; border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 6px 20px rgba(11, 59, 55, 0.06);
+  }
+  .ns-stage.ns-has-side .ns-success { left: 264px; right: 0; width: auto; max-width: none; transform: none; }
+  .ns-stage.ns-has-side .ns-success-card { max-width: 420px; }
+
+  /* ---------- Earnings ---------- */
+  .ns-stage.ns-has-side .ns-earn-hero { padding: 28px 32px; border-radius: 24px; }
+  .ns-stage.ns-has-side .ns-earn-hero strong { font-size: 2.5rem; }
+  .ns-stage.ns-has-side .ns-tabs.flat { max-width: 520px; }
+  .ns-stage.ns-has-side .ns-figure { padding: 20px; }
+  .ns-stage.ns-has-side .ns-tx { max-width: none; background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 6px 22px; }
+  .ns-stage.ns-has-side .ns-tx li:last-child { border-bottom: 0; }
+
+  /* ---------- Profile: summary left, menu right ---------- */
+  .ns-stage.ns-has-side .ns-screen:has(.ns-profile-head) { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 0 24px; align-content: start; }
+  .ns-stage.ns-has-side .ns-screen:has(.ns-profile-head) > .nsd-hero { grid-column: 1 / -1; }
+  .ns-stage.ns-has-side .ns-screen:has(.ns-profile-head) > .ns-profile-stats { grid-column: 1; grid-row: 2; align-self: start; }
+  .ns-stage.ns-has-side .ns-screen:has(.ns-profile-head) > .ns-menu { grid-column: 2; grid-row: 2 / span 2; margin-top: 0; max-width: none; align-self: start; }
+  .ns-stage.ns-has-side .ns-screen:has(.ns-profile-head) > .ns-btn-danger { grid-column: 1; grid-row: 3; align-self: start; }
+
+  /* ---------- Messages / chat / directory ---------- */
+  .ns-stage.ns-has-side .conversation-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; max-width: none; }
+  .ns-stage.ns-has-side .page { max-width: none; padding: 0; }
+  .ns-stage.ns-has-side .chat-thread-page { max-width: 920px; margin: 0 auto; }
+  .ns-stage.ns-has-side .chat-thread { height: calc(100dvh - 190px); min-height: 460px; border-radius: 20px; }
+  .ns-stage.ns-has-side .chat-bubble { max-width: 62%; }
+
+  /* ---------- Admin / facility pages ---------- */
+  .ns-stage.ns-admin.ns-has-side .page { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 20px; align-content: start; }
+  .ns-stage.ns-admin.ns-has-side .page > * { grid-column: 1 / -1; min-width: 0; }
+  .ns-stage.ns-admin.ns-has-side .page > .claim-card { grid-column: auto; margin: 0; }
+  .ns-stage.ns-admin.ns-has-side .page > .detail-card { max-width: 880px; }
+  .ns-stage.ns-admin.ns-has-side .page > form.detail-card { grid-column: 1 / -1; }
+  .ns-stage.ns-admin.ns-has-side .page-header { margin: 0 0 4px; }
+  .ns-stage.ns-admin.ns-has-side .nsd-hero-row .nsd-status { min-width: 280px; }
+  .ns-stage.ns-admin.ns-has-side .nsd-stats { grid-template-columns: repeat(3, 1fr); }
+  .ns-stage.ns-admin.ns-has-side .nsd-actions { grid-template-columns: repeat(3, 1fr); }
+  .ns-stage.ns-admin.ns-has-side .nsd-actions-4 { grid-template-columns: repeat(4, 1fr); }
+  .ns-stage.ns-admin.ns-has-side .ns-screen > .ns-btn-danger { max-width: 260px; }
+  .ns-stage.ns-has-side .form-grid-2 { gap: 16px 20px; }
+  .ns-stage.ns-has-side .detail-card { border-radius: 20px; }
+
+  /* ---------- Signed-out screens: landing, login, sign-up ---------- */
+  .ns-stage:not(.ns-has-side) { display: block; padding: 0; background: #052232; }
+  .ns-stage:not(.ns-has-side) .ns-app { max-width: none; width: 100%; min-height: 100dvh; margin: 0; border-radius: 0; box-shadow: none; background: transparent; overflow: visible; }
+
+  /* Landing + login: photo on the right, content on the left */
+  .ns-stage:not(.ns-has-side) .ns-landing,
+  .ns-stage:not(.ns-has-side) .ns-auth.ns-auth-dark {
+    display: grid; grid-template-columns: minmax(420px, 560px) minmax(0, 1fr); column-gap: 72px; align-content: center; align-items: center;
+    min-height: 100dvh; padding: 56px max(64px, 7vw); text-align: left;
+  }
+  .ns-stage:not(.ns-has-side) .ns-landing > .ns-landing-top,
+  .ns-stage:not(.ns-has-side) .ns-auth-dark > .ns-auth-top { grid-column: 1; grid-row: 1; text-align: left; align-self: end; margin-bottom: 28px; }
+  .ns-stage:not(.ns-has-side) .ns-landing > .ns-landing-bottom,
+  .ns-stage:not(.ns-has-side) .ns-auth-dark > .ns-auth-form { grid-column: 1; grid-row: 2; align-self: start; margin: 0; }
+  .ns-stage:not(.ns-has-side) .ns-hero-photo,
+  .ns-stage:not(.ns-has-side) .ns-hero-photo.short {
+    grid-column: 2; grid-row: 1 / span 2; width: 100%; max-width: 720px; height: min(78vh, 760px); min-height: 0; max-height: none; margin: 0 auto; border-radius: 32px; flex: none;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+  }
+  .ns-stage:not(.ns-has-side) .ns-landing .ns-logo { font-size: 2.75rem; }
+  .ns-stage:not(.ns-has-side) .ns-landing-tag { font-size: 1.0625rem; }
+  .ns-stage:not(.ns-has-side) .ns-landing-copy { justify-content: flex-start; font-size: 1.75rem; min-height: 4.4em; padding: 0; text-align: left; }
+  .ns-stage:not(.ns-has-side) .ns-dots { justify-content: flex-start; }
+  .ns-stage:not(.ns-has-side) .ns-landing-bottom .ns-btn { max-width: 380px; }
+  .ns-stage:not(.ns-has-side) .ns-landing-login { text-align: left; }
+  .ns-stage:not(.ns-has-side) .ns-auth-dark .ns-logo { font-size: 2.5rem; }
+  .ns-stage:not(.ns-has-side) .ns-auth-form { max-width: 440px; }
+
+  /* Sign-up (light auth): centered card with a banner header */
+  .ns-stage:not(.ns-has-side) .ns-auth:not(.ns-auth-dark) {
+    width: min(720px, calc(100% - 64px)); min-height: 0; margin: 40px auto; border-radius: 28px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  }
+  .ns-stage:not(.ns-has-side) .ns-auth-head { padding: 34px 40px 64px; }
+  .ns-stage:not(.ns-has-side) .ns-auth-body { padding: 32px 40px 40px; }
+  .ns-stage:not(.ns-has-side) .ns-auth:not(.ns-auth-dark) .form-grid-2 { gap: 16px 20px; }
 }
 
 @media (min-width: 1440px) {
-  .ns-stage.ns-has-side .ns-screen { max-width: 1320px; }
-  .ns-stage.ns-has-side .ns-list { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); }
+  .ns-stage.ns-has-side .ns-detail { max-width: 1320px; }
+  .ns-stage.ns-has-side .conversation-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ns-stage.ns-admin.ns-has-side .page { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }

@@ -20,8 +20,8 @@ export default function NurseLayout() {
   const showDemo = isDemo && (nurse || pathname !== '/');
 
   return (
-    <div className={`ns-stage${showNav ? ' ns-has-side' : ''}`}>
-      {showNav && (
+    <div className={`ns-stage${nurse ? ' ns-has-side' : ''}`}>
+      {nurse && (
         <DesktopSidebar
           tabs={NURSE_TABS}
           extra={[{ to: '/messages', label: 'Messages', icon: 'message' }, { to: '/nurses', label: 'Nurse Directory', icon: 'user' }]}
