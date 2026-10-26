@@ -37,6 +37,7 @@ export default function MyShifts() {
   const [reportingFor, setReportingFor] = useState(null);
   const [reportSent, setReportSent] = useState(null);
   const [phones, setPhones] = useState({});
+  const [noPhoneFor, setNoPhoneFor] = useState(null);
 
   // Facility phone numbers, looked up once per facility, for the tap-to-call button.
   useEffect(() => {
@@ -167,15 +168,17 @@ export default function MyShifts() {
                   <button type="button" disabled={messaging === c.id} onClick={() => handleMessage(c)}>
                     {messaging === c.id ? 'Opening...' : 'Message'}
                   </button>
-                  {phones[c.shift?.facilityId] && (
-                    <button
-                      type="button"
-                      aria-label={`Call ${phones[c.shift.facilityId]}`}
-                      onClick={() => { window.location.href = `tel:${phones[c.shift.facilityId].replace(/[^\d+]/g, '')}`; }}
-                    >
-                      <Icon name="phone" size={13} /> {phones[c.shift.facilityId]}
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    aria-label={phones[c.shift?.facilityId] ? `Call ${phones[c.shift.facilityId]}` : 'Call facility'}
+                    onClick={() => {
+                      const num = phones[c.shift?.facilityId];
+                      if (!num) { setNoPhoneFor(c.id); return; }
+                      window.location.href = `tel:${num.replace(/[^\d+]/g, '')}`;
+                    }}
+                  >
+                    <Icon name="phone" size={13} /> {phones[c.shift?.facilityId] || 'Call'}
+                  </button>
                   {c.status === 'approved' && !c.clockIn && <button type="button" className="primary" onClick={() => handleClockIn(c.id)}>Clock in</button>}
                   {c.clockIn && !c.clockOut && <button type="button" className="primary" onClick={() => handleClockOut(c.id)}>Clock out</button>}
                   {canRate && ratingFor !== c.id && <button type="button" onClick={() => setRatingFor(c.id)}>Rate facility</button>}
@@ -184,6 +187,10 @@ export default function MyShifts() {
                   )}
                   {reported && <span className="ns-muted">Reported, under review</span>}
                 </div>
+
+                {noPhoneFor === c.id && !phones[c.shift?.facilityId] && (
+                  <p className="ns-error" role="status">Phone number not available for this facility.</p>
+                )}
 
                 {canRate && ratingFor === c.id && (
                   <div className="ns-rate">
