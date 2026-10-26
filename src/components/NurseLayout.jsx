@@ -1,6 +1,7 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import BottomNav from './BottomNav';
+import BottomNav, { TABS as NURSE_TABS } from './BottomNav';
+import DesktopSidebar from './DesktopSidebar';
 import ErrorBoundary from './ErrorBoundary';
 import Icon from './ns/Icon';
 
@@ -8,7 +9,7 @@ import Icon from './ns/Icon';
 const SUBBAR_TITLES = { '/messages': 'Messages', '/nurses': 'Nurse Directory' };
 
 export default function NurseLayout() {
-  const { nurse, isDemo } = useAuth();
+  const { nurse, isDemo, signOut } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
@@ -19,7 +20,16 @@ export default function NurseLayout() {
   const showDemo = isDemo && (nurse || pathname !== '/');
 
   return (
-    <div className="ns-stage">
+    <div className={`ns-stage${showNav ? ' ns-has-side' : ''}`}>
+      {showNav && (
+        <DesktopSidebar
+          tabs={NURSE_TABS}
+          extra={[{ to: '/messages', label: 'Messages', icon: 'message' }, { to: '/nurses', label: 'Nurse Directory', icon: 'user' }]}
+          label="Duty Board"
+          user={nurse?.name}
+          onSignOut={signOut}
+        />
+      )}
       <div className="ns-app">
         {showDemo && (
           <div className="ns-demo">Demo mode: sign-up and login use local sample data. Add your Firebase config in src/lib/firebase.js to go live.</div>

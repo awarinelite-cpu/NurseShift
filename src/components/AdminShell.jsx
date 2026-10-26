@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { useAdmin } from '../context/AdminContext';
 import ErrorBoundary from './ErrorBoundary';
 import Icon from './ns/Icon';
+import DesktopSidebar from './DesktopSidebar';
 
 const TABS = [
   { to: '/admin', label: 'Home', icon: 'home', end: true },
@@ -15,7 +16,7 @@ const TABS = [
 // The admin surface uses the same mobile app shell as the nurse screens:
 // a centered phone-width column, a bottom tab bar and the green card style.
 export default function AdminShell() {
-  const { admin, isDemo } = useAdmin();
+  const { admin, isDemo, signOut } = useAdmin();
 
   // The nurse look is light only, so switch off the dark / forest theme while an
   // admin screen is open and put it back when leaving.
@@ -29,7 +30,8 @@ export default function AdminShell() {
   const tabs = TABS.filter((t) => !t.ownerOnly || admin?.role !== 'subadmin');
 
   return (
-    <div className="ns-stage ns-admin">
+    <div className={`ns-stage ns-admin${admin ? ' ns-has-side' : ''}`}>
+      {admin && <DesktopSidebar tabs={tabs} label="Admin" user={admin.name || admin.email || 'Admin'} onSignOut={signOut} />}
       <div className="ns-app">
         {isDemo && (
           <div className="ns-demo">Demo mode: admin sign-in and data are local samples. Add your Firebase config in src/lib/firebase.js to go live.</div>

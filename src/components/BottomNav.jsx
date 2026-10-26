@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import Icon from './ns/Icon';
 
-const TABS = [
+export const TABS = [
   { to: '/', label: 'Home', icon: 'home', end: true },
   { to: '/shifts', label: 'Shifts', icon: 'calendar' },
   { to: '/earnings', label: 'Earnings', icon: 'wallet' },

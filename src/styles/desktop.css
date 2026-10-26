@@ -1,0 +1,89 @@
+/* NurseShift desktop mode.
+   Phones and small tablets keep the mobile shell (460px column + bottom tabs).
+   From 1024px up the app uses the full window: left sidebar, wide content area,
+   multi-column grids. Nothing here applies below 1024px. */
+
+.ns-side { display: none; }
+
+@media (min-width: 1024px) {
+  html { font-size: 100%; } /* the old global upscale is not needed with a real desktop layout */
+
+  /* ----- Shell ----- */
+  .ns-stage { background: #eef4f2; }
+  .ns-stage.ns-has-side .ns-app {
+    max-width: none;
+    margin: 0 0 0 264px;
+    background: transparent;
+    box-shadow: none;
+    min-height: 100dvh;
+  }
+  .ns-stage:not(.ns-has-side) .ns-app { max-width: 1120px; }
+
+  /* Sidebar */
+  .ns-stage.ns-has-side .ns-side {
+    position: fixed; top: 0; bottom: 0; left: 0; width: 264px; z-index: 40;
+    display: flex; flex-direction: column; gap: 22px;
+    padding: 26px 16px 18px;
+    background: linear-gradient(180deg, #0b3b37, #072b28);
+    color: #e9f6f2;
+  }
+  .ns-side-brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; color: var(--green); }
+  .ns-side-brand strong { display: block; font-size: 1.375rem; font-weight: 800; letter-spacing: -0.02em; color: #fff; line-height: 1.1; }
+  .ns-side-brand strong span { color: var(--green); }
+  .ns-side-brand small { display: block; font-size: 0.75rem; color: rgba(255, 255, 255, 0.6); margin-top: 2px; }
+  .ns-side-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; overflow-y: auto; }
+  .ns-side-sep { height: 1px; background: rgba(255, 255, 255, 0.12); margin: 10px 8px; }
+  .ns-side-link {
+    display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px;
+    font-size: 0.9375rem; font-weight: 600; color: rgba(255, 255, 255, 0.72);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .ns-side-link:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+  .ns-side-link.active { background: var(--green); color: #fff; font-weight: 800; box-shadow: 0 8px 18px rgba(20, 184, 140, 0.28); }
+  .ns-side-user { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 14px; background: rgba(255, 255, 255, 0.07); }
+  .ns-side-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--green); color: #fff; font-weight: 800; font-size: 0.8125rem; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .ns-side-name { flex: 1; min-width: 0; font-size: 0.875rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ns-side-out { width: 34px; height: 34px; border-radius: 10px; color: rgba(255, 255, 255, 0.75); display: inline-flex; align-items: center; justify-content: center; }
+  .ns-side-out:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+
+  /* Bottom tab bar and bottom-pinned bars are replaced by the sidebar */
+  .ns-stage.ns-has-side .ns-nav { display: none; }
+  .ns-stage.ns-has-side .ns-screen { padding: 28px 40px 48px; max-width: 1180px; width: 100%; margin: 0 auto; }
+  .ns-stage.ns-has-side .ns-subbar { padding: 18px 40px 0; border-bottom: 0; max-width: 1180px; width: 100%; margin: 0 auto; }
+  .ns-stage.ns-has-side .ns-demo { position: sticky; top: 0; z-index: 20; }
+
+  /* Pinned CTA / success overlays / sheets: center them in the content area, not the viewport */
+  .ns-stage.ns-has-side .ns-cta { left: calc(264px + (100% - 264px) / 2); max-width: 720px; }
+  .ns-stage.ns-has-side .ns-success { left: calc(264px + (100% - 264px) / 2); max-width: none; width: calc(100% - 264px); }
+  .ns-sheet-wrap { align-items: center; }
+  .ns-sheet { max-width: 560px; border-radius: 24px; }
+
+  /* ----- Content ----- */
+  .ns-stage.ns-has-side .nsd-hero { border-radius: 26px; padding: 26px 32px 30px; }
+  .ns-stage.ns-has-side .nsd-stats { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .ns-stage.ns-has-side .nsd-stat { padding: 18px 18px 14px; }
+  .ns-stage.ns-has-side .nsd-actions { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .ns-stage.ns-has-side .nsd-nurse { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; align-content: start; }
+  .ns-stage.ns-has-side .nsd-nurse > .nsd-hero,
+  .ns-stage.ns-has-side .nsd-nurse > .nsd-stats,
+  .ns-stage.ns-has-side .nsd-nurse > .nsd-h2,
+  .ns-stage.ns-has-side .nsd-nurse > .nsd-actions { grid-column: 1 / -1; }
+
+  /* Lists of cards become responsive grids */
+  .ns-stage.ns-has-side .ns-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+  .ns-stage.ns-has-side .nurse-directory-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .ns-stage.ns-has-side .ns-grid2 { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .ns-stage.ns-has-side .ns-menu { max-width: 640px; }
+  .ns-stage.ns-has-side .conversation-list { max-width: 760px; }
+  .ns-stage.ns-has-side .ns-tx { max-width: 760px; }
+
+  /* Landing / login / sign-up (no sidebar): show as a centered card */
+  .ns-stage:not(.ns-has-side) { display: flex; align-items: center; justify-content: center; padding: 32px; }
+  .ns-stage:not(.ns-has-side) .ns-app { width: 100%; max-width: 520px; min-height: 0; border-radius: 28px; overflow: hidden; box-shadow: 0 30px 80px rgba(11, 59, 55, 0.22); }
+  .ns-stage:not(.ns-has-side) .ns-landing { min-height: 720px; }
+}
+
+@media (min-width: 1440px) {
+  .ns-stage.ns-has-side .ns-screen { max-width: 1320px; }
+  .ns-stage.ns-has-side .ns-list { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); }
+}

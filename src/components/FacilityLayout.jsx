@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { useFacility } from '../context/FacilityContext';
 import ErrorBoundary from './ErrorBoundary';
 import Icon from './ns/Icon';
+import DesktopSidebar from './DesktopSidebar';
 
 const TABS = [
   { to: '/facility', label: 'Home', icon: 'home', end: true },
@@ -14,7 +15,7 @@ const TABS = [
 // The facility surface uses the same mobile app shell as the nurse and admin
 // screens: a phone-width column, a banner on every page and a bottom tab bar.
 export default function FacilityLayout() {
-  const { facility, isDemo } = useFacility();
+  const { facility, isDemo, signOut } = useFacility();
 
   // The app look is light only; switch off dark / forest while a facility screen is open.
   useEffect(() => {
@@ -25,7 +26,8 @@ export default function FacilityLayout() {
   }, []);
 
   return (
-    <div className="ns-stage ns-admin">
+    <div className={`ns-stage ns-admin${facility ? ' ns-has-side' : ''}`}>
+      {facility && <DesktopSidebar tabs={TABS} label="For facilities" user={facility.name || facility.email || 'Facility'} onSignOut={signOut} />}
       <div className="ns-app">
         {isDemo && (
           <div className="ns-demo">Demo mode: signed in as the seeded facility (Reddington Hospital). Add Firebase config to go live.</div>
