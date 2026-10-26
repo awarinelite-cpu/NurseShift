@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { clockIn, clockOut } from '../lib/shifts';
 import { rateFacilityForClaim } from '../lib/ratings';
@@ -6,6 +6,7 @@ import { fileDispute } from '../lib/disputes';
 import { useAuth } from '../context/AuthContext';
 import { useClaims } from '../lib/useClaims';
 import { getOrCreateConversation } from '../lib/chat';
+import { getFacility } from '../lib/facility';
 import { formatNaira, fmtRange, titleFor, toDate } from '../lib/earnings';
 import ReportIssueForm from '../components/ReportIssueForm';
 import Icon from '../components/ns/Icon';
@@ -35,6 +36,16 @@ export default function MyShifts() {
   const [ratingFor, setRatingFor] = useState(null);
   const [reportingFor, setReportingFor] = useState(null);
   const [reportSent, setReportSent] = useState(null);
+  const [phones, setPhones] = useState({});
+
+  // Facility phone numbers, looked up once per facility, for the tap-to-call button.
+  useEffect(() => {
+    const ids = [...new Set(claims.map((c) => c.shift?.facilityId).filter(Boolean))].filter((id) => !(id in phones));
+    if (ids.length === 0) return;
+    Promise.all(ids.map((id) => getFacility(id).then((f) => [id, f?.phone || null]).catch(() => [id, null]))).then((pairs) =>
+      setPhones((prev) => ({ ...prev, ...Object.fromEntries(pairs) }))
+    );
+  }, [claims]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const counts = Object.fromEntries(TABS.map((t) => [t.key, claims.filter(t.match).length]));
   const list = claims
@@ -156,6 +167,15 @@ export default function MyShifts() {
                   <button type="button" disabled={messaging === c.id} onClick={() => handleMessage(c)}>
                     {messaging === c.id ? 'Opening...' : 'Message'}
                   </button>
+                  {phones[c.shift?.facilityId] && (
+                    <button
+                      type="button"
+                      aria-label={`Call ${phones[c.shift.facilityId]}`}
+                      onClick={() => { window.location.href = `tel:${phones[c.shift.facilityId].replace(/[^\d+]/g, '')}`; }}
+                    >
+                      <Icon name="phone" size={13} /> {phones[c.shift.facilityId]}
+                    </button>
+                  )}
                   {c.status === 'approved' && !c.clockIn && <button type="button" className="primary" onClick={() => handleClockIn(c.id)}>Clock in</button>}
                   {c.clockIn && !c.clockOut && <button type="button" className="primary" onClick={() => handleClockOut(c.id)}>Clock out</button>}
                   {canRate && ratingFor !== c.id && <button type="button" onClick={() => setRatingFor(c.id)}>Rate facility</button>}
