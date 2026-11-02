@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 // Shows a "View on map" trigger that opens an in-app modal with an embedded
 // Google Map, instead of navigating away to the Maps app/site. Uses the
@@ -61,7 +62,7 @@ export default function MapModal({ lat, lng, label, city, className, style, chil
         {children}
       </a>
 
-      {open && (
+      {open && createPortal(
         <div className="map-modal-backdrop" onClick={() => setOpen(false)}>
           <div className="map-modal" onClick={(e) => e.stopPropagation()}>
             <div className="map-modal-header">
@@ -134,7 +135,8 @@ export default function MapModal({ lat, lng, label, city, className, style, chil
 
             {toast && <div className="map-modal-toast">{toast}</div>}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
