@@ -9,6 +9,7 @@ import { getOrCreateConversation } from '../lib/chat';
 import { getFacility } from '../lib/facility';
 import { formatNaira, fmtRange, titleFor, toDate } from '../lib/earnings';
 import ReportIssueForm from '../components/ReportIssueForm';
+import MapModal from '../components/MapModal';
 import Icon from '../components/ns/Icon';
 import NurseHero from '../components/ns/NurseHero';
 
@@ -157,7 +158,17 @@ export default function MyShifts() {
                   </div>
                   <div className="ns-claim-main">
                     <h3>{titleFor(c.shift)}</h3>
-                    <p><Icon name="pin" size={13} /> {c.shift?.facility ?? 'Unknown facility'}</p>
+                    <p>
+                      <MapModal
+                        lat={c.shift?.lat}
+                        lng={c.shift?.lng}
+                        label={c.shift?.facility ?? 'Unknown facility'}
+                        city={c.shift?.city}
+                        className="ns-map-link ns-claim-loc"
+                      >
+                        <Icon name="pin" size={13} /> {c.shift?.facility ?? 'Unknown facility'}
+                      </MapModal>
+                    </p>
                     <p><Icon name="clock" size={13} /> {fmtRange(c.shift)}</p>
                     <span className={`ns-tag ${pill.tone}`}>{pill.text}</span>
                   </div>
